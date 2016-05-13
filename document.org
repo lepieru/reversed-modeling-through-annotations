@@ -9,7 +9,6 @@
 #+LATEX_HEADER: \abstract{Dans ce rapport de stage, nous produisons un état de l'art des langages dédiés (aussi appelés DSL pour \textit{Domain-Specific Languages}) à l'aide de la littérature scientifique sur le sujet. Nous définissons le DSL en exposant ses problématiques. La diversité des formes d'un même DSL étant avérée, la question du langage dédié métamorphique se pose. Deux études sont présentées ici : le cas du logiciel MPS, un \textit{Language Workbench} proposant une forme de métamorphisme, ainsi que le prototypage d'un outil de détection de domaine dans le code source.}
 
 * Introduction
-* Étude bibliographique
 
   Les premiers programmes numériques étaient développés directement en langage machine. En plus de n'être compatible qu'avec un type particulier de machine, ce travail était ingrat et source d'erreur. L'apparition de l'assembleur a permis de rendre le code produit plus générique et /human-readable/ grâce à une abstraction du code machine cible. L'arrivée des langages de programmation ont permis l'utilisation de concepts plus haut niveau tel que les types, les variables, les constantes, les listes, les structures, les fonctions, /etc./ qui permettent des constructions beaucoup plus proches de la vision que l'homme a d'un programme.
 
@@ -17,7 +16,13 @@
 
   Il est indéniable que les DSL simplifient l'usage de l'informatique d'aujourd'hui. Pour lancer un programme, on peut l'appeler via un shell en lui passant des options adéquates. Pour interroger une base de données relationnelles, on la questionne en SQL. Si l'on veut écrire une page web, nous le faisons en HTML/CSS. Chacun de ces cas utilise une abstraction sous forme d'un DSL de la complexité interne du logiciel.
 
-  De nombreux articles ont pour sujet les /Domain-Specific Languages/. Tout en revenant sur les bases de qu'est-ce qu'un langage, cette bibliographie essaye de regrouper les différentes définition du DSL. Les DSL seront comparés aux /General Purpose Languages/. Les deux grands types de DSL, externe et interne, seront exposés. Leurs critères de succès et d'échec seront discutés. Les solutions techniques d'implémentation seront aussi abordées. Pour finir, il sera sujet de l'avenir dans le domaine.
+  Si les DSL sont partout, ils possèdent souvent diverses formes pour un même domaine. La définition du langage dédié métamorphique \cite{Acher-et-al-2014} se base sur ce constat. Ce stage a permit de continuer les recherches dans ce sujet.
+
+  Commencant par une étudé bibliographique sur les langages dédiés, nous présenterons par la suite le cas MPS, logiciel de type /Language Workbench/ (c'est-à-dire, de création de langage formelle). Avant de conclure, nous poursuivrons avec la présentation de l'outil de détection de domaine dans le code source.
+
+* Étude bibliographique
+
+De nombreux articles ont pour sujet les /Domain-Specific Languages/. Tout en revenant sur les bases de qu'est-ce qu'un langage, cette bibliographie essaye de regrouper les différentes définition du DSL. Les DSL seront comparés aux /General Purpose Languages/. Les deux grands types de DSL, externe et interne, seront exposés. Leurs critères de succès et d'échec seront discutés. Les solutions techniques d'implémentation seront aussi abordées. Pour finir, il sera sujet de l'avenir dans le domaine.
 
 ** Les /Domain-Specific Languages/
 *** La notion de langage
@@ -304,18 +309,16 @@
 
   Ces deux solutions ont une vision différente. Si le /Language Workbench/ propose une forme plus approprié pour un domaine donné, le /Metamorphic DSL/ veut donner le choix de la forme que peut prendre un DSL selon le cas d'utilisation.
 
-** Conclusion de l'étude bibliographique
+* Le cas MPS
+* Le domaine et le code source
+* Travaux à venir
+* Conclusion
 
   Les langages dédiés réconcilient les domaines avec le code source. Les langages de programmation ont longtemps été des outils que seuls les programmeurs pouvaient manipuler. En donnant une vraie place aux notions métiers, les experts ont la possibilité de produire et de communiquer via les sources comme média, prenant ainsi le contrôle de la logique métier.
 
   Ces pratiques ont démontré leurs impacts bénéfiques sur la productivité et les coûts. Cependant, faire le choix d'utiliser ou non d'un DSL n'est pas évident, tout comme les choix de conception de ce DSL. Une analyse préalable accompagnée de bonnes pratiques doit être effectuée. Si les environnements de /Language Workbench/ ont rendu accessible le /Language-Oriented Programming/, le choix de la forme la plus adéquate reste préoccupant car potentiellement discutable. C'est dans l'optique de répondre à ce problème que le concept de /Metamorphic DSL/ à vu le jour.
 
-  La capacité de passer de forme en forme serait-elle une nouvelle étape dans l'évolution des /Domain-Specific Languages/ ? C'est la question que pose le /Metamorphic DSL/. Le défi est, en plus de proposer un système de transpositions de forme, de savoir quelle forme est la plus appropriée pour la tâche en cours. Pour se faire, une automatisation des processus est nécessaire ; c'est-à-dire une qualification rigoureuse des propriétés des formes (approche utilisateur) et une méthode générique de transposition de forme de DSL (approche développeur). Si le principe d'artéfact retrouvé dans les outils du /language workbench/ semble être un élément de réponse technique, l'état de l'art montre que l'approche métamorphique nécessite des avancés dans le domaine.
-
-* Le cas MPS
-* Le domaine et le code source
-* Travaux à venir
-* Conclusion
+  La capacité de passer de forme en forme serait-elle une nouvelle étape dans l'évolution des /Domain-Specific Languages/ ? C'est la question que pose le /Metamorphic DSL/. Le défi est, en plus de proposer un système de transpositions de forme, de savoir quelle forme est la plus appropriée pour la tâche en cours. Pour se faire, une automatisation des processus est nécessaire ; c'est-à-dire une qualification rigoureuse des propriétés des formes (approche utilisateur) et une méthode générique de transposition de forme de DSL (approche développeur). C'est dans l'optique de trouver des éléments de réponse que du côté de cette approche développeur que [TODO]
 
 #+BEGIN_LATEX
 \newpage
