@@ -1,4 +1,4 @@
-#+TITLE: Vers des langages dédiés métamorphiques
+#+TITLE: Modelisation inverse grâce aux annotations
 #+AUTHOR: Pierre Le Gall
 
 #+OPTIONS: toc:nil
@@ -9,6 +9,7 @@
 #+LATEX_HEADER: \abstract{Dans ce document nous produisons un état de l'art des langages dédiés (aussi appelés DSL pour \textit{Domain-Specific Languages}) à l'aide de la littérature scientifique sur le sujet. Nous définissons le DSL, le comparons aux langages généraux (ou GPL pour \textit{General Purpose Languages}) et exposons le DSL externes et internes. Nous mettons en lumière différents critères de qualité proposés permettant une évaluation des DSL. Les solutions techniques d'implémentation d'un DSL sont aussi abordées. La diversité des formes possibles d'un même DSL est avérée, c'est-à-dire qu'un même domaine peut être représenté via plusieurs syntaxes concrètes. Si une uniformisation des formes permet de dissimuler le problème, la notion de DSL métamorphique accepte cette diversité. La capacité de passer de forme en forme serait-elle la nouvelle étape dans l'évolution des \textit{Domain-Specific Languages} ?}
 
 * Introduction
+* Étude bibliographique
 
   Les premiers programmes numériques étaient développés directement en langage machine. En plus de n'être compatible qu'avec un type particulier de machine, ce travail était ingrat et source d'erreur. L'apparition de l'assembleur a permis de rendre le code produit plus générique et /human-readable/ grâce à une abstraction du code machine cible. L'arrivée des langages de programmation ont permis l'utilisation de concepts plus haut niveau tel que les types, les variables, les constantes, les listes, les structures, les fonctions, /etc./ qui permettent des constructions beaucoup plus proches de la vision que l'homme a d'un programme.
 
@@ -18,8 +19,8 @@
 
   De nombreux articles ont pour sujet les /Domain-Specific Languages/. Tout en revenant sur les bases de qu'est-ce qu'un langage, cette bibliographie essaye de regrouper les différentes définition du DSL. Les DSL seront comparés aux /General Purpose Languages/. Les deux grands types de DSL, externe et interne, seront exposés. Leurs critères de succès et d'échec seront discutés. Les solutions techniques d'implémentation seront aussi abordées. Pour finir, il sera sujet de l'avenir dans le domaine.
 
-* Les /Domain-Specific Languages/
-** La notion de langage
+** Les /Domain-Specific Languages/
+*** La notion de langage
 
    Un langage est la composition d'une syntaxe (sa forme) ainsi que d'une sémantique (son sens). On peut voir la syntaxe comme la donnée et la sémantique comme l'information, c'est-à-dire l'interprétation sur la donnée \cite{Harel-and-Rumpe-2004}. Cela s'applique à tous les langages, des langues naturelles (anglais, français, /etc./) aux langages formels (mathématiques, langages de programmation, /etc./.).
 
@@ -130,11 +131,11 @@
     #+ATTR_LATEX: :width 10cm
     [[./pictures/How-to-Choose-between-External-and-Internal-DSL.png]]
 
-* Succès et échecs
+** Succès et échecs
 
   Nous abordons ici les comportements conseillés ou non dans l'utilisation de DSL, tout en mettant le doigt sur les problématiques de la conception. Nous finirons pas présenter les critères de qualification d'un DSL.
 
-** Bonnes et mauvaises pratiques
+*** Bonnes et mauvaises pratiques
 
    Le processus de création d'un /Domain-Specific Language/ requière des connaissances en développement de langage ainsi qu'une connaissance du domaine \cite{Mernik-et-al-2005}. C'est un point très important car le domaine est au centre du problème.
 
@@ -142,7 +143,7 @@
 
    Si ces conseils semblent généralistes, ce n'est pas le cas des problèmes relevés par \cite{Kelly-and-Pohjonen-2009} grâce à une analyse de plusieurs DSL. Si le manque de compréhension métier des problématiques est cité, les mauvaises pratiques les plus fréquentes sont : rendre la solution initiale inaltérable ; laisser le langage stagner ; ou encore utiliser le code source comme modèle. Moins fréquent, mais toujours à éviter, sont : mettre l'accent sur un sous-domaine ; prédéterminer le paradigme ; ignorer le cas réel d'utilisation ; ou encore considérer que tout le monde comprend la solution.
 
-** Propriétés d'un DSL
+*** Propriétés d'un DSL
 
    Il est compliqué de juger un DSL sans critère précis. \cite{Karsai-et-al-2009} ont réunis les différents facteurs de succès rencontrés dans la littérature sur les DSL. On y trouve : l'apprenabilité (L), la convivialité (U), l'expressivité (E), la réutilisabilité (R), le coût de développement (C) et la fiabilité (I) (voir tableau [[Success-Factors]]).
 
@@ -193,11 +194,11 @@
    | *Diffuseness*            | Verbosity of language              |
    | *Hard Mental Operations* | High demand on cognitive resources |
 
-* Méthodes et implémentations
+** Méthodes et implémentations
 
   Le sujet de cette section est les méthodes et les implémentations. Nous parlerons des capacités de certains GPL à accueillir des DSL et d'outils aidant la conception de DSL.
 
-** Fonctionnalités des langages
+*** Fonctionnalités des langages
 
    Les langages ne sont pas tous égaux face à l'implémentation de DSL en interne. Certains langages, bien que populaires, sont très rigides face à l'accueil de notions externes. C'est le cas des langages ayant une syntaxe proche du =C=, tel que =Java= et =C#=. C'est en partie grâce à une syntaxe peu intrusive qu'un langage peut être plus « accueillant » \cite{Fowler-2005}. Les dialectes de Lisp sont intéressants de ce côté. Leur système de macros permet de donner une sémantique à une syntaxe interne très malléable (voir figure [[Lisp-Json-Reader]]).
 
@@ -270,7 +271,7 @@
    println(n)
    #+END_SRC
 
-** /Language Workbenches/
+*** /Language Workbenches/
 
    Il existe plusieurs /frameworks/ aidant la conception de DSL. \cite{Voelter-2013} retient trois /frameworks/ représentatifs de l'état de l'art dans la conception de /Domain-Specific Languages/ : Spoofax, Xtext et MPS (/Meta Programming System/). Ils font partie des outils de type /Language Workbench/ \cite{Fowler-2005} encadrant la pratique du /Language-Oriented Programming/.
 
@@ -285,7 +286,7 @@
    #+ATTR_LATEX: :width 8cm
    [[./pictures/Parsing-and-Projectional-Styles.png]]
 
-* Constats et perspectives
+** Constats et perspectives
 
   Les critères de qualité du DSL restent difficiles à mesurer \cite{Albuquerque-et-al-2014} et sont encore trop jeunes pour être utilisés industriellement pour les évaluations. Les /Language Workbenches/ simplifient la création et l'usage de langage exécutable métier \cite{Erdweg-et-al-2015}. Spoofax, Xtext et MPS sont des solutions techniques qui ont hérité des concepts du /Language-Oriented Programming/ exprimé par \cite{Ward-1994}. Grâce au système de projection (ex. MPS), la forme abstraite est manipulée via les diverses vues disponibles (voir figure [[Manipulating-representations-with-a-Language-Workbench]]). L'information est présentée sous différentes formes, permettant si besoin de cacher le contenu inutile selon la tâche en cours. L'artéfact éditable permet d'uniformiser la forme, ce qui répond à une problématique forte. Cette vision était déjà à l'époque défini comme la « nouvelle génération de feuille de calcul » \cite{Fowler-2005} : un environnement ou l'utilisateur lambda peut rapidement devenir apte à user de fonctionnalités avancées.
 
@@ -303,13 +304,18 @@
 
   Ces deux solutions ont une vision différente. Si le /Language Workbench/ propose une forme plus approprié pour un domaine donné, le /Metamorphic DSL/ veut donner le choix de la forme que peut prendre un DSL selon le cas d'utilisation.
 
-* Conclusion
+** Conclusion de l'étude bibliographique
 
   Les langages dédiés réconcilient les domaines avec le code source. Les langages de programmation ont longtemps été des outils que seuls les programmeurs pouvaient manipuler. En donnant une vraie place aux notions métiers, les experts ont la possibilité de produire et de communiquer via les sources comme média, prenant ainsi le contrôle de la logique métier.
 
   Ces pratiques ont démontré leurs impacts bénéfiques sur la productivité et les coûts. Cependant, faire le choix d'utiliser ou non d'un DSL n'est pas évident, tout comme les choix de conception de ce DSL. Une analyse préalable accompagnée de bonnes pratiques doit être effectuée. Si les environnements de /Language Workbench/ ont rendu accessible le /Language-Oriented Programming/, le choix de la forme la plus adéquate reste préoccupant car potentiellement discutable. C'est dans l'optique de répondre à ce problème que le concept de /Metamorphic DSL/ à vu le jour.
 
   La capacité de passer de forme en forme serait-elle une nouvelle étape dans l'évolution des /Domain-Specific Languages/ ? C'est la question que pose le /Metamorphic DSL/. Le défi est, en plus de proposer un système de transpositions de forme, de savoir quelle forme est la plus appropriée pour la tâche en cours. Pour se faire, une automatisation des processus est nécessaire ; c'est-à-dire une qualification rigoureuse des propriétés des formes (approche utilisateur) et une méthode générique de transposition de forme de DSL (approche développeur). Si le principe d'artéfact retrouvé dans les outils du /language workbench/ semble être un élément de réponse technique, l'état de l'art montre que l'approche métamorphique nécessite des avancés dans le domaine.
+
+* Le cas MPS
+* Le domaine et le code source
+* Travaux à venir
+* Conclusion
 
 #+BEGIN_LATEX
 \newpage
