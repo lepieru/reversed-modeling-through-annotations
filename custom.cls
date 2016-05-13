@@ -44,7 +44,7 @@
       \includegraphics[width=0.05\textwidth]{./pictures/style/ubs}
 
       \vspace{1cm}
-      \textsc{\Large Étude bibliographique}\\[0.5cm]
+      \textsc{\Large Rapport de stage}\\[0.5cm]
 
       % The title
       \HRule \\[0.4cm]
