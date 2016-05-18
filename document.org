@@ -21,46 +21,52 @@
   Commencant par une étudé bibliographique sur les langages dédiés, nous présenterons par la suite le cas MPS, logiciel de type /Language Workbench/ (c'est-à-dire, de création de langage formelle). Avant de conclure, nous poursuivrons avec la présentation de l'outil de détection de domaine dans le code source.
 
 * Contexte
-** La notion de langage
+** Notions de modèle
 
-   Un langage est la composition d'une syntaxe (sa forme) ainsi que d'une sémantique (son sens). On peut voir la syntaxe comme la donnée et la sémantique comme l'information, c'est-à-dire l'interprétation sur la donnée \cite{Harel-and-Rumpe-2004}. Cela s'applique à tous les langages, des langues naturelles (anglais, français, /etc./) aux langages formels (mathématiques, langages de programmation, /etc./.).
+   Un *modèle* (relatif à un domaine) est la conceptualisation d'un sujet par rapport à une problématique précise (voir figure [[Two-Model-Example]]). Grâce à lui, on peut définir de manière plus ou moins abstraite un problème et/ou sa solution. Dans le cadre de la méthodologie MDE (/Model-driven engineering/ ou Ingénierie Dirigée par les Modèles), tout est considéré comme modèle, des schémas aux codes source. Selon la forme, un modèle équivalent au niveau domaine peuvent contenir plus ou moins d'informations.
 
-*** La syntaxe
+   #+NAME: Two-Model-Example
+   #+CAPTION: Exemple de deux modèle équivalent. À gauche la représentation graphique d'une fonction et à droite la représentation sous forme de code source C de cette même fonction.
+   #+ATTR_LATEX: :width 13cm
+   [ TODO ]
 
-    La syntaxe (concrète) choisie est la représentation que l'on se fait du langage \cite{Fowler-2005}. On distingue deux types de syntaxe concrète : les syntaxes textuelles qui sont composées d'une suite de caractères et les syntaxes graphiques qui sont construites avec des éléments tel que des boîtes, des flèches, /etc./ En mathématique, elles sont le plus souvent définies grâce à une grammaire [fn:Not-only-Grammars]. Une grammaire est un ensemble de règles qui contraignent un langage. Ces règles décrivent comment former des « phrases » en fonction des « mots » rencontrés. Le langage BNF [fn:Yacc-and-Bison] est un exemple d'outil permettant la définition de grammaire \cite{Garshol-2008} (voir figure [[BNF-Example]]), mettant en évidence les symboles terminaux et non-terminaux de la syntaxe.
+   Littéralement modèle du modèle, un *metamodèle* est un modèle définissant les règles et les contraites de forme d'un autre modèle. Il définit donc un type de modèle. La figure [[Model-and-Metamodel-Exemple]] nous montre la différence entre un modèle et son méta-modèle.
 
-    #+CAPTION: Exemple d'utilisation de BNF (Backus Naur Form) : définition de la représentation textuelle d'une valeur numérique (entier et flottant)
-    #+NAME: BNF-Example
-    #+BEGIN_SRC bnf
-    <numeric> ::= <integer> | <float>
-    <integer> ::= <digits> | '-' <digits>
-    <float>   ::= <integer> '.' <digits>
-    <digits>  ::= <digit> <digits> | <digit>
-    <digit>   ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
-    #+END_SRC
+   #+NAME: Model-and-Metamodel-Example
+   #+CAPTION: Exemple d'un modèle et de son méta-modèle
+   #+ATTR_LATEX: :width 13cm
+   [ TODO ]
 
-    La syntaxe concrète s'oppose à la syntaxe abstraite. Cette dernière est une altération de la syntaxe concrète. Cette forme est structurée de façon à être adaptée à une utilisation par la machine. Elle prend très souvent la forme d'un arbre (appelé Arbre de Syntaxe Abstraite, /Abstract Syntax Tree/ ou AST) (voir figure [[Abstract-Syntax-Tree-Example]]) où chaque noeud représente un élément, qui peut lui même être composé de plusieurs sous-éléments. Certains détails de la syntaxe concrète peuvent être ôtés. Il est donc possible d'arriver à un même AST avec des syntaxes concrètes différentes. On peut dire qu'un langage peut avoir deux syntaxes concrètes, ou deux langages qui partagent la même syntaxe abstraite \cite{Fowler-2005}.
+** Notions de langage
 
-    #+NAME: Abstract-Syntax-Tree-Example
-    #+CAPTION: Exemple d'arbre de syntax abstraite: représentation abstraite de la fonction f(n) = n * (n + 1) / 2 \cite{Harel-and-Rumpe-2004}
-    #+ATTR_LATEX: :width 4cm
-    [[./pictures/Abstract-Syntax-Tree-Example.png]]
+   Un *langage* est la composition d'une *syntaxe* (sa forme) ainsi que d'une *sémantique* (son sens). On peut voir la syntaxe comme la donnée et la sémantique comme l'information, c'est-à-dire l'interprétation sur la donnée \cite{Harel-and-Rumpe-2004}. Cela s'applique à tous les langages, des langues naturelles (anglais, français, /etc./) aux langages formels (mathématiques, langages de programmation, /etc./.).
 
-    Nous avons ici exposé le principe de syntaxe qui seul ne permet pas de donner du sens à un langage. L'étape suivante est la définition d'une sémantique.
+   La *syntaxe concrète* est la représentation que l'on se fait du langage \cite{Fowler-2005}. On distingue deux types de syntaxe concrète : les syntaxes textuelles qui sont composées d'une suite de caractères et les syntaxes graphiques qui sont construites avec des éléments tel que des boîtes, des flèches, /etc./. Une *grammaire* est un ensemble de règles qui contraignent un langage. Ces règles décrivent comment former des « phrases » en fonction des « mots » rencontrés. Le langage BNF [fn:Yacc-and-Bison] est un exemple d'outil permettant la définition de grammaire \cite{Garshol-2008} (voir figure [[BNF-Example]]), mettant en évidence les symboles terminaux et non-terminaux de la syntaxe.
 
-*** La sémantique
+   #+CAPTION: Exemple d'utilisation de BNF (Backus Naur Form) : définition de la représentation textuelle d'une valeur numérique (entier et flottant)
+   #+NAME: BNF-Example
+   #+BEGIN_SRC bnf
+   <numeric> ::= <integer> | <float>
+   <integer> ::= <digits> | '-' <digits>
+   <float>   ::= <integer> '.' <digits>
+   <digits>  ::= <digit> <digits> | <digit>
+   <digit>   ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+   #+END_SRC
 
-    La sémantique est le sens que l'on donne à un langage. Grâce à l'analyse grammaticale, une forme plus structurée de la syntaxe en entrée est obtenue. C'est sur cette structure que l'on peut travailler pour en déduire le comportement attendu. Les mathématiques exposent les règles de transformation en sémantique opérationnelle, en sémantique dénotationnelle ou en sémantique axiomatique que nous n'aborderons pas ici. Les compilateurs sont les programmes qui transforment la syntaxe abstraite d'un langage. Cela peut avoir comme but de rendre le programme exécutable par la machine.
+   La syntaxe concrète s'oppose à la *syntaxe abstraite*. Cette dernière est une altération de la syntaxe concrète. Cette forme est structurée de façon à être adaptée à une utilisation par la machine. Elle prend très souvent la forme d'un arbre (appelé Arbre de Syntaxe Abstraite, /Abstract Syntax Tree/ ou AST) (voir figure [[Abstract-Syntax-Tree-Example]]) où chaque noeud représente un élément, qui peut lui même être composé de plusieurs sous-éléments. Certains détails de la syntaxe concrète peuvent être ôtés. Il est donc possible d'arriver à un même AST avec des syntaxes concrètes différentes. On peut dire qu'un langage peut avoir deux syntaxes concrètes, ou deux langages qui partagent la même syntaxe abstraite \cite{Fowler-2005}.
 
-** La notion de modèle
-*** Un modèle
-*** Un metamodèle
+   #+NAME: Abstract-Syntax-Tree-Example
+   #+CAPTION: Exemple d'arbre de syntax abstraite: représentation abstraite de la fonction f(n) = n * (n + 1) / 2 \cite{Harel-and-Rumpe-2004}
+   #+ATTR_LATEX: :width 4cm
+   [[./pictures/Abstract-Syntax-Tree-Example.png]]
+
+   La *sémantique* est le sens que l'on donne à un langage. Grâce à l'analyse grammaticale, une forme plus structurée de la syntaxe en entrée est obtenue. C'est sur cette structure que l'on peut travailler pour en déduire le comportement attendu. Les mathématiques exposent les règles de transformation en sémantique opérationnelle, en sémantique dénotationnelle ou en sémantique axiomatique que nous n'aborderons pas ici. Les compilateurs sont les programmes qui transforment la syntaxe abstraite d'un langage. Cela peut avoir comme but de rendre le programme exécutable par la machine.
+
 * Étude bibliographique
 
 De nombreux articles ont pour sujet les /Domain-Specific Languages/. Cette étude bibliographique essaye de regrouper les différentes définitions du DSL. Les DSL seront comparés aux /General Purpose Languages/. Les deux grands types de DSL, externe et interne, seront exposés. Leurs critères de succès et d'échec seront discutés. Les solutions techniques d'implémentation seront aussi abordées. Pour finir, il sera sujet de l'avenir dans le domaine.
 
 ** Les /Domain-Specific Languages/
-
 *** Définir le DSL
 
    Les /Domain-Specific Languages/, aussi appelés /Little Languages/ \cite{Hudak-1996}, sont des langages sur mesure par rapport à un domaine d'application. Leur raison d'être est d'exprimer au mieux le métier. En s'abstenant d'exposer les problématiques techniques, ils s'ouvrent à un « public plus large » \cite{Mernik-et-al-2005}. Un DSL adapté réduit considérablement le fossé entre le métier et les documents produits. Bien utilisés, ils deviennent un nouveau vecteur de communication.
@@ -315,6 +321,12 @@ De nombreux articles ont pour sujet les /Domain-Specific Languages/. Cette étud
   Ces deux solutions ont une vision différente. Si le /Language Workbench/ propose une forme plus approprié pour un domaine donné, le /Metamorphic DSL/ veut donner le choix de la forme que peut prendre un DSL selon le cas d'utilisation.
 
 * Le cas MPS (à merger dans l'étude bibliographique)
+
+   Références :
+   - \cite{Dmitriev-2004}
+   - \cite{Voelter-2010}
+   - \cite{Pech-et-al-2013}
+
 * Modélisation inverse grâce aux annotations
 ** Modèles dans les GPL et les domaines (à merger dans l'étude bibilographique ???)
 ** Du métamophisme via le domaine
