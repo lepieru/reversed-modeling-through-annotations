@@ -1,4 +1,4 @@
-#+TITLE: Métamorphisme, édition projectionnelle et modélisation inverse
+#+TITLE: Modélisation inverse grâce aux annotations
 #+AUTHOR: Pierre Le Gall
 
 #+OPTIONS: toc:nil
