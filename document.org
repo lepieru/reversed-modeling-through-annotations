@@ -107,7 +107,7 @@ De nombreux articles ont pour sujet les /Domain-Specific Languages/. Cette étud
 
     Les DSL externes sont construits à l'aide outils semblables à ceux utilisés pour les GPL. Les concepteurs ont la liberté de construire les éléments de la grammaire (en s'inspirant ou non de langages existants) ainsi que de sélectionner les principaux concepts applicables. Souvent accompagnés d'outils spécifiques, ils sont capables de fonctionner en /standalone/. Cela permet de s'affranchir de diverses contraintes, notamment celles du langage au coeur de la solution métier \cite{Karsai-et-al-2009}. Ce nouveau langage est indépendant. \cite{Fowler-2005} liste plusieurs problèmes relatifs aux DSL externes. Ils commencent par créer une barrière symbolique avec le langage de base, ce qui rend l'interopérabilité difficile. L'utilisateur ayant en main un langage limité, il n'est pas évident de pouvoir effectuer une action hors de la portée du langage. Fowler continue en utilisant le terme cacophonie des langages : si un langage demande un effort d'apprentissage, peut-être que les multiplier est une mauvaise idée. Cependant, il ne faut pas oublier que ces langages ont pour but d'être simple, limitant la valeur de cette dernière critique.
 
-    Si un DSL (voir l'exemple avec SQL figure [[External-DSL-Example-with-SQL]]) limite l'utilisateur dans le cadre de la manipulation de données provenant de bases de données relationnelles, il ne faut pas voir cette contrainte comme un simple inconvénient. Ceci encourage l'écriture de code plus compréhensible en étant plus déclaratif dans un contexte bien défini. De plus, si l'utilisateur n'a pas accès à toutes le fonctionnalités du système, le DSL est aussi une sécurité contre les maladresses. Si c'est aussi vrai pour le DSL interne, cela l'est particulièrement pour le DSL externe qui restreint l'utilisateur dans le cadre du domaine.
+    Si un DSL (voir l'exemple avec SQL figure [[External-DSL-Example-with-SQL]] limite l'utilisateur dans le cadre de la manipulation de données provenant de bases de données relationnelles, il ne faut pas voir cette contrainte comme un simple inconvénient. Ceci encourage l'écriture de code plus compréhensible en étant plus déclaratif dans un contexte bien défini. De plus, si l'utilisateur n'a pas accès à toutes le fonctionnalités du système, le DSL est aussi une sécurité contre les maladresses. Si c'est aussi vrai pour le DSL interne, cela l'est particulièrement pour le DSL externe qui restreint l'utilisateur dans le cadre du domaine.
 
     #+NAME: External-DSL-Example-with-SQL
     #+CAPTION: Un exemple de DSL externe avec SQL
@@ -302,6 +302,11 @@ De nombreux articles ont pour sujet les /Domain-Specific Languages/. Cette étud
    #+ATTR_LATEX: :width 8cm
    [[./pictures/Parsing-and-Projectional-Styles.png]]
 
+   Références :
+   - \cite{Dmitriev-2004}
+   - \cite{Voelter-2010}
+   - \cite{Pech-et-al-2013}
+
 ** Constats et perspectives
 
   Les critères de qualité du DSL restent difficiles à mesurer \cite{Albuquerque-et-al-2014} et sont encore trop jeunes pour être utilisés industriellement pour les évaluations. Les /Language Workbenches/ simplifient la création et l'usage de langage exécutable métier \cite{Erdweg-et-al-2015}. Spoofax, Xtext et MPS sont des solutions techniques qui ont hérité des concepts du /Language-Oriented Programming/ exprimé par \cite{Ward-1994}. Grâce au système de projection (ex. MPS), la forme abstraite est manipulée via les diverses vues disponibles (voir figure [[Manipulating-representations-with-a-Language-Workbench]]). L'information est présentée sous différentes formes, permettant si besoin de cacher le contenu inutile selon la tâche en cours. L'artéfact éditable permet d'uniformiser la forme, ce qui répond à une problématique forte. Cette vision était déjà à l'époque défini comme la « nouvelle génération de feuille de calcul » \cite{Fowler-2005} : un environnement ou l'utilisateur lambda peut rapidement devenir apte à user de fonctionnalités avancées.
@@ -320,17 +325,54 @@ De nombreux articles ont pour sujet les /Domain-Specific Languages/. Cette étud
 
   Ces deux solutions ont une vision différente. Si le /Language Workbench/ propose une forme plus approprié pour un domaine donné, le /Metamorphic DSL/ veut donner le choix de la forme que peut prendre un DSL selon le cas d'utilisation.
 
-* Le cas MPS (à merger dans l'étude bibliographique)
-
-   Références :
-   - \cite{Dmitriev-2004}
-   - \cite{Voelter-2010}
-   - \cite{Pech-et-al-2013}
-
 * Modélisation inverse grâce aux annotations
-** Modèles dans les GPL et les domaines (à merger dans l'étude bibilographique ???)
-** Du métamophisme via le domaine
-** Pourquoi s'intéresser aux annotations ?
+** Modèles, GPL et domaines
+
+   Le rapport entre les modèles, leurs méta-modèles, le GPL et les domaines est assez particulier du fait que les GPL sont des langages permettant la modélisation. La figure [[Models-GPL-and-Domain]] montre ces relations.
+
+   #+NAME: Models-GPL-and-Domain
+   #+CAPTION: Rapport entre les modèles dans le GPL et les domaines
+   #+ATTR_LATEX: :width 15cm
+   [ TODO ]
+
+   La forme d'un code source (=M(gpl)=) est formalisé par son méta-modèle (=MM(gpl)=). Ce =M(gpl)= est une manière de définir le méta-modèle du domaine ciblé (=MM(domain)=). Exécuter le code source revient à instancier un modèle (=M(domain)=) conforme à =MM(domain)=.
+
+   L'exemple en figure [[JooQ-Models]] …
+
+   #+NAME: JooQ-Models
+   #+CAPTION: Les modèles dans JooQ
+   #+ATTR_LATEX: :width 15cm
+   [ TODO ]
+
+** /Model-to-model/, /Domain-Specific/ et GPL
+
+   Deux approches permettent des transformations de modèle à modèle. La première est la solution /ad hoc/ (voir figure [Ad-hoc-Ruby-to-Javascript-with-Opal]), la seconde stratégie est de passer par une representation intermédiaire (voir figure [Generic-Model-to-Model-Transformation]). La seconde est forcément la plus intéressante de par sa nature générique. Dans ce cas, une syntaxe abstraite centrale doit être définie, c'est-à-dire que l'intersection des domaines des différents modèles doit être spécifié (dans notre exemple, =XML=, =JSON=, =CSV= et =YAML= partagent des notions du domaines de la sérialisation de données).
+
+  #+NAME: Ad-hoc-Ruby-to-Javascript-with-Opal
+  #+CAPTION: Transformation /ad hoc/ Ruby vers Javascript avec [[http://opalrb.org/][Opal]]
+  #+ATTR_LATEX: :width 13cm
+  [ TODO ]
+
+  #+NAME: Generic-Model-to-Model-Transformation
+  #+CAPTION: Transformation générique grâce à une syntaxe abstraite
+  #+ATTR_LATEX: :width 13cm
+  [ TODO ]
+
+  Le cas des GPL est plus complexe que l'exemple des formats de sérialisation de données (qui sont des DSL). Les langages de programmation donnent la possibilité de définir un modèle pour un domaine. Il faut donc comprendre ici que le métier ne respecte pas le metamodèle du GPL mais celui défini par les modèles rédigé dans ce GPL.
+
+  Différence entre volonté et réalité :
+
+  #+NAME: Model-and-Metamodel-in-GPL-and-DSL
+  #+CAPTION: Relation entre les modèles et metamodèles dans le GPL et le DSL
+  #+ATTR_LATEX: :width 13cm
+  [ TODO Schéma MM(gpl), M(gpl), MM(domain), M(domain) ]
+
+  L'UML est intéressant pour tirer les notions domaines retrouvé dans le code source. Cependant, l'UML n'est qu'une forme supplémentaire pour représenter un modèle orienté objet. Le /Domain-Specific/ ne se retrouve pas nécessairement dans ce metamodèle. Si l'on reprends la figure [[Internal-DSL-example]], on remarque que selon la stratégie utilisé pour émuler un DSL interne, ce n'est pas grâce à une représentation UML que l'on va pouvoir retrouver le domaine. Cette conclusion nous indique qu'il serait nécessaire d'analyser les AST pour en retirer du /Domain-Specific/.
+
+** S'intéresser à l'AST : le cas des annotations
+
+   Les annotations dans le code source sont des meta-données pouvant être ajoutés sur différents noeuds de l'AST (package, classes, méthodes, /etc/.). Du comportement peut leur être associé (voir l'exemple avec la persistence en Java grâce à l'aide des annotations \cite{Reed-2007}). Côté domaine métier, les annotations sont aussi une source d'information.
+
 ** L'outil Busimo : des annotations au domaine
 ** Résultats
 ** Critique(s)
