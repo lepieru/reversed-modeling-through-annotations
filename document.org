@@ -20,12 +20,8 @@
 
   Commencant par une étudé bibliographique sur les langages dédiés, nous présenterons par la suite le cas MPS, logiciel de type /Language Workbench/ (c'est-à-dire, de création de langage formelle). Avant de conclure, nous poursuivrons avec la présentation de l'outil de détection de domaine dans le code source.
 
-* Étude bibliographique
-
-De nombreux articles ont pour sujet les /Domain-Specific Languages/. Tout en revenant sur les bases de qu'est-ce qu'un langage, cette bibliographie essaye de regrouper les différentes définition du DSL. Les DSL seront comparés aux /General Purpose Languages/. Les deux grands types de DSL, externe et interne, seront exposés. Leurs critères de succès et d'échec seront discutés. Les solutions techniques d'implémentation seront aussi abordées. Pour finir, il sera sujet de l'avenir dans le domaine.
-
-** Les /Domain-Specific Languages/
-*** La notion de langage
+* Contexte
+** La notion de langage
 
    Un langage est la composition d'une syntaxe (sa forme) ainsi que d'une sémantique (son sens). On peut voir la syntaxe comme la donnée et la sémantique comme l'information, c'est-à-dire l'interprétation sur la donnée \cite{Harel-and-Rumpe-2004}. Cela s'applique à tous les langages, des langues naturelles (anglais, français, /etc./) aux langages formels (mathématiques, langages de programmation, /etc./.).
 
@@ -56,7 +52,16 @@ De nombreux articles ont pour sujet les /Domain-Specific Languages/. Tout en rev
 
     La sémantique est le sens que l'on donne à un langage. Grâce à l'analyse grammaticale, une forme plus structurée de la syntaxe en entrée est obtenue. C'est sur cette structure que l'on peut travailler pour en déduire le comportement attendu. Les mathématiques exposent les règles de transformation en sémantique opérationnelle, en sémantique dénotationnelle ou en sémantique axiomatique que nous n'aborderons pas ici. Les compilateurs sont les programmes qui transforment la syntaxe abstraite d'un langage. Cela peut avoir comme but de rendre le programme exécutable par la machine.
 
-** Définir le DSL
+** La notion de modèle
+*** Un modèle
+*** Un metamodèle
+* Étude bibliographique
+
+De nombreux articles ont pour sujet les /Domain-Specific Languages/. Cette étude bibliographique essaye de regrouper les différentes définitions du DSL. Les DSL seront comparés aux /General Purpose Languages/. Les deux grands types de DSL, externe et interne, seront exposés. Leurs critères de succès et d'échec seront discutés. Les solutions techniques d'implémentation seront aussi abordées. Pour finir, il sera sujet de l'avenir dans le domaine.
+
+** Les /Domain-Specific Languages/
+
+*** Définir le DSL
 
    Les /Domain-Specific Languages/, aussi appelés /Little Languages/ \cite{Hudak-1996}, sont des langages sur mesure par rapport à un domaine d'application. Leur raison d'être est d'exprimer au mieux le métier. En s'abstenant d'exposer les problématiques techniques, ils s'ouvrent à un « public plus large » \cite{Mernik-et-al-2005}. Un DSL adapté réduit considérablement le fossé entre le métier et les documents produits. Bien utilisés, ils deviennent un nouveau vecteur de communication.
 
@@ -88,11 +93,11 @@ De nombreux articles ont pour sujet les /Domain-Specific Languages/. Tout en rev
    #+ATTR_LATEX: :width 5cm
    [[./pictures/Middle-Out-Development.png]]
 
-** Externe et interne
+*** Externe et interne
 
    Les /Domain-Specific Languages/ se divisent en deux grandes catégories : les DSL externes et les DSL internes.
 
-*** DSL externes
+**** DSL externes
 
     Les DSL externes sont construits à l'aide outils semblables à ceux utilisés pour les GPL. Les concepteurs ont la liberté de construire les éléments de la grammaire (en s'inspirant ou non de langages existants) ainsi que de sélectionner les principaux concepts applicables. Souvent accompagnés d'outils spécifiques, ils sont capables de fonctionner en /standalone/. Cela permet de s'affranchir de diverses contraintes, notamment celles du langage au coeur de la solution métier \cite{Karsai-et-al-2009}. Ce nouveau langage est indépendant. \cite{Fowler-2005} liste plusieurs problèmes relatifs aux DSL externes. Ils commencent par créer une barrière symbolique avec le langage de base, ce qui rend l'interopérabilité difficile. L'utilisateur ayant en main un langage limité, il n'est pas évident de pouvoir effectuer une action hors de la portée du langage. Fowler continue en utilisant le terme cacophonie des langages : si un langage demande un effort d'apprentissage, peut-être que les multiplier est une mauvaise idée. Cependant, il ne faut pas oublier que ces langages ont pour but d'être simple, limitant la valeur de cette dernière critique.
 
@@ -107,7 +112,7 @@ De nombreux articles ont pour sujet les /Domain-Specific Languages/. Tout en rev
     ORDER BY name
     #+END_SRC
 
-*** DSL internes
+**** DSL internes
 
     Gérer la communication entre plusieurs langages est une tâche compliqué, ce qui a pour conséquence que les développeurs font souvent le choix du DSL interne \cite{Renggli-and-Girba-2009}.
 
@@ -127,7 +132,7 @@ De nombreux articles ont pour sujet les /Domain-Specific Languages/. Tout en rev
     #+CAPTION: Les différents types de DSL (source : https://queue.acm.org/detail.cfm?id=2617811)
     [[./pictures/DSL-Types.png]]
 
-*** Faire un choix
+**** Faire un choix
 
     Pour faire le choix d'une solution, externe ou interne, il faut peser le pour et le contre en fonction de la situation. La figure [[How-to-Choose-between-External-and-Internal-DSL]] pose jusqu'à quatre questions pour faire son choix. Le DSL interne est déconseillé par \cite{Mernik-et-al-2005} si les notations du domaine doit être strictement respectés et s'il y a pas de besoin spécifique (analyse, vérification, optimisation, parallélisation et transformation). S'il est souvent difficile de respecter la syntaxe du domaine dans un GPL, le /deep DSL/ offre la possibilité de travailler sur la syntaxe (vérification, transformation, /etc./), rendant cette deuxième condition discutable.
 
@@ -136,11 +141,11 @@ De nombreux articles ont pour sujet les /Domain-Specific Languages/. Tout en rev
     #+ATTR_LATEX: :width 10cm
     [[./pictures/How-to-Choose-between-External-and-Internal-DSL.png]]
 
-** Succès et échecs
+*** Succès et échecs
 
   Nous abordons ici les comportements conseillés ou non dans l'utilisation de DSL, tout en mettant le doigt sur les problématiques de la conception. Nous finirons pas présenter les critères de qualification d'un DSL.
 
-*** Bonnes et mauvaises pratiques
+**** Bonnes et mauvaises pratiques
 
    Le processus de création d'un /Domain-Specific Language/ requière des connaissances en développement de langage ainsi qu'une connaissance du domaine \cite{Mernik-et-al-2005}. C'est un point très important car le domaine est au centre du problème.
 
@@ -148,7 +153,7 @@ De nombreux articles ont pour sujet les /Domain-Specific Languages/. Tout en rev
 
    Si ces conseils semblent généralistes, ce n'est pas le cas des problèmes relevés par \cite{Kelly-and-Pohjonen-2009} grâce à une analyse de plusieurs DSL. Si le manque de compréhension métier des problématiques est cité, les mauvaises pratiques les plus fréquentes sont : rendre la solution initiale inaltérable ; laisser le langage stagner ; ou encore utiliser le code source comme modèle. Moins fréquent, mais toujours à éviter, sont : mettre l'accent sur un sous-domaine ; prédéterminer le paradigme ; ignorer le cas réel d'utilisation ; ou encore considérer que tout le monde comprend la solution.
 
-*** Propriétés d'un DSL
+**** Propriétés d'un DSL
 
    Il est compliqué de juger un DSL sans critère précis. \cite{Karsai-et-al-2009} ont réunis les différents facteurs de succès rencontrés dans la littérature sur les DSL. On y trouve : l'apprenabilité (L), la convivialité (U), l'expressivité (E), la réutilisabilité (R), le coût de développement (C) et la fiabilité (I) (voir tableau [[Success-Factors]]).
 
@@ -199,11 +204,11 @@ De nombreux articles ont pour sujet les /Domain-Specific Languages/. Tout en rev
    | *Diffuseness*            | Verbosity of language              |
    | *Hard Mental Operations* | High demand on cognitive resources |
 
-** Méthodes et implémentations
+*** Méthodes et implémentations
 
   Le sujet de cette section est les méthodes et les implémentations. Nous parlerons des capacités de certains GPL à accueillir des DSL et d'outils aidant la conception de DSL.
 
-*** Fonctionnalités des langages
+**** Fonctionnalités des langages
 
    Les langages ne sont pas tous égaux face à l'implémentation de DSL en interne. Certains langages, bien que populaires, sont très rigides face à l'accueil de notions externes. C'est le cas des langages ayant une syntaxe proche du =C=, tel que =Java= et =C#=. C'est en partie grâce à une syntaxe peu intrusive qu'un langage peut être plus « accueillant » \cite{Fowler-2005}. Les dialectes de Lisp sont intéressants de ce côté. Leur système de macros permet de donner une sémantique à une syntaxe interne très malléable (voir figure [[Lisp-Json-Reader]]).
 
@@ -276,7 +281,7 @@ De nombreux articles ont pour sujet les /Domain-Specific Languages/. Tout en rev
    println(n)
    #+END_SRC
 
-*** /Language Workbenches/
+**** /Language Workbenches/
 
    Il existe plusieurs /frameworks/ aidant la conception de DSL. \cite{Voelter-2013} retient trois /frameworks/ représentatifs de l'état de l'art dans la conception de /Domain-Specific Languages/ : Spoofax, Xtext et MPS (/Meta Programming System/). Ils font partie des outils de type /Language Workbench/ \cite{Fowler-2005} encadrant la pratique du /Language-Oriented Programming/.
 
@@ -309,9 +314,18 @@ De nombreux articles ont pour sujet les /Domain-Specific Languages/. Tout en rev
 
   Ces deux solutions ont une vision différente. Si le /Language Workbench/ propose une forme plus approprié pour un domaine donné, le /Metamorphic DSL/ veut donner le choix de la forme que peut prendre un DSL selon le cas d'utilisation.
 
-* Le cas MPS
-* Le domaine et le code source
+* Le cas MPS (à merger dans l'étude bibliographique)
+* Modélisation inverse grâce aux annotations
+** Modèles dans les GPL et les domaines (à merger dans l'étude bibilographique ???)
+** Du métamophisme via le domaine
+** Pourquoi s'intéresser aux annotations ?
+** L'outil Busimo : des annotations au domaine
+** Résultats
+** Critique(s)
 * Travaux à venir
+** Règles de filtrage
+** Analyse de modèles Java
+** Miner Github
 * Conclusion
 
   Les langages dédiés réconcilient les domaines avec le code source. Les langages de programmation ont longtemps été des outils que seuls les programmeurs pouvaient manipuler. En donnant une vraie place aux notions métiers, les experts ont la possibilité de produire et de communiquer via les sources comme média, prenant ainsi le contrôle de la logique métier.
