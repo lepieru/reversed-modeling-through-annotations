@@ -67,6 +67,9 @@ La *sémantique* est le sens que l'on donne à un langage. Grâce à l'analyse g
 De nombreux articles ont pour sujet les /Domain-Specific Languages/. Cette étude bibliographique essaye de regrouper les différentes définitions du DSL. Les DSL seront comparés aux /General Purpose Languages/. Les deux grands types de DSL, externe et interne, seront exposés. Leurs critères de succès et d'échec seront discutés. Les solutions techniques d'implémentation seront aussi abordées. Pour finir, il sera sujet de l'avenir dans le domaine.
 
 ** Les /Domain-Specific Languages/
+
+Nous présentons ici le concept de DSL ainsi que ces deux grandes catégories, le DSL externe et le DSL interne.
+
 *** Définir le DSL
 
 Les /Domain-Specific Languages/, aussi appelés /Little Languages/ \cite{Hudak-1996}, sont des langages sur mesure par rapport à un domaine d'application. Leur raison d'être est d'exprimer au mieux le métier. En s'abstenant d'exposer les problématiques techniques, ils s'ouvrent à un « public plus large » \cite{Mernik-et-al-2005}. Un DSL adapté réduit considérablement le fossé entre le métier et les documents produits. Bien utilisés, ils deviennent un nouveau vecteur de communication.
@@ -147,11 +150,11 @@ Pour faire le choix d'une solution, externe ou interne, il faut peser le pour et
 #+ATTR_LATEX: :width 10cm
 [[./pictures/How-to-Choose-between-External-and-Internal-DSL.png]]
 
-*** Succès et échecs
+** Succès et échecs
 
 Nous abordons ici les comportements conseillés ou non dans l'utilisation de DSL, tout en mettant le doigt sur les problématiques de la conception. Nous finirons pas présenter les critères de qualification d'un DSL.
 
-**** Bonnes et mauvaises pratiques
+*** Bonnes et mauvaises pratiques
 
 Le processus de création d'un /Domain-Specific Language/ requière des connaissances en développement de langage ainsi qu'une connaissance du domaine \cite{Mernik-et-al-2005}. C'est un point très important car le domaine est au centre du problème.
 
@@ -159,7 +162,7 @@ Pour apporter de la méthodologie dans ce processus, \cite{Karsai-et-al-2009} pr
 
 Si ces conseils semblent généralistes, ce n'est pas le cas des problèmes relevés par \cite{Kelly-and-Pohjonen-2009} grâce à une analyse de plusieurs DSL. Si le manque de compréhension métier des problématiques est cité, les mauvaises pratiques les plus fréquentes sont : rendre la solution initiale inaltérable ; laisser le langage stagner ; ou encore utiliser le code source comme modèle. Moins fréquent, mais toujours à éviter, sont : mettre l'accent sur un sous-domaine ; prédéterminer le paradigme ; ignorer le cas réel d'utilisation ; ou encore considérer que tout le monde comprend la solution.
 
-**** Propriétés d'un DSL
+*** Propriétés d'un DSL
 
 Il est compliqué de juger un DSL sans critère précis. \cite{Karsai-et-al-2009} ont réunis les différents facteurs de succès rencontrés dans la littérature sur les DSL. On y trouve : l'apprenabilité (L), la convivialité (U), l'expressivité (E), la réutilisabilité (R), le coût de développement (C) et la fiabilité (I) (voir tableau [[Success-Factors]]).
 
@@ -210,11 +213,11 @@ Il est compliqué de juger un DSL sans critère précis. \cite{Karsai-et-al-2009
 | *Diffuseness*            | Verbosity of language              |
 | *Hard Mental Operations* | High demand on cognitive resources |
 
-*** Méthodes et implémentations
+** Méthodes et implémentations
 
 Le sujet de cette section est les méthodes et les implémentations. Nous parlerons des capacités de certains GPL à accueillir des DSL et d'outils aidant la conception de DSL.
 
-**** Fonctionnalités des langages
+*** Fonctionnalités des langages
 
 Les langages ne sont pas tous égaux face à l'implémentation de DSL en interne. Certains langages, bien que populaires, sont très rigides face à l'accueil de notions externes. C'est le cas des langages ayant une syntaxe proche du =C=, tel que =Java= et =C#=. C'est en partie grâce à une syntaxe peu intrusive qu'un langage peut être plus « accueillant » \cite{Fowler-2005}. Les dialectes de Lisp sont intéressants de ce côté. Leur système de macros permet de donner une sémantique à une syntaxe interne très malléable (voir figure [[Lisp-Json-Reader]]).
 
@@ -287,7 +290,7 @@ LMS (/Lightweight Modular Staging/) est un système de génération de code à l
   println(n)
 #+END_SRC
 
-**** /Language Workbenches/
+*** /Language Workbenches/
 
 Il existe plusieurs /frameworks/ aidant la conception de DSL. \cite{Voelter-2013} retient trois /frameworks/ représentatifs de l'état de l'art dans la conception de /Domain-Specific Languages/ : Spoofax, Xtext et MPS (/Meta Programming System/). Ils font partie des outils de type /Language Workbench/ \cite{Fowler-2005} encadrant la pratique du /Language-Oriented Programming/.
 
