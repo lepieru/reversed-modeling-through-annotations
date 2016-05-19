@@ -41,7 +41,7 @@ Littéralement modèle du modèle, un *metamodèle* est un modèle définissant 
 
 Un *langage* est la composition d'une *syntaxe* (sa forme) ainsi que d'une *sémantique* (son sens). On peut voir la syntaxe comme la donnée et la sémantique comme l'information, c'est-à-dire l'interprétation sur la donnée \cite{Harel-and-Rumpe-2004}. Cela s'applique à tous les langages, des langues naturelles (anglais, français, /etc./) aux langages formels (mathématiques, langages de programmation, /etc./.).
 
-La *syntaxe concrète* est la représentation que l'on se fait du langage \cite{Fowler-2005}. On distingue deux types de syntaxe concrète : les syntaxes textuelles qui sont composées d'une suite de caractères et les syntaxes graphiques qui sont construites avec des éléments tel que des boîtes, des flèches, /etc./. Une *grammaire* est un ensemble de règles qui contraignent un langage. Ces règles décrivent comment former des « phrases » en fonction des « mots » rencontrés. Le langage BNF [fn:Yacc-and-Bison] est un exemple d'outil permettant la définition de grammaire \cite{Garshol-2008} (voir figure [[BNF-Example]]), mettant en évidence les symboles terminaux et non-terminaux de la syntaxe.
+La *syntaxe concrète* est la représentation que l'on se fait du langage \cite{Fowler-2005}. On distingue deux types de syntaxe concrète : les syntaxes textuelles qui sont composées d'une suite de caractères et les syntaxes graphiques qui sont construites avec des éléments tel que des boîtes, des flèches, /etc./. Une *grammaire* est un ensemble de règles qui contraignent la forme d'un langage. Ces règles décrivent comment construire des « phrases » en fonction des « mots » rencontrés. Le langage BNF [fn:Yacc-and-Bison] est un exemple d'outil permettant la définition de grammaire \cite{Garshol-2008} (voir figure [[BNF-Example]]), mettant en évidence les symboles terminaux et non-terminaux de la syntaxe.
 
 #+CAPTION: Exemple d'utilisation de BNF (Backus Naur Form) : définition de la représentation textuelle d'une valeur numérique (entier et flottant)
 #+NAME: BNF-Example
@@ -357,13 +357,13 @@ La forme d'un code source (=M(gpl)=) est formalisé par son méta-modèle (=MM(g
 #+ATTR_LATEX: :width 15cm
 [ TODO ]
 
-L'UML est  intéressant pour tirer les notions domaines retrouvé dans le code source. Cependant, l'UML n'est qu'une forme supplémentaire pour représenter un modèle orienté objet. Le /Domain-Specific/ ne se retrouve pas nécessairement dans ce metamodèle. Si l'on reprends la figure [[Internal-DSL-example]], on remarque que selon la stratégie utilisé pour émuler un DSL interne, ce n'est pas grâce à une représentation UML que l'on va pouvoir retrouver le domaine. Cette conclusion nous indique qu'il serait nécessaire d'analyser les AST pour en retirer du /Domain-Specific/.
+L'UML est  intéressant pour tirer les notions domaines retrouvé dans le code source. Cependant, l'UML n'est qu'une forme supplémentaire pour représenter un modèle orienté objet. Le /Domain-Specific/ ne se retrouve pas nécessairement dans ce metamodèle. Si l'on reprends la figure [[Internal-DSL-Example]], on remarque que selon la stratégie utilisé pour émuler un DSL interne, ce n'est pas grâce à une représentation UML que l'on va pouvoir retrouver le domaine. Cette conclusion nous indique qu'il serait nécessaire d'analyser les AST pour en retirer du /Domain-Specific/.
 
 ** S'intéresser à l'AST : le cas des annotations
 
 Les annotations dans le code source sont des meta-données pouvant être ajoutés sur différents noeuds de l'AST (packages, classes, méthodes, /etc/.). Du comportement peut leur être associé (voir l'exemple avec la persistence en Java grâce à l'aide des annotations \cite{Reed-2007}). Pour le métier aussi, les annotations sont une potentielle une source d'information.
 
-Si l'on considère le domaine du test unitaire, le code source =Xtend= en figure [[JUnit-Annotation-Example]] contient de l'information au niveau des annotations. Si des informations sont présentent partout dans les modèles (nom de classe, nom de méthode, /etc/.), les annotations sont des informations explicites beaucoup moins technique (soit plus proche du domaine). Extraire ces annotations peut être une manière de reconstruire le domaine.
+Si l'on considère le domaine du test unitaire, le code source =Xtend= en figure [[JUnit-Annotation-Example]] contient de l'information au niveau des annotations. Si des informations sont présentent partout dans les modèles (nom de classe, nom de méthode, /etc/.), les annotations sont des informations explicites beaucoup moins technique (soit plus proche du domaine). Extraire ces annotations peut être une manière de reconstruire le domaine. De plus, les annotations sont aisément identifiable dans le code ce qui n'est pas le cas pour toutes les techniques appliquées à la définition de DSL interne (voir le cas de jOOQ [[Internal-DSL-Exemple]]).
 
 #+NAME: JUnit-Annotation-Example
 #+CAPTION: Exemple avec des annotations JUnit en Xtend
@@ -393,9 +393,9 @@ Si l'on considère le domaine du test unitaire, le code source =Xtend= en figure
 
 ** L'outil Busimo : des annotations au domaine
 
-L'outil Busimo a pour but d'inferrer un méta-modèle orienté domaine grâce aux annotations insré dans les codes source.
+L'outil Busimo a pour but d'inferrer un méta-modèle orienté domaine grâce aux annotations insérée dans les codes source. Il prend en entrée du code (=Xtend= uniqument à la date du document), en récupére la forme abstraite pour en créer un modèle arboressant des noeuds annotés (AnnotableNode.  Le schéma [[How-Busimo-Works]] montre le fonctionnement global de Busimo.
 
-#+NAME: jOOQ-Models
+#+NAME: How-Busimo-Works
 #+CAPTION: Les modèles dans jOOQ
 #+ATTR_LATEX: :width 15cm
 [ TODO ]
@@ -404,8 +404,23 @@ L'outil Busimo a pour but d'inferrer un méta-modèle orienté domaine grâce au
 ** Critique(s)
 * Travaux à venir
 ** Analyse de modèles Java
+
+#+NAME: Multi-Source-Annotation-Picker
+#+CAPTION: Analyser plusieur type de source
+#+ATTR_LATEX: :width 15cm
+[ TODO ]
+
+Référence:
+- \cite{Pawlak-et-al-2006}
+
 ** Règles de filtrage
+
+Certaines annotations ne sont pas orienté domaine. Nous pouvons prendre l'exemple en Java des annotaion =@Override=, =@SuppressWarnings=, ou encore =@FunctionalInterface= [fn:Code-as-Domain].
+
 ** Miner Github
+
+Github est sans doute la plus grande source centralisé de code source. Il est donc facile de récupérer un grand nombre de source =Java= et =Xtend=. Une analyse de ces sources nous permettrait de valider la cohérence des modèles généré par Busimo.
+
 * Conclusion
 
 Les langages dédiés réconcilient les domaines avec le code source. Les langages de programmation ont longtemps été des outils que seuls les programmeurs pouvaient manipuler. En donnant une vraie place aux notions métiers, les experts ont la possibilité de produire et de communiquer via les sources comme média, prenant ainsi le contrôle de la logique métier.
@@ -429,3 +444,4 @@ La capacité de passer de forme en forme serait-elle une nouvelle étape dans l'
 [fn:cl-json-reader] cl-json-reader : https://github.com/qinix/cl-json-reader
 [fn:Xtend] Xtend : https://www.eclipse.org/xtend/
 [fn:Scala-LMS] Scala-LMS : https://scala-lms.github.io/
+[fn:Code-as-Domain] Il y a effectivement un domaine associé à ces annotations, mais ce domaine est complément lié à la facette technique du développement
