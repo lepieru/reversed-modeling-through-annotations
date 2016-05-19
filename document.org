@@ -403,8 +403,8 @@ L'outil Busimo a pour but d'inferrer un méta-modèle orienté domaine grâce au
 ** Résultats
 ** Critique(s)
 * Travaux à venir
-** Règles de filtrage
 ** Analyse de modèles Java
+** Règles de filtrage
 ** Miner Github
 * Conclusion
 
