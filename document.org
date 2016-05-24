@@ -6,7 +6,7 @@
 #+LATEX_CLASS: custom
 #+LATEX_CLASS_OPTIONS: [11pt]
 #+LATEX_HEADER: \input{header}
-#+LATEX_HEADER: \abstract{Dans ce rapport de stage, nous produisons un état de l'art des langages dédiés (aussi appelés DSL pour \textit{Domain-Specific Languages}) à l'aide de la littérature scientifique sur le sujet. Nous définissons le DSL en exposant ses problématiques. La diversité des formes d'un même DSL étant avérée, la question du langage dédié métamorphique se pose. Deux études sont présentées ici : le cas du logiciel MPS, un \textit{Language Workbench} proposant une forme de métamorphisme, ainsi que le prototypage d'un outil de détection de domaine dans le code source.}
+#+LATEX_HEADER: \abstract{Ce document regroupe un état de l'art sur les langages dédiés (aussi appelés DSL pour \textit{Domain-Specific Languages}) ainsi qu'un rapport des travaux de recherche autour du thème du DSL métamorphique. Si l'on souhaite généraliser les transformations modèle à modèle, il faut fournir une forme pivot. Dans le DSL, la sémantique est le domaine ; cependant, ce n'est pas le cas du GPL (pour \textit{General Purpose Language}) qui lui défini le domaine. C'est dans le but de capturer cette forme pivot qu'un prototype permettant l'inference du domaine dans du code GPL a été développé. Ce type d'outil est un premier pas vers l'automatisation de la modélisation inverse.}
 
 * Introduction
 
