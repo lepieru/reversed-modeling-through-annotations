@@ -1,4 +1,4 @@
-#+TITLE: Modélisation inverse grâce aux annotations
+#+TITLE: Modélisation inverse à l'aide des annotations
 #+AUTHOR: Pierre Le Gall
 
 #+OPTIONS: toc:nil
