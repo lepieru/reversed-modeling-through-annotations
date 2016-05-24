@@ -16,9 +16,9 @@ Certains langages de programmation ont par la suite été conçus pour mieux ré
 
 Il est indéniable que les DSL simplifient l'usage de l'informatique d'aujourd'hui. Pour lancer un programme, on peut l'appeler via un shell en lui passant des options adéquates. Pour interroger une base de données relationnelles, on la questionne en SQL. Si l'on veut écrire une page web, nous le faisons en HTML/CSS. Chacun de ces cas utilise une abstraction sous forme d'un DSL de la complexité interne du logiciel.
 
-Si les DSL sont partout, ils possèdent souvent diverses formes pour un même domaine. La définition du langage dédié métamorphique \cite{Acher-et-al-2014} se base sur ce constat. Ce stage a permit de continuer les recherches dans ce sujet.
+Si les DSL sont partout, ils possèdent souvent diverses formes pour un même métier. Une forme peut être externe ou interne. Si il existe souvent qu'une seule forme interne, il existe souvent plusieurs formes externes créant une barrière entre des outils d'un même domaine. La définition du langage dédié métamorphique \cite{Acher-et-al-2014} arrive sur ce constat.
 
-Commencant par une étudé bibliographique sur les langages dédiés, nous présenterons par la suite le cas MPS, logiciel de type /Language Workbench/ (c'est-à-dire, de création de langage formelle). Avant de conclure, nous poursuivrons avec la présentation de l'outil de détection de domaine dans le code source.
+Commencant par une étudé bibliographique sur les langages dédiés, le travail sur un prototype d'inference du domaine dans du code GPL sera présenté. Cet outil est un début vers l'automatisation de la modélisation inverse, c'est-à-dire la définition d'un méta-modèle à l'aide des sources GPL en entrée. Ce premier essai s'intéresse aux annotations.
 
 * Contexte
 ** Notions de modèle
