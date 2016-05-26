@@ -116,8 +116,6 @@ Malgré tout, la frontière entre GPL et DSL n'est pas nette, mais plutôt gradu
 
 Les /Domain-Specific Languages/ se divisent en deux grandes catégories : les DSL externes et les DSL internes.
 
-**** DSL externes
-
 Les DSL externes sont construits à l'aide outils semblables à ceux utilisés pour les GPL. Les concepteurs ont la liberté de construire les éléments de la grammaire (en s'inspirant ou non de langages existants) ainsi que de sélectionner les principaux concepts applicables. Souvent accompagnés d'outils spécifiques, ils sont capables de fonctionner en /standalone/. Cela permet de s'affranchir de diverses contraintes, notamment celles du langage au coeur de la solution métier \cite{Karsai-et-al-2009}. Ce nouveau langage est indépendant. \cite{Fowler-2005} liste plusieurs problèmes relatifs aux DSL externes. Ils commencent par créer une barrière symbolique avec le langage de base, ce qui rend l'interopérabilité difficile. L'utilisateur ayant en main un langage limité, il n'est pas évident de pouvoir effectuer une action hors de la portée du langage. Fowler continue en utilisant le terme cacophonie des langages : si un langage demande un effort d'apprentissage, peut-être que les multiplier est une mauvaise idée. Cependant, il ne faut pas oublier que ces langages ont pour but d'être simple, limitant la valeur de cette dernière critique.
 
 Si un DSL (voir l'exemple avec SQL figure [[External-DSL-examle-with-SQL]] limite l'utilisateur dans le cadre de la manipulation de données provenant de bases de données relationnelles, il ne faut pas voir cette contrainte comme un simple inconvénient. Ceci encourage l'écriture de code plus compréhensible en étant plus déclaratif dans un contexte bien défini. De plus, si l'utilisateur n'a pas accès à toutes le fonctionnalités du système, le DSL est aussi une sécurité contre les maladresses. Si c'est aussi vrai pour le DSL interne, cela l'est particulièrement pour le DSL externe qui restreint l'utilisateur dans le cadre du domaine.
@@ -130,8 +128,6 @@ Si un DSL (voir l'exemple avec SQL figure [[External-DSL-examle-with-SQL]] limit
      WHERE born_in = 2015
   ORDER BY name
 #+END_SRC
-
-**** DSL internes
 
 Gérer la communication entre plusieurs langages est une tâche compliqué, ce qui a pour conséquence que les développeurs font souvent le choix du DSL interne \cite{Renggli-and-Girba-2009}.
 
@@ -150,8 +146,6 @@ create.selectFrom(CAT)
 #+NAME: DSL-types
 #+CAPTION: Les différents types de DSL (source : https://queue.acm.org/detail.cfm?id=2617811)
 [[./pictures/DSL-types.png]]
-
-**** Faire un choix
 
 Pour faire le choix d'une solution, externe ou interne, il faut peser le pour et le contre en fonction de la situation. La figure [[How-to-choose-between-external-and-internal-DSL]] pose jusqu'à quatre questions pour faire son choix. Le DSL interne est déconseillé par \cite{Mernik-et-al-2005} si les notations du domaine doit être strictement respectés et s'il y a pas de besoin spécifique (analyse, vérification, optimisation, parallélisation et transformation). S'il est souvent difficile de respecter la syntaxe du domaine dans un GPL, le /deep DSL/ offre la possibilité de travailler sur la syntaxe (vérification, transformation, /etc./), rendant cette deuxième condition discutable.
 
