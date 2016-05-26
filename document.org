@@ -231,7 +231,7 @@ LMS (/Lightweight Modular Staging/) est un système de génération de code à l
   println(n)
 #+END_SRC
 
-*** /Language Workbenches/
+*** Les /Language Workbenches/
 
 Il existe plusieurs /frameworks/ aidant la conception de DSL. \cite{Voelter-2013} retient trois /frameworks/ représentatifs de l'état de l'art dans la conception de /Domain-Specific Languages/ : Spoofax, Xtext et MPS (/Meta Programming System/). Ils font partie des outils de type /Language Workbench/ \cite{Fowler-2005} encadrant la pratique du /Language-Oriented Programming/.
 
