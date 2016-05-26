@@ -1,4 +1,4 @@
-#+TITLE: Modélisation inverse à l'aide des annotations
+#+TITLE: Modélisation inverse via les annotations
 #+AUTHOR: Pierre Le Gall
 
 #+OPTIONS: toc:nil
@@ -12,7 +12,7 @@
 
 Les premiers programmes numériques étaient développés directement en langage machine. En plus de n'être compatible qu'avec un type particulier de machine, ce travail était ingrat et source d'erreur. L'apparition de l'assembleur a permis de rendre le code produit plus générique et /human-readable/ grâce à une abstraction du code machine cible. L'arrivée des langages de programmation ont permis l'utilisation de concepts plus haut niveau tel que les types, les variables, les constantes, les listes, les structures, les fonctions, /etc./ qui permettent des constructions beaucoup plus proches de la vision que l'homme a d'un programme.
 
-Certains langages de programmation ont par la suite été conçus pour mieux répondre à une problématique particulière ; c'était déjà l'idée derrière COBOL [fn:Cobol-Accronym], qui tout en étant /Turing-complete/, est né dans l'optique de proposer un outil spécialisé dans la création d'applications de gestion. Mais pourquoi créer des outils pour un cas utilisation particulier ? Ne serait-ce pas réinventer la roue ? Pourquoi ne pas simplement avoir fait le choix de =Fortran= ou de =Lisp= qui existaient déjà à l'époque ? Est-ce qu'être moins générique ne revient pas à créer toujours plus de barrières ? Le fait est que les outils sont plus efficaces quand ils sont adaptés aux problèmes. C'est la raison du succès des /Domain-Specific Languages/. De nos jours, leur utilisation est devenu chose commune. Grâce à l'abstraction qu'ils proposent, l'utilisateur non programmeur peut interagir avec le système en ayant en tête les problématiques du domaine.
+Certains langages de programmation ont par la suite été conçus pour mieux répondre à une problématique particulière ; c'était déjà l'idée derrière COBOL [fn:Cobol-accronym], qui tout en étant /Turing-complete/, est né dans l'optique de proposer un outil spécialisé dans la création d'applications de gestion. Mais pourquoi créer des outils pour un cas utilisation particulier ? Ne serait-ce pas réinventer la roue ? Pourquoi ne pas simplement avoir fait le choix de =Fortran= ou de =Lisp= qui existaient déjà à l'époque ? Est-ce qu'être moins générique ne revient pas à créer toujours plus de barrières ? Le fait est que les outils sont plus efficaces quand ils sont adaptés aux problèmes. C'est la raison du succès des /Domain-Specific Languages/. De nos jours, leur utilisation est devenu chose commune. Grâce à l'abstraction qu'ils proposent, l'utilisateur non programmeur peut interagir avec le système en ayant en tête les problématiques du domaine.
 
 Il est indéniable que les DSL simplifient l'usage de l'informatique d'aujourd'hui. Pour lancer un programme, on peut l'appeler via un shell en lui passant des options adéquates. Pour interroger une base de données relationnelles, on la questionne en SQL. Si l'on veut écrire une page web, nous le faisons en HTML/CSS. Chacun de ces cas utilise une abstraction sous forme d'un DSL de la complexité interne du logiciel.
 
@@ -23,28 +23,28 @@ Commencant par une étudé bibliographique sur les langages dédiés, le travail
 * Contexte
 ** Notions de modèle
 
-Un *modèle* (relatif à un domaine) est la conceptualisation d'un sujet par rapport à une problématique précise (voir figure [[Two-Models-Example]]). Grâce à lui, on peut définir de manière plus ou moins abstraite un problème et/ou sa solution. Dans le cadre de la méthodologie MDE (/Model-driven engineering/ ou Ingénierie Dirigée par les Modèles), tout est modèle, des schémas aux codes source. Selon la forme, un modèle équivalent au niveau domaine peuvent contenir plus ou moins d'informations.
+Un *modèle* (relatif à un domaine) est la conceptualisation d'un sujet par rapport à une problématique précise (voir figure [[Two-models-example]]). Grâce à lui, on peut définir de manière plus ou moins abstraite un problème et/ou sa solution. Dans le cadre de la méthodologie MDE (/Model-Driven Engineering/ ou Ingénierie Dirigée par les Modèles), tout est modèle, des schémas aux codes source. Selon la forme, un modèle équivalent au niveau domaine peuvent contenir plus ou moins d'informations.
 
-#+NAME: Two-Models-Example
+#+NAME: Two-models-example
 #+CAPTION: Exemple de deux modèle équivalent. À gauche la représentation graphique d'une fonction et à droite la représentation sous forme de code source C de cette même fonction.
 #+ATTR_LATEX: :width 13cm
-[[./pictures/Two-Models-Example.png]]
+[[./pictures/Two-models-example.png]]
 
-Littéralement modèle du modèle, un *méta-modèle* est un modèle définissant les règles et les contraites d'un autre modèle. Il définit donc un type de modèle. La figure [[Model-and-Metamodel-Exemple]] nous montre la différence entre un modèle et son méta-modèle.
+Littéralement modèle du modèle, un *méta-modèle* est un modèle définissant les règles et les contraites d'un autre modèle. Il définit donc un type de modèle. La figure [[Model-and-metamodel-example]] nous montre la différence entre un modèle et son méta-modèle.
 
-#+NAME: Model-and-Metamodel-Example
+#+NAME: Model-and-metamodel-example
 #+CAPTION: Exemple d'un modèle et de son méta-modèle
 #+ATTR_LATEX: :width 13cm
-[[./pictures/Model-and-Metamodel-Example.png]]
+[[./pictures/Model-and-metamodel-example.png]]
 
 ** Notions de langage
 
 Un *langage* est la composition d'une *syntaxe* (sa forme) ainsi que d'une *sémantique* (son sens). On peut voir la syntaxe comme la donnée et la sémantique comme l'information, c'est-à-dire l'interprétation sur la donnée \cite{Harel-and-Rumpe-2004}. Cela s'applique à tous les langages, des langues naturelles (anglais, français, /etc./) aux langages formels (mathématiques, langages de programmation, /etc./.).
 
-La *syntaxe concrète* est la représentation que l'on se fait du langage \cite{Fowler-2005}. On distingue deux types de syntaxe concrète : les syntaxes textuelles qui sont composées d'une suite de caractères et les syntaxes graphiques qui sont construites avec des éléments tel que des boîtes, des flèches, /etc./. Une *grammaire* est un ensemble de règles qui contraignent la forme d'un langage. Ces règles décrivent comment construire des « phrases » en fonction des « mots » rencontrés. Le langage BNF [fn:Yacc-and-Bison] est un exemple d'outil permettant la définition de grammaire \cite{Garshol-2008} (voir figure [[BNF-Example]]), mettant en évidence les symboles terminaux et non-terminaux de la syntaxe.
+La *syntaxe concrète* est la représentation que l'on se fait du langage \cite{Fowler-2005}. On distingue deux types de syntaxe concrète : les syntaxes textuelles qui sont composées d'une suite de caractères et les syntaxes graphiques qui sont construites avec des éléments tel que des boîtes, des flèches, /etc./. Une *grammaire* est un ensemble de règles qui contraignent la forme d'un langage. Ces règles décrivent comment construire des « phrases » en fonction des « mots » rencontrés. Le langage BNF [fn:Yacc-and-Bison] est un exemple d'outil permettant la définition de grammaire \cite{Garshol-2008} (voir figure [[BNF-example]]), mettant en évidence les symboles terminaux et non-terminaux de la syntaxe.
 
 #+CAPTION: Exemple d'utilisation de BNF (Backus Naur Form) : définition de la représentation textuelle d'une valeur numérique (entier et flottant)
-#+NAME: BNF-Example
+#+NAME: BNF-example
 #+BEGIN_SRC bnf
   <numeric> ::= <integer> | <float>
   <integer> ::= <digits> | '-' <digits>
@@ -53,12 +53,12 @@ La *syntaxe concrète* est la représentation que l'on se fait du langage \cite{
   <digit>   ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
 #+END_SRC
 
-La syntaxe concrète s'oppose à la *syntaxe abstraite*. Cette dernière est une altération de la syntaxe concrète. Cette forme est structurée de façon à être adaptée à une utilisation par la machine. Elle prend très souvent la forme d'un arbre (appelé Arbre de Syntaxe Abstraite, /Abstract Syntax Tree/ ou AST) (voir figure [[Abstract-Syntax-Tree-Example]]) où chaque noeud représente un élément, qui peut lui même être composé de plusieurs sous-éléments. Certains détails de la syntaxe concrète peuvent être ôtés. Il est donc possible d'arriver à un même AST avec des syntaxes concrètes différentes. On peut dire qu'un langage peut avoir deux syntaxes concrètes, ou deux langages qui partagent la même syntaxe abstraite \cite{Fowler-2005}.
+La syntaxe concrète s'oppose à la *syntaxe abstraite*. Cette dernière est une altération de la syntaxe concrète. Cette forme est structurée de façon à être adaptée à une utilisation par la machine. Elle prend très souvent la forme d'un arbre (appelé Arbre de Syntaxe Abstraite, /Abstract Syntax Tree/ ou AST) (voir figure [[AST-example]]) où chaque noeud représente un élément, qui peut lui même être composé de plusieurs sous-éléments. Certains détails de la syntaxe concrète peuvent être ôtés. Il est donc possible d'arriver à un même AST avec des syntaxes concrètes différentes. On peut dire qu'un langage peut avoir deux syntaxes concrètes, ou deux langages qui partagent la même syntaxe abstraite \cite{Fowler-2005}.
 
-#+NAME: Abstract-Syntax-Tree-Example
-#+CAPTION: Exemple d'arbre de syntax abstraite: représentation abstraite de la fonction f(n) = n * (n + 1) / 2 \cite{Harel-and-Rumpe-2004}
+#+NAME: AST-example
+#+CAPTION: Exemple d'arbre de syntax abstraite : représentation abstraite de la fonction f(n) = n * (n + 1) / 2 \cite{Harel-and-Rumpe-2004}
 #+ATTR_LATEX: :width 4cm
-[[./pictures/Abstract-Syntax-Tree-Example.png]]
+[[./pictures/AST-example.png]]
 
 La *sémantique* est le sens que l'on donne à un langage. Grâce à l'analyse grammaticale, une forme plus structurée de la syntaxe en entrée est obtenue. C'est sur cette structure que l'on peut travailler pour en déduire le comportement attendu. Les mathématiques exposent les règles de transformation en sémantique opérationnelle, en sémantique dénotationnelle ou en sémantique axiomatique que nous n'aborderons pas ici. Les compilateurs sont les programmes qui transforment la syntaxe abstraite d'un langage. Cela peut avoir comme but de rendre le programme exécutable par la machine.
 
@@ -95,22 +95,22 @@ Malgré tout, la frontière entre GPL et DSL n'est pas nette, mais plutôt gradu
 
 \cite{Fowler-2005} cite plusieurs traditions dans le DSL. On y retrouve les /Unix Little Languages/ (/mini-languages/ pour le système construit avec la /tool-chain/ Unix), les dialectes de Lisp (probablement l'exemple le plus fort pour exprimer un DSL dans un GPL), l'/Adaptive Model Object/ (très productif mais demande de connaître l'architecture du projet), l'XML (équipé d'une grammaire par défaut et bien outillé, mais n'est pas forcément facile à lire), ou encore les /GUI builders/ (permettant un syntaxe plus déclarative et moins procédurale). Ces outils sont puissants : les /Unix Little Languages/ permettent de configurer tout un système grâce à de simples fichiers textes. Les Lisp permettent de redéfinir toute une syntaxe dans le GPL lui même. L'/Adaptive Model Object/ permet de rendre le métier expressif dans une application programmée dans un langage orienté objet. L'XML permet de proposer une syntaxe concrète qui peut être réutilisées pour diverses représentations. Et enfin, les /GUI builders/ ont permis d'abstraire la déclaration des interfaces homme-machine (voir =HTML= ou encore =QML=).
 
-\cite{Ward-1994} positionne le DSL au centre des problématiques logicielles (voir figure [[Middle-Out-Development]]) dans sa définition du /Language-Oriented Programming/, c'est-à-dire entre le métier et les aspects techniques. En effet, le DSL permet de rendre le domaine moins abstrait (voir figure [[Mainstream-Programming]] et [[Language-Oriented-Programming]]) ainsi qu'une optimisation des exécutions côté machine \cite{Sujeeth-et-al-2013}.
+\cite{Ward-1994} positionne le DSL au centre des problématiques logicielles (voir figure [[Middle-out-development]]) dans sa définition du /Language-Oriented Programming/, c'est-à-dire entre le métier et les aspects techniques. En effet, le DSL permet de rendre le domaine moins abstrait (voir figure [[Mainstream-programming]] et [[Language-Oriented-Programming]]) ainsi qu'une optimisation des exécutions côté machine \cite{Sujeeth-et-al-2013}.
 
-#+NAME: Middle-Out-Development
+#+NAME: Middle-out-development
 #+CAPTION: Notion de /Middle-out-development/ \cite{Ward-1994}
-#+ATTR_LATEX: :width 5cm
-[[./pictures/Middle-Out-Development.png]]
+#+ATTR_LATEX: :width 7cm
+[[./pictures/Middle-out-development.png]]
 
 #+NAME: Mainstream-Programming
 #+CAPTION: Programmation traditionnelle avec un GPL \cite{Dmitriev-2004}
 #+ATTR_LATEX: :width 15cm
-[[./pictures/Mainstream-programming-with-a-GPL.png]]
+[[./pictures/Mainstream-programming.png]]
 
 #+NAME: Language-Oriented-Programming
 #+CAPTION: /Language-oriented programming/ avec un DSL \cite{Dmitriev-2004}
 #+ATTR_LATEX: :width 15cm
-[[./pictures/Language-oriented-programming-with-a-DSL.png]]
+[[./pictures/Language-Oriented-Programming.png]]
 
 *** Externe et interne
 
@@ -120,9 +120,9 @@ Les /Domain-Specific Languages/ se divisent en deux grandes catégories : les DS
 
 Les DSL externes sont construits à l'aide outils semblables à ceux utilisés pour les GPL. Les concepteurs ont la liberté de construire les éléments de la grammaire (en s'inspirant ou non de langages existants) ainsi que de sélectionner les principaux concepts applicables. Souvent accompagnés d'outils spécifiques, ils sont capables de fonctionner en /standalone/. Cela permet de s'affranchir de diverses contraintes, notamment celles du langage au coeur de la solution métier \cite{Karsai-et-al-2009}. Ce nouveau langage est indépendant. \cite{Fowler-2005} liste plusieurs problèmes relatifs aux DSL externes. Ils commencent par créer une barrière symbolique avec le langage de base, ce qui rend l'interopérabilité difficile. L'utilisateur ayant en main un langage limité, il n'est pas évident de pouvoir effectuer une action hors de la portée du langage. Fowler continue en utilisant le terme cacophonie des langages : si un langage demande un effort d'apprentissage, peut-être que les multiplier est une mauvaise idée. Cependant, il ne faut pas oublier que ces langages ont pour but d'être simple, limitant la valeur de cette dernière critique.
 
-Si un DSL (voir l'exemple avec SQL figure [[External-DSL-Example-with-SQL]] limite l'utilisateur dans le cadre de la manipulation de données provenant de bases de données relationnelles, il ne faut pas voir cette contrainte comme un simple inconvénient. Ceci encourage l'écriture de code plus compréhensible en étant plus déclaratif dans un contexte bien défini. De plus, si l'utilisateur n'a pas accès à toutes le fonctionnalités du système, le DSL est aussi une sécurité contre les maladresses. Si c'est aussi vrai pour le DSL interne, cela l'est particulièrement pour le DSL externe qui restreint l'utilisateur dans le cadre du domaine.
+Si un DSL (voir l'exemple avec SQL figure [[External-DSL-examle-with-SQL]] limite l'utilisateur dans le cadre de la manipulation de données provenant de bases de données relationnelles, il ne faut pas voir cette contrainte comme un simple inconvénient. Ceci encourage l'écriture de code plus compréhensible en étant plus déclaratif dans un contexte bien défini. De plus, si l'utilisateur n'a pas accès à toutes le fonctionnalités du système, le DSL est aussi une sécurité contre les maladresses. Si c'est aussi vrai pour le DSL interne, cela l'est particulièrement pour le DSL externe qui restreint l'utilisateur dans le cadre du domaine.
 
-#+NAME: External-DSL-Example-with-SQL
+#+NAME: External-DSL-example-with-SQL
 #+CAPTION: Un exemple de DSL externe avec SQL
 #+BEGIN_SRC sql
     SELECT *
@@ -135,7 +135,7 @@ Si un DSL (voir l'exemple avec SQL figure [[External-DSL-Example-with-SQL]] limi
 
 Gérer la communication entre plusieurs langages est une tâche compliqué, ce qui a pour conséquence que les développeurs font souvent le choix du DSL interne \cite{Renggli-and-Girba-2009}.
 
-L'idée d'un DSL interne est d'utiliser les capacités d'un GPL pour exprimer un domaine. On parle aussi de /Embedded Domain-Specific Languages/ (EDSL ou DSEL [fn:Is-Embedded-DSL-equivalent-to-Internal-DSL]) \cite{Hudak-1996}. De cette manière, il n'existe pas de barrière symbolique. L'utilisateur peut utiliser un GPL sans avoir à comprendre toutes ses subtilités. De ce point de vue, il n'y plus de limite artificielle, toutes les capacités du langage hôte sont disponibles. Toutefois, il est possible de se perdre dans ce nuage de fonctionnalités \cite{Fowler-2005}. L'approche interne demande moins d'effort que l'approche externe pour les concepteurs \cite{Kamin-1998}, impactant directement les coûts de développement. En effet, il est possible de profiter de l'intégration du GPL hôte (/parser/, /debbuger/, compilateur, coloration syntaxique, /etc./) ; à noter que la solution finale tend à être moins adaptée (ex. retours d'erreurs) qu'avec un DSL externe. Malheureusement, il se peut qu'il soit compliqué d'adapter un DSL aux contraintes syntaxiques du GPL hôte choisi rendant le résultat peu efficace pour l'expert métier. C'est le cas pour la plupart des GPL proposant une syntaxe fortement inspirée du langage C \cite{Fowler-2005, Stefik-and-Siebert-2013}.
+L'idée d'un DSL interne est d'utiliser les capacités d'un GPL pour exprimer un domaine. On parle aussi de /Embedded Domain-Specific Languages/ (EDSL ou DSEL [fn:Is-Embedded-DSL-equivalent-to-internal-DSL]) \cite{Hudak-1996}. De cette manière, il n'existe pas de barrière symbolique. L'utilisateur peut utiliser un GPL sans avoir à comprendre toutes ses subtilités. De ce point de vue, il n'y plus de limite artificielle, toutes les capacités du langage hôte sont disponibles. Toutefois, il est possible de se perdre dans ce nuage de fonctionnalités \cite{Fowler-2005}. L'approche interne demande moins d'effort que l'approche externe pour les concepteurs \cite{Kamin-1998}, impactant directement les coûts de développement. En effet, il est possible de profiter de l'intégration du GPL hôte (/parser/, /debbuger/, compilateur, coloration syntaxique, /etc./) ; à noter que la solution finale tend à être moins adaptée (ex. retours d'erreurs) qu'avec un DSL externe. Malheureusement, il se peut qu'il soit compliqué d'adapter un DSL aux contraintes syntaxiques du GPL hôte choisi rendant le résultat peu efficace pour l'expert métier. C'est le cas pour la plupart des GPL proposant une syntaxe fortement inspirée du langage C \cite{Fowler-2005, Stefik-and-Siebert-2013}.
 
 #+NAME: Internal-DSL-example
 #+CAPTION: Un exemple de DSL interne, équivalent du DSL externe (=SQL=) en figure [[[External-DSL-Example-with-SQL]]], avec la bibliothèque =jOOQ= (=Java=)
@@ -147,18 +147,18 @@ create.selectFrom(CAT)
 
 \cite{Gibbons-and-Wu-2014} distinguent le DSL interne peu profond (/shallow DSEL/) et profond (/deep DSEL/). Le /shallow DSEL/ est le fait de se servir de la syntaxe du langage hôte comme base de formalisation de notion du domaine. Si nous avons "=chat + chien=", cela doit aussi avoir du sens dans le langage hôte. À l'inverse le /deep DSEL/ ne se contente pas simplement d'exécuter la chaîne en entrée, il en crée un AST. Le comportement de cette structure peut être défini par la suite. Ce deuxième type de DSL nous permet plus de liberté dans la construction de la sémantique des entrées.
 
-#+NAME: DSL-Types
+#+NAME: DSL-types
 #+CAPTION: Les différents types de DSL (source : https://queue.acm.org/detail.cfm?id=2617811)
-[[./pictures/DSL-Types.png]]
+[[./pictures/DSL-types.png]]
 
 **** Faire un choix
 
-Pour faire le choix d'une solution, externe ou interne, il faut peser le pour et le contre en fonction de la situation. La figure [[How-to-Choose-between-External-and-Internal-DSL]] pose jusqu'à quatre questions pour faire son choix. Le DSL interne est déconseillé par \cite{Mernik-et-al-2005} si les notations du domaine doit être strictement respectés et s'il y a pas de besoin spécifique (analyse, vérification, optimisation, parallélisation et transformation). S'il est souvent difficile de respecter la syntaxe du domaine dans un GPL, le /deep DSL/ offre la possibilité de travailler sur la syntaxe (vérification, transformation, /etc./), rendant cette deuxième condition discutable.
+Pour faire le choix d'une solution, externe ou interne, il faut peser le pour et le contre en fonction de la situation. La figure [[How-to-choose-between-external-and-internal-DSL]] pose jusqu'à quatre questions pour faire son choix. Le DSL interne est déconseillé par \cite{Mernik-et-al-2005} si les notations du domaine doit être strictement respectés et s'il y a pas de besoin spécifique (analyse, vérification, optimisation, parallélisation et transformation). S'il est souvent difficile de respecter la syntaxe du domaine dans un GPL, le /deep DSL/ offre la possibilité de travailler sur la syntaxe (vérification, transformation, /etc./), rendant cette deuxième condition discutable.
 
-#+NAME: How-to-Choose-between-External-and-Internal-DSL
-#+CAPTION: Diagramme aidant à faire le choix du DSL externe ou interne \cite{Mernik-et-al-2005}
-#+ATTR_LATEX: :width 10cm
-[[./pictures/How-to-Choose-between-External-and-Internal-DSL.png]]
+#+NAME: How-to-choose-between-external-and-internal-DSL
+#+CAPTION: Diagramme de décision du type de DSL \cite{Mernik-et-al-2005}
+#+ATTR_LATEX: :width 15cm
+[[./pictures/How-to-choose-between-external-and-internal-DSL.png]]
 
 ** Succès et échecs
 
@@ -174,9 +174,9 @@ Si ces conseils semblent généralistes, ce n'est pas le cas des problèmes rele
 
 *** Propriétés d'un DSL
 
-Il est compliqué de juger un DSL sans critère précis. \cite{Karsai-et-al-2009} ont réunis les différents facteurs de succès rencontrés dans la littérature sur les DSL. On y trouve : l'apprenabilité (L), la convivialité (U), l'expressivité (E), la réutilisabilité (R), le coût de développement (C) et la fiabilité (I) (voir tableau [[Success-Factors]]).
+Il est compliqué de juger un DSL sans critère précis. \cite{Karsai-et-al-2009} ont réunis les différents facteurs de succès rencontrés dans la littérature sur les DSL. On y trouve : l'apprenabilité (L), la convivialité (U), l'expressivité (E), la réutilisabilité (R), le coût de développement (C) et la fiabilité (I) (voir tableau [[Success-factors]]).
 
-#+NAME: Success-Factors
+#+NAME: Success-factors
 #+CAPTION: Facteurs de succès proposé par \cite{Hermans-et-al-2009}
 | *(L) Learnability*     | Developers have to learn an extra language,     |
 |                        | which takes time and effort. Furthermore,       |
@@ -203,9 +203,9 @@ Il est compliqué de juger un DSL sans critère précis. \cite{Karsai-et-al-2009
 |                        | automation of large parts of the development    |
 |                        | process leads to fewers errors.                 |
 
-\cite{Albuquerque-et-al-2014} proposent la réutilisation des critères cognitifs de \cite{Blackwell-and-Green-2003}. Ils les séparent en deux catégories : l'expressivité et la brièveté. L'expressivité (/expressiveness/) est la capacité du DSL à représenter les éléments du domaine (voir tableau [[Expressiveness]]). La brièveté (/conciseness/) est l'économie de termes dans la syntaxe (voir tableau [[Conciseness]]). Ces caractéristiques étant opposés, les concepteurs doivent faire en sorte d'avoir un DSL équilibré. Malheureusement, il est difficile d'identifier ses forces et ses faiblesses dès la phase de conception \cite{Albuquerque-et-al-2014}.
+\cite{Albuquerque-et-al-2014} proposent la réutilisation des critères cognitifs de \cite{Blackwell-and-Green-2003}. Ils les séparent en deux catégories : l'expressivité et la brièveté. L'expressivité (/expressiveness/) est la capacité du DSL à représenter les éléments du domaine (voir tableau [[Expressiveness-criteria]]). La brièveté (/conciseness/) est l'économie de termes dans la syntaxe (voir tableau [[Conciseness-criteria]]). Ces caractéristiques étant opposés, les concepteurs doivent faire en sorte d'avoir un DSL équilibré. Malheureusement, il est difficile d'identifier ses forces et ses faiblesses dès la phase de conception \cite{Albuquerque-et-al-2014}.
 
-#+NAME: Expressiveness
+#+NAME: Expressiveness-criteria
 #+CAPTION: Critères concernant l'expressivité proposés par \cite{Albuquerque-et-al-2014}
 | Expressiveness         |                                                     |
 |------------------------+-----------------------------------------------------|
@@ -214,7 +214,7 @@ Il est compliqué de juger un DSL sans critère précis. \cite{Karsai-et-al-2009
 | *Abstraction*          | Type and availability of abstraction mechanisms     |
 | *Closeness of Mapping* | Closeness of representation to domain               |
 
-#+NAME: Conciseness
+#+NAME: Conciseness-criteria
 #+CAPTION: Critères concernant la brièveté proposés par \cite{Albuquerque-et-al-2014}
 | Conciseness              |                                    |
 |--------------------------+------------------------------------|
@@ -229,9 +229,9 @@ Le sujet de cette section est les méthodes et les implémentations. Nous parler
 
 *** Fonctionnalités des langages
 
-Les langages ne sont pas tous égaux face à l'implémentation de DSL en interne. Certains langages, bien que populaires, sont très rigides face à l'accueil de notions externes. C'est le cas des langages ayant une syntaxe proche du =C=, tel que =Java= et =C#=. C'est en partie grâce à une syntaxe peu intrusive qu'un langage peut être plus « accueillant » \cite{Fowler-2005}. Les dialectes de Lisp sont intéressants de ce côté. Leur système de macros permet de donner une sémantique à une syntaxe interne très malléable (voir figure [[Lisp-Json-Reader]]).
+Les langages ne sont pas tous égaux face à l'implémentation de DSL en interne. Certains langages, bien que populaires, sont très rigides face à l'accueil de notions externes. C'est le cas des langages ayant une syntaxe proche du =C=, tel que =Java= et =C#=. C'est en partie grâce à une syntaxe peu intrusive qu'un langage peut être plus « accueillant » \cite{Fowler-2005}. Les dialectes de Lisp sont intéressants de ce côté. Leur système de macros permet de donner une sémantique à une syntaxe interne très malléable (voir figure [[Lisp-JSON-reader]]).
 
-#+NAME: Lisp-Json-Reader
+#+NAME: Lisp-JSON-reader
 #+CAPTION: Un exemple de flexibilité de la syntaxe Lisp avec json-reader
 #+BEGIN_SRC lisp
   (json-reader:enable-json-syntax)
@@ -250,9 +250,9 @@ Les langages ne sont pas tous égaux face à l'implémentation de DSL en interne
 
 Certains voient les langages de programmation fonctionnelle comme de très bon candidats. Haskell possède certaines fonctionnalités (comme les monades) qui conviennent au développement de DSL \cite{Hudak-1996}. De plus, il permet l'implémentation de solution /deep DSEL/ \cite{Gibbons-and-Wu-2014}.
 
-Les langages dynamiques (c'est-à-dire à typage dynamique, par opposition aux langages à typage statiques) sont aussi plus permissifs. Un bon exemple est l'exploitation des capacités de méta-programmation de =Ruby= dans le /framework/ web =Ruby on Rails= \cite{Fowler-2005}. =Smalltalk=, lui aussi dynamique, permet beaucoup d'expressivité grâce à une syntaxe proche du langage naturel et à ses méthodes en plusieurs parties (voir figure [[Smalltalk-Example]]). Pour \cite{Renggli-and-Girba-2009}, Smalltalk apparaît comme le plus adapté (voir tableau [[Smalltalk-as-the-most-Suitable]]). En effet, sa syntaxe minimaliste, les capacité de simulation du paradigme objet et sa réflexivité font de lui un très bon outil de construction de DSL.
+Les langages dynamiques (c'est-à-dire à typage dynamique, par opposition aux langages à typage statiques) sont aussi plus permissifs. Un bon exemple est l'exploitation des capacités de méta-programmation de =Ruby= dans le /framework/ web =Ruby on Rails= \cite{Fowler-2005}. =Smalltalk=, lui aussi dynamique, permet beaucoup d'expressivité grâce à une syntaxe proche du langage naturel et à ses méthodes en plusieurs parties (voir figure [[DSL-in-Smalltalk-example]]). Pour \cite{Renggli-and-Girba-2009}, Smalltalk apparaît comme le plus adapté (voir tableau [[Smalltalk-as-the-most-suitable]]). En effet, sa syntaxe minimaliste, les capacité de simulation du paradigme objet et sa réflexivité font de lui un très bon outil de construction de DSL.
 
-#+NAME: Smalltalk-Example
+#+NAME: DSL-in-Smalltalk-example
 #+CAPTION: DSL SQL en Smalltalk
 #+BEGIN_SRC smalltalk
   Posts findAll
@@ -261,14 +261,14 @@ Les langages dynamiques (c'est-à-dire à typage dynamique, par opposition aux l
         limit:   5
 #+END_SRC
 
-#+NAME: Smalltalk-as-the-most-Suitable
+#+NAME: Smalltalk-as-the-most-suitable
 #+CAPTION: Comparaison des capacités d'accueil d'un DSL entre plusieurs langages \cite{Renggli-and-Girba-2009}. Legende : \Circle{} non supporté, \LEFTcircle{} partiellement supporté, \CIRCLE{} supporté.
 #+ATTR_LATEX: :width 10cm
-[[./pictures/Smalltalk-as-the-most-Suitable.png]]
+[[./pictures/Smalltalk-as-the-most-suitable.png]]
 
-LMS (/Lightweight Modular Staging/) est un système de génération de code à l'exécution pour le langage Scala \cite{Rompf-and-Odersky-2012}. En associant l'agilité que propose le DSL et des transpositions de code avant exécution, un programme Scala peut être plus rapide qu'un programme C équivalent écrit à la main. On retrouve ici le principe du /deep DSEL/. La figure [[Scala-LMS-Result]] montre le résultat de l'exécution de code en figure [[Scala-LMS-Source]] avec LMS.
+LMS (/Lightweight Modular Staging/) est un système de génération de code à l'exécution pour le langage Scala \cite{Rompf-and-Odersky-2012}. En associant l'agilité que propose le DSL et des transpositions de code avant exécution, un programme Scala peut être plus rapide qu'un programme C équivalent écrit à la main. On retrouve ici le principe du /deep DSEL/. La figure [[Scala-LMS-result]] montre le résultat de l'exécution de code en figure [[Scala-LMS-example]] avec LMS.
 
-#+NAME: Scala-LMS-Source
+#+NAME: Scala-LMS-example
 #+CAPTION: Exemple d'utilisation de LMS (source : https://scala-lms.github.io)
 #+BEGIN_SRC scala
   class Vector[T:Numeric:Manifest](val data: Rep[Array[T]]) {
@@ -286,7 +286,7 @@ LMS (/Lightweight Modular Staging/) est un système de génération de code à l
   println(v.sumIf(_ > 0))
 #+END_SRC
 
-#+NAME: Scala-LMS-Result
+#+NAME: Scala-LMS-result
 #+CAPTION: Code généré à l'exécution (source : https://scala-lms.github.io)
 #+BEGIN_SRC scala
   var n: Double = 0.0
@@ -306,18 +306,18 @@ Il existe plusieurs /frameworks/ aidant la conception de DSL. \cite{Voelter-2013
 
 Spoofax utilise plusieurs métalangages pour définir les différents éléments du langage : =SDF3= définie la syntaxe. =NaBL= crée des contextes dans le langage (/imports/, /namespaces/, /scopes/, /etc./). =TS= spécifie les types, ce qui permet d'éviter les erreurs à l'exécution. Et finalement =Stratego=, qui permet de donner une sémantique au langage.
 
-Contrairement à Spoofax, Xtext réutilise au plus des outils préexistants. Il se sert d'un langage proche de =EBNF= pour définir la syntaxe concrète, de =EMF= pour la génération de code et de bibliothèques =Java= pour diverse problématiques. Pour exemple, le langage de programmation =Xtend=  [fn:Xtend] est développé avec la pile logiciel Xtext.
+Contrairement à Spoofax, Xtext réutilise au plus des outils préexistants. Il se sert d'un langage proche de =EBNF= pour définir la syntaxe concrète, de =EMF= pour la génération de code et de bibliothèques =Java= pour diverse problématiques. Pour exemple, le langage de programmation =Xtend= [fn:Xtend] est développé avec la pile logiciel Xtext.
 
-Si Spoofax et Xtext se focalise sur le DSL textuel, MPS propose un système de projection. Si l'utilisateur visualise à l'aide d'une syntaxe concrète, il faut comprendre que l'édition se fait directement sur l'AST, ce qui permet de conserver une cohérence entre les différentes vues disponibles (voir figure [[Parsing-and-Projectional-Styles]]). Les points particuliers de l'édition projectionnelle sont les suivant \cite{Voelter-2010} :
+Si Spoofax et Xtext se focalise sur le DSL textuel, MPS propose un système de projection. Si l'utilisateur visualise à l'aide d'une syntaxe concrète, il faut comprendre que l'édition se fait directement sur l'AST, ce qui permet de conserver une cohérence entre les différentes vues disponibles (voir figure [[Parsing-and-projectional-styles]]). Les points particuliers de l'édition projectionnelle sont les suivant \cite{Voelter-2010} :
 - pas de grammaire car la source est un AST, il n'y a donc pas d'ambiguité possible
 - la syntaxe est très flexible, peut être textuelle comme graphique
 - permet plusieurs syntaxe pour un même AST
 - indissociable de l'IDE car c'est lui qui interpréte l'AST pour l'affichage et l'édition
 
-#+NAME: Parsing-and-Projectional-Styles
+#+NAME: Parsing-and-projectional-styles
 #+CAPTION: Sur la gauche le fonctionnement de Spoofax et Xtext et sur la droite le fonctionnement de MPS \cite{Voelter-2013}. Xtext peut adopter le comportement à droite mais ce n'est pas son mode par défaut.
 #+ATTR_LATEX: :width 8cm
-[[./pictures/Parsing-and-Projectional-Styles.png]]
+[[./pictures/Parsing-and-projectional-styles.png]]
 
 ** Constats et perspectives
 
@@ -328,12 +328,12 @@ Les critères de qualité du DSL restent difficiles à mesurer \cite{Albuquerque
 #+ATTR_LATEX: :width 13cm
 [[./pictures/Manipulating-representations-with-a-Language-Workbench.png]]
 
-Jongler avec $n$ syntaxes (externes, et potentiellement plusieurs formes internes pour un même DSL) crée des barrières symboliques. Les /Language Workbenches/ ne sont pas toujours une solution acceptable car il peut toujours être difficile de savoir quelle forme adopter. \cite{Acher-et-al-2014} définissent le terme de /Metamorphic DSL/ avec l'expérience FAMILIAR. Le fait est que les syntaxes concrètes forcent le choix d'une forme qui n'est pas adapté à tous les cas d'utilisations. Le /Metamorphic DSL/ conceptualise la capacité d'un DSL à passer d'une syntaxe concrète à une autre selon le cas d'utilisation (tâche à effectuer, outil utilisé), permettant ainsi de ne pas avoir à choisir une mais plutôt plusieurs formes (voir figure [[Metamorphic-DSL-Usecase]]).
+Jongler avec $n$ syntaxes (externes, et potentiellement plusieurs formes internes pour un même DSL) crée des barrières symboliques. Les /Language Workbenches/ ne sont pas toujours une solution acceptable car il peut toujours être difficile de savoir quelle forme adopter. \cite{Acher-et-al-2014} définissent le terme de /Metamorphic DSL/ avec l'expérience FAMILIAR. Le fait est que les syntaxes concrètes forcent le choix d'une forme qui n'est pas adapté à tous les cas d'utilisations. Le /Metamorphic DSL/ conceptualise la capacité d'un DSL à passer d'une syntaxe concrète à une autre selon le cas d'utilisation (tâche à effectuer, outil utilisé), permettant ainsi de ne pas avoir à choisir une mais plutôt plusieurs formes (voir figure [[Metamorphic-DSL-usecase]]).
 
-#+NAME: Metamorphic-DSL-Usecase
+#+NAME: Metamorphic-DSL-usecase
 #+CAPTION: Cas d'utilisation du /Metamorphic DSL/ \cite{Acher-et-al-2014}.
 #+ATTR_LATEX: :width 15cm
-[[./pictures/Metamorphic-DSL-Usecase.png]]
+[[./pictures/Metamorphic-DSL-usecase.png]]
 
 Ces deux solutions ont une vision différente. Si le /Language Workbench/ propose une forme plus approprié pour un domaine donné, le /Metamorphic DSL/ veut donner le choix de la forme que peut prendre un DSL selon le cas d'utilisation.
 
@@ -342,31 +342,31 @@ Ces deux solutions ont une vision différente. Si le /Language Workbench/ propos
 
 Retrouver le domaine dans un programme GPL est plus problématique que pour le DSL.
 
-Pour illustrer, nous pouvons prendre le cas des transformations de forme. Deux approches s'offre à nous. La première est la solution /ad hoc/ (voir figure [[Ad-hoc-Transformation]]), la seconde stratégie est de passer par une representation intermédiaire (voir figure [[Generic-Transformation]]). La seconde est intéressante de par sa nature générique. Dans ce cas, une syntaxe abstraite centrale doit être définie, c'est-à-dire que l'intersection des domaines des différents modèles doit être spécifié. Il faut être capable déterminer une syntaxe abstraite sans perdre d'information présente dans les syntaxes concrètes (dans notre exemple, =XML=, =JSON=, =CSV= et =YAML= partagent des notions du domaines de la sérialisation de données).
+Pour illustrer, nous pouvons prendre le cas des transformations de forme. Deux approches s'offre à nous. La première est la solution /ad hoc/ (voir figure [[Ad-hoc-transformation]]), la seconde stratégie est de passer par une representation intermédiaire (voir figure [[Generic-transformation]]). La seconde est intéressante de par sa nature générique. Dans ce cas, une syntaxe abstraite centrale doit être définie, c'est-à-dire que l'intersection des domaines des différents modèles doit être spécifié. Il faut être capable déterminer une syntaxe abstraite sans perdre d'information présente dans les syntaxes concrètes (dans notre exemple, =XML=, =JSON=, =CSV= et =YAML= partagent des notions du domaines de la sérialisation de données).
 
-#+NAME: Ad-hoc-Transformation
+#+NAME: Ad-hoc-transformation
 #+CAPTION: Transformation /ad hoc/ de Ruby vers Javascript avec [[http://opalrb.org/][Opal]]
 #+ATTR_LATEX: :width 13cm
-[[./pictures/Ad-hoc-Transformation.png]]
+[[./pictures/Ad-hoc-transformation.png]]
 
-#+NAME: Generic-Transformation
+#+NAME: Generic-transformation
 #+CAPTION: Transformation générique grâce à une syntaxe abstraite
 #+ATTR_LATEX: :width 13cm
-[[./pictures/Generic-Transformation.png]]
+[[./pictures/Generic-transformation.png]]
 
-Notre volonté est de déterminer un méta-modèles, soit le domaine, à partir de modèles défini sous la forme d'un langage de programmation général. Le cas des GPL est plus complexe que l'exemple des formats de sérialisation de données qui sont des DSL. Les langages de programmation donnent la possibilité de définir un modèle pour un domaine (d'où leur nature généraliste). Il faut donc comprendre ici que le métier ne respecte pas le méta-modèle du GPL mais celui défini par les modèles rédigé dans ce GPL. La figure [[GPL-Domain-and-Models]] montre les relations entre modèles et méta-modèles dans le cas des langages de programmation et des domaines.
+Notre volonté est de déterminer un méta-modèles, soit le domaine, à partir de modèles défini sous la forme d'un langage de programmation général. Le cas des GPL est plus complexe que l'exemple des formats de sérialisation de données qui sont des DSL. Les langages de programmation donnent la possibilité de définir un modèle pour un domaine (d'où leur nature généraliste). Il faut donc comprendre ici que le métier ne respecte pas le méta-modèle du GPL mais celui défini par les modèles rédigé dans ce GPL. La figure [[GPL-domain-and-models]] montre les relations entre modèles et méta-modèles dans le cas des langages de programmation et des domaines.
 
-#+NAME: GPL-Domain-and-Models
+#+NAME: GPL-domain-and-models
 #+CAPTION: Rapport entre les modèles dans le GPL et les domaines
 #+ATTR_LATEX: :width 13cm
-[[./pictures/GPL-Domain-and-Models.png]]
+[[./pictures/GPL-domain-and-models.png]]
 
-La forme d'un code source (=M(gpl)=) est formalisé par son méta-modèle (=MM(gpl)=). Ce =M(gpl)= est une des manières de définir le méta-modèle du domaine ciblé (=MM(domain)=). Exécuter =M(gpl)= revient donc à modéliser =MM(domain)= ainsi qu'à instancier un modèle (=M(domain)=) conforme à ce =MM(domain)=. Ceci est d'autant plus clair dans les langages orientés-objet, le principe de classe étant la définition d'un type (niveau méta) auquel lui est associé des attributs et du comportements. Un exemple avec le cas de le framework de persistance =Hibernate= se trouve en figure [[Java-Hibernate-and-Models]].
+La forme d'un code source (=M(gpl)=) est formalisé par son méta-modèle (=MM(gpl)=). Ce =M(gpl)= est une des manières de définir le méta-modèle du domaine ciblé (=MM(domain)=). Exécuter =M(gpl)= revient donc à modéliser =MM(domain)= ainsi qu'à instancier un modèle (=M(domain)=) conforme à ce =MM(domain)=. Ceci est d'autant plus clair dans les langages orientés-objet, le principe de classe étant la définition d'un type (niveau méta) auquel lui est associé des attributs et du comportements. Un exemple avec le cas de le framework de persistance =Hibernate= se trouve en figure [[Java-Hibernate-and-models]].
 
-#+NAME: Java-Hibernate-DB-and-Models
+#+NAME: Java-Hibernate-DB-and-models
 #+CAPTION: Java, Hibernate, base de données et les modèles
 #+ATTR_LATEX: :width 15cm
-[[./pictures/Java-Hibernate-DB-and-Models.png]]
+[[./pictures/Java-Hibernate-DB-and-models.png]]
 
 Cependant, nous ne devrions pas avoir à exécuter un modèles pour en récupérer le domaine qu'il représente. Les modèles en entrée devrait aussi être interprétable au niveau métier. Le problème se pose avec la bibliothèque =jOOQ=. Comme on peut le voir sur la figure [[Internal-DSL-example]], le DSL interne n'est accessible seulement grâce à une exécution. De plus la conception de la bibliothèque doit permettre la récupération du domaine, ce qui n'est pas nécessairement le cas pour toutes les implémentation. Finalement, il faut aussi prendre en compte que les implémentations ne respectent pas toutes un même méta-modèle.
 
@@ -374,9 +374,9 @@ Cependant, nous ne devrions pas avoir à exécuter un modèles pour en récupér
 
 Les annotations dans le code source sont des meta-données pouvant être ajoutés sur différents noeuds de l'AST (packages, classes, méthodes, /etc/.). Du comportement peut leur être associé (voir l'exemple avec la persistence en Java grâce à l'aide des annotations \cite{Reed-2007}). Pour le métier aussi, les annotations sont une potentielle une source d'information.
 
-Si l'on considère le domaine du test unitaire, le code source =Xtend= en figure [[JUnit-Annotation-Example]] contient de l'information au niveau des annotations. Si des informations sont présentent partout dans les modèles (nom de classe, nom de méthode, /etc/.), les annotations sont des informations explicites beaucoup moins technique (soit plus proche du domaine). Extraire ces annotations peut être une manière de reconstruire le domaine. De plus, les annotations sont aisément identifiable dans le code ce qui n'est pas le cas pour toutes les techniques appliquées à la définition de DSL interne (voir le cas de jOOQ [[Internal-DSL-Exemple]]).
+Si l'on considère le domaine du test unitaire, le code source =Xtend= en figure [[JUnit-annotations-example]] contient de l'information au niveau des annotations. Si des informations sont présentent partout dans les modèles (nom de classe, nom de méthode, /etc/.), les annotations sont des informations explicites beaucoup moins technique (soit plus proche du domaine). Extraire ces annotations peut être une manière de reconstruire le domaine. De plus, les annotations sont aisément identifiable dans le code ce qui n'est pas le cas pour toutes les techniques appliquées à la définition de DSL interne (voir le cas de jOOQ [[Internal-DSL-example]]).
 
-#+NAME: JUnit-Annotation-Example
+#+NAME: JUnit-annotations-example
 #+CAPTION: Exemple avec des annotations JUnit en Xtend
 #+BEGIN_SRC xtend
   package test
@@ -404,12 +404,12 @@ Si l'on considère le domaine du test unitaire, le code source =Xtend= en figure
 
 ** L'outil Busimo : des annotations au domaine
 
-L'outil Busimo a pour but d'inferrer un méta-modèle orienté domaine grâce aux annotations insérées dans le code source. Il prend en entrée un fichier contenant du code (=Xtend= uniqument à la date du document), en récupére la forme abstraite pour en créer un modèle arboressant des noeuds annotés (=AnnotableNode=). Le schéma [[How-Busimo-Works]] montre le fonctionnement global de Busimo.
+L'outil Busimo a pour but d'inferrer un méta-modèle orienté domaine grâce aux annotations insérées dans le code source. Il prend en entrée un fichier contenant du code (=Xtend= uniqument à la date du document), en récupére la forme abstraite pour en créer un modèle arboressant des noeuds annotés (=AnnotableNode=). Le schéma [[How-Busimo-works]] montre le fonctionnement global de Busimo.
 
-#+NAME: How-Busimo-Works
+#+NAME: How-Busimo-works
 #+CAPTION: Fonctionnement global de Busimo
 #+ATTR_LATEX: :width 15cm
-[[./pictures/How-Busimo-Works.png]]
+[[./pictures/How-Busimo-works.png]]
 
 ** Résultats
 ** Critique(s)
@@ -417,23 +417,23 @@ L'outil Busimo a pour but d'inferrer un méta-modèle orienté domaine grâce au
 ** Analyse de modèles Java
 
 Cette première version ne sait qu'analyser du code source =Xtend=. Ce choix a été fait pour des raisons de facilité. En effet, le langage =Xtend= a été défini grâce au framework =Xtext=, cela permettant de récupérer les AST correspondants aisément.
-Cependant, il est nécessaire d'aller plus loin pour aussi permettre l'analyse de code source =Java=. Si =Xtend= sait « se /parser/ » grâce à ses propres outils, le cas de =Java= est plus compliqué. =Spoon= \cite{Pawlak-et-al-2006} est un outil dont nous pouvons nous servir pour, entre autres, analyser statiquement du code source =Java= grâce à une redéfinition compléte de l'AST. Dans ce cas, Busimo doit être capable de transformer ce deuxième type d'arbre en un AST de noeuds annotés. (voir figure [[Multi-Model-Analyser]]).
+Cependant, il est nécessaire d'aller plus loin pour aussi permettre l'analyse de code source =Java=. Si =Xtend= sait « se /parser/ » grâce à ses propres outils, le cas de =Java= est plus compliqué. =Spoon= \cite{Pawlak-et-al-2006} est un outil dont nous pouvons nous servir pour, entre autres, analyser statiquement du code source =Java= grâce à une redéfinition compléte de l'AST. Dans ce cas, Busimo doit être capable de transformer ce deuxième type d'arbre en un AST de noeuds annotés. (voir figure [[Multi-model-analyser]]).
 
-#+NAME: Multi-Model-Analyser
+#+NAME: Multi-model-analyser
 #+CAPTION: Analyser plusieur type de source
 #+ATTR_LATEX: :width 15cm
-[[./pictures/Multi-Model-Analyser.png]]
+[[./pictures/Multi-model-analyser.png]]
 
 ** Règles de filtrage
 
-Certaines annotations ne sont pas orientées domaine. Si l'on prend Java, on peut voir que le langage possède des annotations « techniques », comme par exemple  =@Override=, =@SuppressWarnings=, ou encore =@FunctionalInterface= [fn:Code-as-Domain].
+Certaines annotations ne sont pas orientées domaine. Si l'on prend Java, on peut voir que le langage possède des annotations « techniques », comme par exemple  =@Override=, =@SuppressWarnings=, ou encore =@FunctionalInterface= [fn:Code-as-domain].
 
-Un système de listes noires est donc nécessaire si l'on ne souhaite pas avoir un méta-modèle pollué par des subtilités techniques. Avec cette liste en entrée, notre programme peut ignorer les annotations présentes dans cette liste. De plus, d'autres listes pourrait être ajouté par l'utilisateur pour ignorer certains métiers (voir figure [[Annotations-Blacklist]]).
+Un système de listes noires est donc nécessaire si l'on ne souhaite pas avoir un méta-modèle pollué par des subtilités techniques. Avec cette liste en entrée, notre programme peut ignorer les annotations présentes dans cette liste. De plus, d'autres listes pourrait être ajouté par l'utilisateur pour ignorer certains métiers (voir figure [[Annotations-blacklist]]).
 
-#+NAME: Annotation-Blacklist
-#+CAPTION: Liste noir en en
+#+NAME: Annotations-blacklist
+#+CAPTION: Système de listes noires
 #+ATTR_LATEX: :width 15cm
-[[./pictures/Annotation-Blacklist.png]]
+[[./pictures/Annotations-blacklist.png]]
 
 ** Miner
 
@@ -455,11 +455,11 @@ La capacité de passer de forme en forme serait-elle une nouvelle étape dans l'
 
 * Footnotes
 
-[fn:Cobol-Accronym] Cobol pour /Common Business-Oriented Language/
+[fn:Cobol-accronym] Cobol pour /Common Business-Oriented Language/
 [fn:Yacc-and-Bison] Yacc et Bison sont deux équivalents informatique à BNF
-[fn:Not-only-Grammars] Les automates et les expressions régulières permettent aussi la définition de syntaxes
-[fn:Is-Embedded-DSL-equivalent-to-Internal-DSL] Le fait que les DSEL soient équivalents aux DSL internes est discuté dans la littérature
-[fn:cl-json-reader] cl-json-reader : https://github.com/qinix/cl-json-reader
+[fn:Not-only-grammars] Les automates et les expressions régulières permettent aussi la définition de syntaxes
+[fn:Is-Embedded-DSL-equivalent-to-internal-DSL] Le fait que les DSEL soient équivalents aux DSL internes est discuté dans la littérature
+[fn:CL-JSON-reader] cl-json-reader : https://github.com/qinix/cl-json-reader
 [fn:Xtend] Xtend : https://www.eclipse.org/xtend/
 [fn:Scala-LMS] Scala-LMS : https://scala-lms.github.io/
-[fn:Code-as-Domain] Il y a effectivement un domaine associé à ces annotations, mais ce domaine est complément lié à la facette technique du développement
+[fn:Code-as-domain] Il y a effectivement « toujours » un domaine associé à une annotations, cependant l'exemple montre des annotations liées à un côté purement technique du code source
