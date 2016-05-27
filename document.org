@@ -240,7 +240,7 @@ Spoofax utilise plusieurs métalangages pour définir les différents éléments
 Contrairement à Spoofax, Xtext réutilise au plus des outils préexistants. Il se sert d'un langage proche de =EBNF= pour définir la syntaxe concrète, de =EMF= pour la génération de code et de bibliothèques =Java= pour diverse problématiques. Pour exemple, le langage de programmation =Xtend= [fn:Xtend] est développé avec la pile logiciel Xtext.
 
 Si Spoofax et Xtext se focalise sur le DSL textuel, MPS propose un système de projection. Si l'utilisateur visualise à l'aide d'une syntaxe concrète, il faut comprendre que l'édition se fait directement sur l'AST, ce qui permet de conserver une cohérence entre les différentes vues disponibles (voir figure [[Parsing-and-projectional-styles]]). Les points particuliers de l'édition projectionnelle sont les suivant \cite{Voelter-2010} :
-- pas de grammaire car la source est un AST, il n'y a donc pas d'ambiguité possible
+- pas de grammaire car la source est un AST, il n'y a donc pas d'ambiguité possible (voir figure [[MPS-view-definition]])
 - la syntaxe est très flexible, peut être textuelle comme graphique
 - permet plusieurs syntaxe pour un même AST
 - indissociable de l'IDE car c'est lui qui interpréte l'AST pour l'affichage et l'édition
@@ -249,6 +249,16 @@ Si Spoofax et Xtext se focalise sur le DSL textuel, MPS propose un système de p
 #+CAPTION: Sur la gauche le fonctionnement de Spoofax et Xtext et sur la droite le fonctionnement de MPS \cite{Voelter-2013}. Xtext peut adopter le comportement à droite mais ce n'est pas son mode par défaut.
 #+ATTR_LATEX: :width 8cm
 [[./pictures/Parsing-and-projectional-styles.png]]
+
+#+NAME: MPS-concept-definition
+#+CAPTION: Définition d'un concept dans MPS
+#+ATTR_LATEX: :width 8cm
+[[./pictures/MPS-concept-definition.png]]
+
+#+NAME: MPS-view-definition
+#+CAPTION: Définition d'une vue textuelle dans MPS
+#+ATTR_LATEX: :width 8cm
+[[./pictures/MPS-view-definition.png]]
 
 ** Succès et échecs
 
@@ -334,18 +344,18 @@ Ces deux solutions ont une vision différente. Si le /Language Workbench/ propos
 * Modélisation inverse grâce aux annotations
 ** Motivations
 
-Nous avons cité précédemment les problèmes d'interopérabilité entre les différents DSL d'un même domaine. Si un domaine est la plupart du temps associé à un unique DSL externe, les DSL internes sont souvent nombreux. Le problème relié au DSL métamorphique sur lequel nous nous penchons est la traduction de GPL à GPL de sémantique au niveau domaine. On peut faire l'analogie avec les barrières entre les langues naturelles : les choses peuvent être dites de manière différentes, cependant nous pouvons parler de la même chose.
+Nous avons cité précédemment les problèmes d'interopérabilité entre les différents DSL d'un même domaine. Si un domaine est la plupart du temps associé à un unique DSL externe, les DSL internes sont souvent nombreux. Le problème relié au DSL métamorphique sur lequel nous nous penchons est la traduction de sémantique de GPL à GPL au niveau domaine. On peut faire l'analogie avec les barrières entre les langues naturelles : les choses peuvent être dites de manière différentes, cependant nous pouvons parler de la même chose.
 
 Retrouver le domaine dans un programme GPL est plus problématique que pour le DSL. Pour illustrer, nous pouvons prendre le cas des transformations de forme. Deux approches s'offre à nous. La première est la solution /ad hoc/ (voir figure [[Ad-hoc-transformation]]), la seconde stratégie est de passer par une representation intermédiaire (voir figure [[Generic-transformation]]). La seconde est intéressante de par sa nature générique. Dans ce cas, une syntaxe abstraite centrale doit être définie, c'est-à-dire que l'intersection des domaines des différents modèles doit être spécifié. Il faut être capable déterminer une syntaxe abstraite sans perdre d'information présente dans les syntaxes concrètes (dans notre exemple, =XML=, =JSON=, =CSV= et =YAML= partagent des notions du domaines de la sérialisation de données).
 
 #+NAME: Ad-hoc-transformation
 #+CAPTION: Transformation /ad hoc/ de Ruby vers Javascript avec [[http://opalrb.org/][Opal]]
-#+ATTR_LATEX: :width 13cm
+#+ATTR_LATEX: :width 10cm
 [[./pictures/Ad-hoc-transformation.png]]
 
 #+NAME: Generic-transformation
 #+CAPTION: Transformation générique grâce à une syntaxe abstraite
-#+ATTR_LATEX: :width 13cm
+#+ATTR_LATEX: :width 10cm
 [[./pictures/Generic-transformation.png]]
 
 Notre but est de déterminer un méta-modèles, soit le domaine, à partir de modèles défini sous la forme d'un langage de programmation général. Le cas des GPL est plus complexe que l'exemple des formats de sérialisation de données qui sont des DSL. Les langages de programmation donnent la possibilité de définir un modèle pour un domaine (d'où leur nature généraliste). Il faut donc comprendre ici que le métier ne respecte pas le méta-modèle du GPL mais celui défini par les modèles rédigé dans ce GPL. La figure [[GPL-domain-and-models]] montre les relations entre modèles et méta-modèles dans le cas des langages de programmation et des domaines.
@@ -359,16 +369,18 @@ La forme d'un code source (=M(gpl)=) est formalisé par son méta-modèle (=MM(g
 
 #+NAME: Java-Hibernate-DB-and-models
 #+CAPTION: Java, Hibernate, base de données et les modèles
-#+ATTR_LATEX: :width 15cm
+#+ATTR_LATEX: :width 12cm
 [[./pictures/Java-Hibernate-DB-and-models.png]]
 
-Cependant, nous ne devrions pas avoir à exécuter un modèles pour en récupérer le domaine qu'il représente. Les modèles en entrée devrait aussi être interprétable au niveau métier. Le problème se pose avec la bibliothèque =jOOQ=. Comme on peut le voir sur la figure [[Internal-DSL-example]], le DSL interne n'est accessible seulement grâce à une exécution. De plus la conception de la bibliothèque doit permettre la récupération du domaine, ce qui n'est pas nécessairement le cas pour toutes les implémentation. Finalement, il faut aussi prendre en compte que les implémentations ne respectent pas toutes un même méta-modèle.
+Cependant, nous ne devrions pas avoir à exécuter un modèles pour en récupérer le domaine qu'il représente. De plus cette supposition est très lié au paradigme objet. Les modèles en entrée devrait aussi être interprétable au niveau métier. Le problème se pose avec la bibliothèque =jOOQ=. Comme on peut le voir sur la figure [[Internal-DSL-example]], le DSL interne n'est accessible seulement grâce à une exécution. De plus la conception de la bibliothèque doit permettre la récupération du domaine, ce qui n'est pas nécessairement le cas pour toutes les implémentation. Finalement, il faut aussi prendre en compte que les implémentations ne respectent pas toutes un même méta-modèle.
 
 ** S'intéresser à l'AST : le cas des annotations
 
-Les annotations dans le code source sont des meta-données pouvant être ajoutés sur différents noeuds de l'AST (packages, classes, méthodes, /etc/.). Du comportement peut leur être associé (voir l'exemple avec la persistence en Java grâce à l'aide des annotations \cite{Reed-2007}). Pour le métier aussi, les annotations sont une potentielle une source d'information.
+Les annotations dans le code source sont des méta-données pouvant être ajoutés sur différents noeuds de l'AST (packages, classes, méthodes, /etc/.). Du comportement peut leur être associé (voir l'exemple avec la persistence en Java grâce à l'aide des annotations \cite{Reed-2007}). Pour le métier aussi, les annotations sont une potentielle une source d'information.
 
-Si l'on considère le domaine du test unitaire, le code source =Xtend= en figure [[JUnit-annotations-example]] contient de l'information au niveau des annotations. Si des informations sont présentent partout dans les modèles (nom de classe, nom de méthode, /etc/.), les annotations sont des informations explicites beaucoup moins technique (soit plus proche du domaine). Extraire ces annotations peut être une manière de reconstruire le domaine. De plus, les annotations sont aisément identifiable dans le code ce qui n'est pas le cas pour toutes les techniques appliquées à la définition de DSL interne (voir le cas de jOOQ [[Internal-DSL-example]]).
+Extraire les annotations peut être une manière de reconstruire le domaine. De plus, les annotations sont aisément identifiable dans le code ce qui n'est pas le cas pour toutes les techniques appliquées à la définition de DSL interne (voir le cas de jOOQ [[Internal-DSL-example]]). Si les méta-modèle sont identifiable dans le code source, le cas des annotation semble être une bonne première approche au problème.
+
+Si l'on considère le domaine du test unitaire, le code source =Xtend= en figure [[JUnit-annotations-example]] contient de l'information au niveau des annotations. Si des informations sont présentent partout dans les modèles (nom de classe, nom de méthode, /etc/.), les annotations sont des informations explicites beaucoup moins technique (soit plus proche du domaine).
 
 #+NAME: JUnit-annotations-example
 #+CAPTION: Exemple avec des annotations JUnit en Xtend
@@ -398,15 +410,120 @@ Si l'on considère le domaine du test unitaire, le code source =Xtend= en figure
 
 ** L'outil Busimo : des annotations au domaine
 
-L'outil Busimo a pour but d'inferrer un méta-modèle orienté domaine grâce aux annotations insérées dans le code source. Il prend en entrée un fichier contenant du code (=Xtend= uniqument à la date du document), en récupére la forme abstraite pour en créer un modèle arboressant des noeuds annotés (=AnnotableNode=). Le schéma [[How-Busimo-works]] montre le fonctionnement global de Busimo.
+Cette section présente le fonctionnement de l'outil Busimo [fn:Busimo-project-URL].
+
+Busimo a pour but d'inferer un méta-modèle via les annotations situées dans le code source. Il prend en entrée un fichier source (=Xtend= uniqument à la date du document mais aussi =Java= par la suite) puis transforme la forme abstraite correspondante pour en créer un modèle arboressant de noeuds annotés. C'est sur cette arbre que le modèle ainsi que son méta-modèle va être inféré. Le schéma [[How-Busimo-works]] montre le fonctionnement global de l'application.
 
 #+NAME: How-Busimo-works
 #+CAPTION: Fonctionnement global de Busimo
-#+ATTR_LATEX: :width 15cm
+#+ATTR_LATEX: :width 12cm
 [[./pictures/How-Busimo-works.png]]
 
-** Résultats
-** Critique(s)
+La forme abstraite utilisée dans Busimo (que l'on appellera /Annotable Nodes Tree/ ou ANT) est intéressante par son caractère générique qui la rend indépendante du langage en entrée. En effet, le code en figure [[JUnit-annotations-example]] donne l'ANT en figure [[JUnit-ANT-exanple]], mais une version =Java= du même programme doit pouvoir retourner le même résultat [fn:Xtend-and-Java]. Un second exemple d'ANT est proposé par la figure [[State-machine-ANT-example]] qui est généré avec le code [[State-machine-code-example]].
+
+#+NAME: JUnit-ANT-example
+#+CAPTION: ANT d'un modèle utilisant JUnit
+#+ATTR_LATEX: :width 10cm
+[[./pictures/JUnit-ANT-example.png]]
+
+#+NAME: State-machine-code-example
+#+CAPTION: Code source d'un modèle d'une machine à états
+#+BEGIN_SRC xtend
+  @StateMachine
+  class Light implements IStateMachine {
+  	@Accessors var IState state
+  	@Accessors var int count
+
+  	new() {
+  		count = 0
+  		state = new Off
+  	}
+
+  	def pushTheButton() {
+  		state.handle(this)
+  		count++
+  	}
+
+  	@State
+  	static class On implements IState {
+  		override void handle(IStateMachine stateMachine) {
+  			switchOff(stateMachine as Light)
+  		}
+
+  		@Transition(next="Off")
+  		def switchOff(Light light) {
+  			light.state = new Off
+  		}
+  	}
+
+  	@State
+  	static class Off implements IState {
+  		override void handle(IStateMachine stateMachine) {
+  			val light = stateMachine as Light
+  			switchOn(light)
+  		}
+
+  		@Transition(next="On")
+  		def switchOn(Light light) {
+  			light.state = new On
+  		}
+  	}
+  }
+#+END_SRC
+
+#+NAME: State-machine-ANT-example
+#+CAPTION: ANT d'un modèle d'une machine à états
+#+ATTR_LATEX: :width 10cm
+[[./pictures/State-machine-ANT-example.png]]
+
+Par la suite, l'ANT est analysé pour définir un méta-modèle. Les règles appliquées, explicitées dans le pseudocode en [[Pseudocode-ANT-to-metamodel]], sont les suivantes :
+- une annotation située sur un noeud crée une entité, si elle n'existe pas déjà ; ; les entités peuvent être issues :
+  - de classes
+  - d'attributs
+  - de méthodes
+- une nouvelle entité est contenu par les entité issues du noeud parent (la classe englobante)
+
+#+NAME: Pseudocode-ANT-to-metamodel
+#+CAPTION: ANT d'un modèle utilisant JUnit
+#+BEGIN_SRC pseudocode
+  def analyze_node(node, parent=nil)
+    node.each_annotation do |annotation|
+      if class_not_exist annotation.name
+        type = create_class annotation.name
+        metamodel.add type
+        parent.contains type unless parent.nil?
+      end
+    end
+    node.children.each do |child|
+      analyze_node child, self
+    end
+  end
+
+  analyze_node ant_root
+#+END_SRC
+
+=Xtend=, comme =Java=, n'étant pas réflexif, le framework =EMF= (pour /Eclipse Modeling Framework/) est utilisé pour définir dynamiquement de nouvelles entités (des classes) nécessaire à la création du méta-modèle. Le méta-modèle en sortie est un Ecore au format =XML=.
+
+< Présentation des résultats (méta-modèles + modèles) >
+
+#+NAME: JUnit-metamodel
+#+CAPTION: Méta-modèle de JUnit en sortie
+#+ATTR_LATEX: :width 7cm
+[[./pictures/JUnit-metamodel.png]]
+
+#+NAME: State-machine-metamodel
+#+CAPTION: Méta-modèle d'une machine à états en sortie
+#+ATTR_LATEX: :width 13cm
+[[./pictures/State-machine-metamodel.png]]
+
+** Critiques
+
+- filtrage des annotations =Java= / =Xtend=
+- refactoring du ecore nécessaire
+- permet la qualitication des annotations
+
+à merger dans *Travaux à venir* ?
+
 * Travaux à venir
 ** Analyse de modèles Java
 
@@ -415,7 +532,7 @@ Cependant, il est nécessaire d'aller plus loin pour aussi permettre l'analyse d
 
 #+NAME: Multi-model-analyser
 #+CAPTION: Analyser plusieur type de source
-#+ATTR_LATEX: :width 15cm
+#+ATTR_LATEX: :width 11cm
 [[./pictures/Multi-model-analyser.png]]
 
 ** Règles de filtrage
@@ -426,7 +543,7 @@ Un système de listes noires est donc nécessaire si l'on ne souhaite pas avoir 
 
 #+NAME: Annotations-blacklist
 #+CAPTION: Système de listes noires
-#+ATTR_LATEX: :width 15cm
+#+ATTR_LATEX: :width 12cm
 [[./pictures/Annotations-blacklist.png]]
 
 ** Miner
@@ -443,7 +560,7 @@ La capacité de passer de forme en forme serait-elle une nouvelle étape dans l'
 
 C'est dans l'optique de trouver des éléments de réponse que du côté de l'approche développeur que nous avons décidé de creuser du côté du contenu des code source. Car si les domaines derrière les DSL peuvent être plus simplement captés grâce à leur outils, les domaines issu des DSL internes sont souvent bien plus implicites.  le cas des DSL internes rend les choses plus implicites. De plus dès qu'un langage nécessite sa propre implémentation, cela rajoute un nouveau type de modèle à l'équation.
 
-Busimo nous aura montré que le code source contient bien des informations /Domain-Specific/ et qu'avec un minimum d'inference, un domaine peut être reconstruit. La part d'implicite reste tout de même importante dû à l'abstraction que permet les GPL. Par la suite, on peut imaginer des analyses de construction plus complexe des AST à l'aide de /pattern matching/. Si Busimo génère un méta-modèle uniquement via le concept d'annotation, ceci est une première étape.
+Busimo nous aura montré que le code source contient bien des informations /Domain-Specific/ et qu'avec un minimum d'inférence, un domaine peut être reconstruit. La part d'implicite reste tout de même importante dû à l'abstraction que permet les GPL. Par la suite, on peut imaginer des analyses de construction plus complexe des AST à l'aide de /pattern matching/. Si Busimo génère un méta-modèle uniquement via le concept d'annotation, ceci est une première étape.
 
 #+BEGIN_LATEX
 \newpage
@@ -461,3 +578,5 @@ Busimo nous aura montré que le code source contient bien des informations /Doma
 [fn:Xtend] Xtend : https://www.eclipse.org/xtend/
 [fn:Scala-LMS] Scala-LMS : https://scala-lms.github.io/
 [fn:Code-as-domain] Il y a effectivement « toujours » un domaine associé à une annotations, cependant l'exemple montre des annotations liées à un côté purement technique du code source
+[fn:Busimo-project-URL] Dépôt Git : https://github.com/lepieru/busimo
+[fn:Xtend-and-Java] =Xtend= a été construit dans l'idée de créer un langage 100% compatible avec =Java=
