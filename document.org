@@ -6,7 +6,7 @@
 #+LATEX_CLASS: custom
 #+LATEX_CLASS_OPTIONS: [11pt]
 #+LATEX_HEADER: \input{header}
-#+LATEX_HEADER: \abstract{Ce document regroupe un état de l'art sur les langages dédiés (aussi appelés DSL pour \textit{Domain-Specific Languages}) ainsi qu'un rapport des travaux de recherche autour du thème du DSL métamorphique. Si l'on souhaite généraliser les transformations modèle à modèle, il faut fournir une forme pivot. Dans le DSL, la sémantique est le domaine ; cependant, ce n'est pas le cas du GPL (pour \textit{General Purpose Language}) qui lui défini le domaine. C'est dans le but de capturer cette forme pivot qu'un prototype permettant l'inference du domaine dans du code GPL a été développé. Ce type d'outil est un premier pas vers l'automatisation de la modélisation inverse.}
+#+LATEX_HEADER: \abstract{Ce document regroupe un état de l'art sur les langages dédiés (aussi appelés DSL pour \textit{Domain-Specific Languages}) ainsi qu'un rapport des travaux de recherche autour du thème du DSL métamorphique. Si l'on souhaite généraliser les transformations modèle à modèle, il faut fournir une forme pivot. Dans le DSL, la sémantique est le domaine ; cependant, ce n'est pas le cas du GPL (pour \textit{General Purpose Language}) qui a la capacité de définir le métier. C'est dans le but de capturer cette forme pivot qu'un prototype permettant l'inference de domaine dans le code source a été développé. Le travail en cours sur l'outil Busimo est un premier pas vers l'automatisation de la modélisation inverse.}
 
 * Introduction
 
