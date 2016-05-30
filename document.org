@@ -23,18 +23,27 @@ Commencant par une étudé bibliographique sur les langages dédiés, le travail
 * Contexte
 ** Notions de modèle
 
-Un *modèle* (relatif à un domaine) est la conceptualisation d'un sujet par rapport à une problématique précise (voir figure [[Two-models-example]]). Grâce à lui, on peut définir de manière plus ou moins abstraite un problème et/ou sa solution. Dans le cadre de la méthodologie MDE (/Model-Driven Engineering/ ou Ingénierie Dirigée par les Modèles), tout est modèle, des schémas aux codes source. Selon la forme, un modèle équivalent au niveau domaine peuvent contenir plus ou moins d'informations.
+Un *modèle* (relatif à un domaine) est la conceptualisation d'un sujet par rapport à une problématique précise (voir deux exemples de modèles en figure [[Graphical-model-example]] et [[Code-model-example]]). Grâce à lui, on peut définir de manière plus ou moins abstraite un problème et/ou sa solution. Dans le cadre de la méthodologie MDE (/Model-Driven Engineering/ ou Ingénierie Dirigée par les Modèles), tout est modèle, des schémas aux codes source. Selon la forme, un modèle équivalent au niveau domaine peuvent contenir plus ou moins d'informations.
 
-#+NAME: Two-models-example
-#+CAPTION: Exemple de deux modèle équivalent. À gauche la représentation graphique d'une fonction et à droite la représentation sous forme de code source C de cette même fonction.
-#+ATTR_LATEX: :width 13cm
-[[./pictures/Two-models-example.png]]
+#+NAME: Graphical-model-example
+#+CAPTION: Schema conceptuellement équivalent au modèle en figure [[Code-model-example]]
+#+ATTR_LATEX: :width 7cm
+[[./pictures/Graphical-model-example.png]]
+
+#+NAME: Code-model-example
+#+CAPTION: Code exécutable conceptuellement équivalent au modèle en figure [[Graphical-model-example]]
+#+ATTR_LATEX: :centering t
+#+BEGIN_SRC pseudocode
+  def increment(i : int) : int
+    return i + 1
+  end
+#+END_SRC
 
 Littéralement modèle du modèle, un *méta-modèle* est un modèle définissant les règles et les contraites d'un autre modèle. Il définit donc un type de modèle. La figure [[Model-and-metamodel-example]] nous montre la différence entre un modèle et son méta-modèle.
-
+:
 #+NAME: Model-and-metamodel-example
 #+CAPTION: Exemple d'un modèle et de son méta-modèle
-#+ATTR_LATEX: :width 13cm
+#+ATTR_LATEX: :width 11cm
 [[./pictures/Model-and-metamodel-example.png]]
 
 ** Notions de langage
@@ -260,7 +269,7 @@ Si Spoofax et Xtext se focalise sur le DSL textuel, MPS propose un système de p
 #+ATTR_LATEX: :width 8cm
 [[./pictures/MPS-view-definition.png]]
 
-** Succès et échecs
+n** Succès et échecs
 
 Nous abordons ici les comportements conseillés ou non dans l'utilisation de DSL, tout en mettant le doigt sur les problématiques de la conception. Nous finirons pas présenter les critères de qualification d'un DSL.
 
@@ -347,9 +356,9 @@ Ces deux solutions ont une vision différente. Si le /Language Workbench/ propos
 Nous avons cité précédemment les problèmes d'interopérabilité entre les différents DSL d'un même domaine. Si un domaine est la plupart du temps associé à un unique DSL externe, les DSL internes sont souvent nombreux. Le problème relié au DSL métamorphique sur lequel nous nous penchons est la traduction de sémantique de GPL à GPL au niveau domaine. On peut faire l'analogie avec les barrières entre les langues naturelles : les choses peuvent être dites de manière différentes, cependant nous pouvons parler de la même chose.
 
 Retrouver le domaine dans un programme GPL est plus problématique que pour le DSL. Pour illustrer, nous pouvons prendre le cas des transformations de forme. Deux approches s'offre à nous. La première est la solution /ad hoc/ (voir figure [[Ad-hoc-transformation]]), la seconde stratégie est de passer par une representation intermédiaire (voir figure [[Generic-transformation]]). La seconde est intéressante de par sa nature générique. Dans ce cas, une syntaxe abstraite centrale doit être définie, c'est-à-dire que l'intersection des domaines des différents modèles doit être spécifié. Il faut être capable déterminer une syntaxe abstraite sans perdre d'information présente dans les syntaxes concrètes (dans notre exemple, =XML=, =JSON=, =CSV= et =YAML= partagent des notions du domaines de la sérialisation de données).
-
+:
 #+NAME: Ad-hoc-transformation
-#+CAPTION: Transformation /ad hoc/ de Ruby vers Javascript avec [[http://opalrb.org/][Opal]]
+#+CAPTION: Transformation /ad hoc/ de Ruby vers JavaScript avec [[http://opalrb.org/][Opal]]
 #+ATTR_LATEX: :width 10cm
 [[./pictures/Ad-hoc-transformation.png]]
 
