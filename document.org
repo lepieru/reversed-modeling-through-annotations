@@ -34,9 +34,9 @@ Un *modèle* (relatif à un domaine) est la conceptualisation d'un sujet par rap
 #+CAPTION: Code exécutable conceptuellement équivalent au modèle en figure [[Graphical-model-example]]
 #+ATTR_LATEX: :centering t
 #+BEGIN_SRC pseudocode
-  def increment(i : int) : int
-    return i + 1
-  end
+def increment(i : int) : int
+  return i + 1
+end
 #+END_SRC
 
 Littéralement modèle du modèle, un *méta-modèle* est un modèle définissant les règles et les contraites d'un autre modèle. Il définit donc un type de modèle. La figure [[Model-and-metamodel-example]] nous montre la différence entre un modèle et son méta-modèle.
@@ -55,11 +55,11 @@ La *syntaxe concrète* est la représentation que l'on se fait du langage \cite{
 #+CAPTION: Exemple d'utilisation de BNF (Backus Naur Form) : définition de la représentation textuelle d'une valeur numérique (entier et flottant)
 #+NAME: BNF-example
 #+BEGIN_SRC bnf
-  <numeric> ::= <integer> | <float>
-  <integer> ::= <digits> | '-' <digits>
-  <float>   ::= <integer> '.' <digits>
-  <digits>  ::= <digit> <digits> | <digit>
-  <digit>   ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+<numeric> ::= <integer> | <float>
+<integer> ::= <digits> | '-' <digits>
+<float>   ::= <integer> '.' <digits>
+<digits>  ::= <digit> <digits> | <digit>
+<digit>   ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
 #+END_SRC
 
 La syntaxe concrète s'oppose à la *syntaxe abstraite*. Cette dernière est une altération de la syntaxe concrète. Cette forme est structurée de façon à être adaptée à une utilisation par la machine. Elle prend très souvent la forme d'un arbre (appelé Arbre de Syntaxe Abstraite, /Abstract Syntax Tree/ ou AST) (voir figure [[AST-example]]) où chaque noeud représente un élément, qui peut lui même être composé de plusieurs sous-éléments. Certains détails de la syntaxe concrète peuvent être ôtés. Il est donc possible d'arriver à un même AST avec des syntaxes concrètes différentes. On peut dire qu'un langage peut avoir deux syntaxes concrètes, ou deux langages qui partagent la même syntaxe abstraite \cite{Fowler-2005}.
@@ -132,10 +132,10 @@ Si un DSL (voir l'exemple avec SQL figure [[External-DSL-examle-with-SQL]] limit
 #+NAME: External-DSL-example-with-SQL
 #+CAPTION: Un exemple de DSL externe avec SQL
 #+BEGIN_SRC sql
-    SELECT *
-      FROM cat
-     WHERE born_in = 2015
-  ORDER BY name
+  SELECT *
+    FROM cat
+   WHERE born_in = 2015
+ORDER BY name
 #+END_SRC
 
 Gérer la communication entre plusieurs langages est une tâche compliqué, ce qui a pour conséquence que les développeurs font souvent le choix du DSL interne \cite{Renggli-and-Girba-2009}.
@@ -182,18 +182,18 @@ Les langages ne sont pas tous égaux face à l'implémentation de DSL en interne
 #+NAME: Lisp-JSON-reader
 #+CAPTION: Un exemple de flexibilité de la syntaxe Lisp avec json-reader
 #+BEGIN_SRC lisp
-  (json-reader:enable-json-syntax)
-  (let ((x {
-             "foo": 1,
-             "bar": ["a", "b", "c"],
-             "baz": { foo: 42 }
-           } ))
-    (assert (hash-table-p x))
-    (assert (= (hash-table-count x) 3))
-    (assert (eql (gethash "foo" x) 1))
-    (assert (vectorp (gethash "bar" x)))
-    (assert (hash-table-p (gethash "baz" x))))
-  (json-reader:disable-json-syntax)
+(json-reader:enable-json-syntax)
+(let ((x {
+           "foo": 1,
+           "bar": ["a", "b", "c"],
+           "baz": { foo: 42 }
+         } ))
+  (assert (hash-table-p x))
+  (assert (= (hash-table-count x) 3))
+  (assert (eql (gethash "foo" x) 1))
+  (assert (vectorp (gethash "bar" x)))
+  (assert (hash-table-p (gethash "baz" x))))
+(json-reader:disable-json-syntax)
 #+END_SRC
 
 Certains voient les langages de programmation fonctionnelle comme de très bon candidats. Haskell possède certaines fonctionnalités (comme les monades) qui conviennent au développement de DSL \cite{Hudak-1996}. De plus, il permet l'implémentation de solution /deep DSEL/ \cite{Gibbons-and-Wu-2014}.
@@ -219,33 +219,33 @@ LMS (/Lightweight Modular Staging/) est un système de génération de code à l
 #+NAME: Scala-LMS-example
 #+CAPTION: Exemple d'utilisation de LMS (source : https://scala-lms.github.io)
 #+BEGIN_SRC scala
-  clas s Vector[T:Numeric:Manifest](val data: Rep[Array[T]]) {
-    def foreach(f: Rep[T] => Rep[Unit]): Rep[Unit] = {
-      for (i <- 0 until data.length) f(data(i))
-    }
-    def sumIf(f: Rep[T] => Rep[Boolean]) = {
-      var n = zero[T]
-      foreach(x => if (f(x)) n += x)
-      return n
-    }
+class Vector[T:Numeric:Manifest](val data: Rep[Array[T]]) {
+  def foreach(f: Rep[T] => Rep[Unit]): Rep[Unit] = {
+    for (i <- 0 until data.length) f(data(i))
   }
+  def sumIf(f: Rep[T] => Rep[Boolean]) = {
+    var n = zero[T]
+    foreach(x => if (f(x)) n += x)
+    return n
+  }
+}
 
-  val v: Vector[Double] = ...
-  println(v.sumIf(_ > 0))
+val v: Vector[Double] = ...
+println(v.sumIf(_ > 0))
 #+END_SRC
 
 #+NAME: Scala-LMS-result
 #+CAPTION: Code généré à l'exécution (source : https://scala-lms.github.io)
 #+BEGIN_SRC scala
-  var n: Double = 0.0
-  var i: Int = 0
-  val end = data.length
-  while (i < end) {
-    val x = data(i)
-    val c = x > 0
-    if (c) n += x
-  }
-  println(n)
+var n: Double = 0.0
+var i: Int = 0
+val end = data.length
+while (i < end) {
+  val x = data(i)
+  val c = x > 0
+  if (c) n += x
+}
+println(n)
 #+END_SRC
 
 *** Les /Language Workbenches/
@@ -334,27 +334,27 @@ Si l'on considère le domaine du test unitaire, le code source =Xtend= en figure
 #+NAME: JUnit-annotations-example
 #+CAPTION: Exemple avec des annotations JUnit en Xtend
 #+BEGIN_SRC xtend
-  package test
+package test
 
-  import static org.junit.Assert.*
-  import org.junit.Test
-  import org.junit.Ignore
+import static org.junit.Assert.*
+import org.junit.Test
+import org.junit.Ignore
 
-  class StringTest
-  {
-    @Test
-    def void testToString() {
-      assertEquals("", "".toString)
-      assertEquals("test", "test".toString)
-    }
-
-    @Test
-    @Ignore
-    def void testLength() {
-      assertEquals("".length, 0)
-      assertEquals("test".length, 4)
-    }
+class StringTest
+{
+  @Test
+  def void testToString() {
+    assertEquals("", "".toString)
+    assertEquals("test", "test".toString)
   }
+
+  @Test
+  @Ignore
+  def void testLength() {
+    assertEquals("".length, 0)
+    assertEquals("test".length, 4)
+  }
+}
 #+END_SRC
 
 ** L'outil Busimo : des annotations au domaine
@@ -378,46 +378,46 @@ La forme abstraite utilisée dans Busimo (que l'on appellera /Annotable Nodes Tr
 #+NAME: State-machine-code-example
 #+CAPTION: Code source d'un modèle d'une machine à états
 #+BEGIN_SRC xtend
-  @StateMachine
-  class Light implements IStateMachine {
-  	@Accessors var IState state
-  	@Accessors var int count
+@StateMachine
+class Light implements IStateMachine {
+  @Accessors var IState state
+  @Accessors var int count
 
-  	new() {
-  		count = 0
-  		state = new Off
-  	}
-
-  	def pushTheButton() {
-  		state.handle(this)
-  		count++
-  	}
-
-  	@State
-  	static class On implements IState {
-  		override void handle(IStateMachine stateMachine) {
-  			switchOff(stateMachine as Light)
-  		}
-
-  		@Transition(next="Off")
-  		def switchOff(Light light) {
-  			light.state = new Off
-  		}
-  	}
-
-  	@State
-  	static class Off implements IState {
-  		override void handle(IStateMachine stateMachine) {
-  			val light = stateMachine as Light
-  			switchOn(light)
-  		}
-
-  		@Transition(next="On")
-  		def switchOn(Light light) {
-  			light.state = new On
-  		}
-  	}
+  new() {
+    count = 0
+    state = new Off
   }
+
+  def pushTheButton() {
+    state.handle(this)
+    count++
+  }
+
+  @State
+  static class On implements IState {
+    override void handle(IStateMachine stateMachine) {
+      switchOff(stateMachine as Light)
+    }
+
+    @Transition(next="Off")
+    def switchOff(Light light) {
+      light.state = new Off
+    }
+  }
+
+  @State
+  static class Off implements IState {
+    override void handle(IStateMachine stateMachine) {
+      val light = stateMachine as Light
+      switchOn(light)
+    }
+
+    @Transition(next="On")
+    def switchOn(Light light) {
+      light.state = new On
+    }
+  }
+}
 #+END_SRC
 
 #+NAME: State-machine-ANT-example
@@ -435,20 +435,20 @@ Par la suite, l'ANT est analysé pour définir un méta-modèle. Les règles app
 #+NAME: Pseudocode-ANT-to-metamodel
 #+CAPTION: ANT d'un modèle utilisant JUnit
 #+BEGIN_SRC pseudocode
-  def analyze_node(node, parent=nil)
-    node.each_annotation do |annotation|
-      unless class_exist annotation.name
-        type = create_class annotation.name
-        metamodel.add type
-        parent.contains type unless parent.nil?
-      end
-    end
-    node.children.each do |child|
-      analyze_node child, self
+def analyze_node(node, parent=nil)
+  node.each_annotation do |annotation|
+    unless class_exist annotation.name
+      type = create_class annotation.name
+      metamodel.add type
+      parent.contains type unless parent.nil?
     end
   end
+  node.children.each do |child|
+    analyze_node child, self
+  end
+end
 
-  analyze_node ant_root
+analyze_node ant_root
 #+END_SRC
 
 =Xtend=, comme =Java=, n'étant pas réflexif, le framework =EMF= (pour /Eclipse Modeling Framework/) est utilisé pour définir dynamiquement de nouvelles entités (des classes) nécessaire à la création du méta-modèle. Le méta-modèle en sortie est un Ecore au format =XML=.
