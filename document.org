@@ -71,7 +71,7 @@ La syntaxe concrète s'oppose à la *syntaxe abstraite*. Cette dernière est une
 
 La *sémantique* est le sens que l'on donne à un langage. Grâce à l'analyse grammaticale, une forme plus structurée de la syntaxe en entrée est obtenue. C'est sur cette structure que l'on peut travailler pour en déduire le comportement attendu. Les mathématiques exposent les règles de transformation en sémantique opérationnelle, en sémantique dénotationnelle ou en sémantique axiomatique que nous n'aborderons pas ici. Les compilateurs sont les programmes qui transforment la syntaxe abstraite d'un langage. Cela peut avoir comme but de rendre le programme exécutable par la machine.
 
-* Étude bibliographique
+* Étude bibliographique sur les langages dédiés
 
 De nombreux articles ont pour sujet les /Domain-Specific Languages/. Cette étude bibliographique essaye de regrouper les différentes définitions du DSL. Les DSL seront comparés aux /General Purpose Languages/. Les deux grands types de DSL, externe et interne, seront exposés. Leurs critères de succès et d'échec seront discutés. Les solutions techniques d'implémentation seront aussi abordées. Pour finir, il sera sujet de l'avenir dans le domaine.
 
@@ -259,6 +259,11 @@ Si Spoofax et Xtext se focalise sur le DSL textuel, MPS propose un système de p
 #+ATTR_LATEX: :width 8cm
 [[./pictures/Parsing-and-projectional-styles.png]]
 
+#+NAME: Manipulating-representations-with-a-Language-Workbench
+#+CAPTION: Manipulation des représentations avec le /Language Workbench/ \cite{Fowler-2005}.
+#+ATTR_LATEX: :width 13cm
+[[./pictures/Manipulating-representations-with-a-Language-Workbench.png]]
+
 #+NAME: MPS-concept-definition
 #+CAPTION: Définition d'un concept dans MPS
 #+ATTR_LATEX: :width 8cm
@@ -334,12 +339,7 @@ Il est compliqué de juger un DSL sans critère précis. \cite{Karsai-et-al-2009
 
 ** Constats et perspectives
 
-Les critères de qualité du DSL restent difficiles à mesurer \cite{Albuquerque-et-al-2014} et sont encore trop jeunes pour être utilisés industriellement pour les évaluations. Les /Language Workbenches/ simplifient la création et l'usage de langage exécutable métier \cite{Erdweg-et-al-2015}. Spoofax, Xtext et MPS sont des solutions techniques qui ont hérité des concepts du /Language-Oriented Programming/ exprimé par \cite{Ward-1994}. Grâce au système de projection (ex. MPS), la forme abstraite est manipulée via les diverses vues disponibles (voir figure [[Manipulating-representations-with-a-Language-Workbench]]). L'information est présentée sous différentes formes, permettant si besoin de cacher le contenu inutile selon la tâche en cours. L'artéfact éditable permet d'uniformiser la forme, ce qui répond à une problématique forte. Cette vision était déjà à l'époque défini comme la « nouvelle génération de feuille de calcul » \cite{Fowler-2005} : un environnement ou l'utilisateur lambda peut rapidement devenir apte à user de fonctionnalités avancées.
-
-#+NAME: Manipulating-representations-with-a-Language-Workbench
-#+CAPTION: Manipulation des représentations avec le /Language Workbench/ \cite{Fowler-2005}.
-#+ATTR_LATEX: :width 13cm
-[[./pictures/Manipulating-representations-with-a-Language-Workbench.png]]
+Les critères de qualité du DSL restent difficiles à mesurer \cite{Albuquerque-et-al-2014} et sont encore trop jeunes pour être utilisés industriellement pour les évaluations. Les /Language Workbenches/ simplifient la création et l'usage de langage exécutable métier \cite{Erdweg-et-al-2015}. Spoofax, Xtext et MPS sont des solutions techniques qui ont hérité des concepts du /Language-Oriented Programming/ exprimé par \cite{Ward-1994}. Grâce au système de projection (ex. MPS), la forme abstraite est manipulée via les diverses vues disponibles. L'information est présentée sous différentes formes, permettant si besoin de cacher le contenu inutile selon la tâche en cours. L'artéfact éditable permet d'uniformiser la forme, ce qui répond à une problématique forte. Cette vision était déjà à l'époque défini comme la « nouvelle génération de feuille de calcul » \cite{Fowler-2005} : un environnement ou l'utilisateur lambda peut rapidement devenir apte à user de fonctionnalités avancées.
 
 Jongler avec $n$ syntaxes (externes, et potentiellement plusieurs formes internes pour un même DSL) crée des barrières symboliques. Les /Language Workbenches/ ne sont pas toujours une solution acceptable car il peut toujours être difficile de savoir quelle forme adopter. \cite{Acher-et-al-2014} définissent le terme de /Metamorphic DSL/ avec l'expérience FAMILIAR. Le fait est que les syntaxes concrètes forcent le choix d'une forme qui n'est pas adapté à tous les cas d'utilisations. Le /Metamorphic DSL/ conceptualise la capacité d'un DSL à passer d'une syntaxe concrète à une autre selon le cas d'utilisation (tâche à effectuer, outil utilisé), permettant ainsi de ne pas avoir à choisir une mais plutôt plusieurs formes (voir figure [[Metamorphic-DSL-usecase]]).
 
@@ -374,14 +374,14 @@ Notre but est de déterminer un méta-modèles, soit le domaine, à partir de mo
 #+ATTR_LATEX: :width 9cm
 [[./pictures/GPL-domain-and-models.png]]
 
-La forme d'un code source (=M(gpl)=) est formalisé par son méta-modèle (=MM(GPL)=). Ce =M(GPL)= est une des manières de définir le méta-modèle du domaine ciblé (=MM(Domain)=). Exécuter =M(GPL)= revient donc à modéliser =MM(Domain)= ainsi qu'à instancier un modèle (=M(Domain)=) conforme à ce =MM(Domain)=. Ceci est d'autant plus clair dans les langages orientés-objet, le principe de classe étant la définition d'un type (niveau méta) auquel lui est associé des attributs et du comportements. Un exemple avec le cas de le /framework/ de persistance =Hibernate= se trouve en figure [[Java-Hibernate-and-models]].
+La forme d'un code source (=M(GPL)=) est formalisé par son méta-modèle (=MM(GPL)=). Ce =M(GPL)= est une des manières de définir le méta-modèle du domaine ciblé (=MM(Domain)=). Exécuter =M(GPL)= revient donc à modéliser =MM(Domain)= ainsi qu'à instancier un modèle (=M(Domain)=) conforme à ce =MM(Domain)=. Ceci est d'autant plus clair dans les langages orientés-objet, le principe de classe étant la définition d'un type (niveau méta) auquel lui est associé des attributs et du comportements. Un exemple avec le cas de le /framework/ de persistance =Hibernate= se trouve en figure [[Java-Hibernate-and-models]].
 
 #+NAME: Java-Hibernate-DB-and-models
 #+CAPTION: Java, Hibernate, base de données et les modèles
 #+ATTR_LATEX: :width 13cm
 [[./pictures/Java-Hibernate-DB-and-models.png]]
 
-Cependant, nous ne devrions pas avoir à exécuter un modèles pour en récupérer le domaine qu'il représente. De plus cette supposition est très lié au paradigme objet. Les modèles en entrée devrait aussi être interprétable au niveau métier. Le problème se pose avec la bibliothèque =jOOQ=. Comme on peut le voir sur la figure [[Internal-DSL-example]], le DSL interne n'est accessible seulement grâce à une exécution. De plus la conception de la bibliothèque doit permettre la récupération du domaine, ce qui n'est pas nécessairement le cas pour toutes les implémentation. Finalement, il faut aussi prendre en compte que les implémentations ne respectent pas toutes un même méta-modèle.
+Cependant, nous ne devrions pas avoir à exécuter un modèles pour en récupérer le domaine qu'il représente.  Les modèles en entrée devrait aussi être interprétable au niveau métier. Le problème se pose avec la bibliothèque =jOOQ=. Comme on peut le voir sur la figure [[Internal-DSL-example]], le DSL interne n'est accessible seulement grâce à une exécution. De plus la conception de la bibliothèque doit permettre la récupération du domaine, ce qui n'est pas nécessairement le cas pour toutes les implémentation. Finalement, il faut aussi prendre en compte que les implémentations ne respectent pas toutes un même méta-modèle.
 
 ** S'intéresser à l'AST : le cas des annotations
 
@@ -525,6 +525,11 @@ Par la suite, l'ANT est analysé pour définir un méta-modèle. Les règles app
 #+ATTR_LATEX: :width 13cm
 [[./pictures/State-machine-metamodel.png]]
 
+#+NAME: State-machine-metamodel-without-lists
+#+CAPTION: Méta-modèle d'une machine à états en sortie, avec inférence de contenance
+#+ATTR_LATEX: :width 13cm
+[[./pictures/State-machine-metamodel-without-lists.png]]
+
 ** Critiques
 
 - filtrage des annotations =Java= / =Xtend=
@@ -567,9 +572,9 @@ Ces pratiques ont démontré leurs impacts bénéfiques sur la productivité et 
 
 La capacité de passer de forme en forme serait-elle une nouvelle étape dans l'évolution des /Domain-Specific Languages/ ? C'est la question que pose le /Metamorphic DSL/. Le défi est, en plus de proposer un système de transpositions de forme, de savoir quelle forme est la plus appropriée pour la tâche en cours. Pour se faire, une automatisation des processus est nécessaire ; c'est-à-dire une méthode générique de transposition de forme de DSL (approche développeur) et une qualification rigoureuse des propriétés des formes (approche utilisateur).
 
-C'est dans l'optique de trouver des éléments de réponse que du côté de l'approche développeur que nous avons décidé de creuser du côté du contenu des code source. Car si les domaines derrière les DSL peuvent être plus simplement captés grâce à leur outils, les domaines issu des DSL internes sont souvent bien plus implicites.  le cas des DSL internes rend les choses plus implicites. De plus dès qu'un langage nécessite sa propre implémentation, cela rajoute un nouveau type de modèle à l'équation.
+C'est dans l'optique de trouver des éléments de réponse du côté de l'approche développeur que nous avons décidé de creuser du côté du contenu des codes source. Car si un domaine représenté un DSL peut être plus simplement captés grâce à leur outils, les domaines issu des DSL internes sont souvent bien plus implicites. Le cas des DSL internes rend les choses plus implicites. De plus dès qu'un langage de programmation nécessite sa propre implémentation, cela rajoute un nouveau type de modèle à l'équation.
 
-Busimo nous aura montré que le code source contient bien des informations /Domain-Specific/ et qu'avec un minimum d'inférence, un domaine peut être reconstruit. La part d'implicite reste tout de même importante dû à l'abstraction que permet les GPL. Par la suite, on peut imaginer des analyses de construction plus complexe des AST à l'aide de /pattern matching/. Si Busimo génère un méta-modèle uniquement via le concept d'annotation, ceci est une première étape.
+Busimo nous aura montré que le code source contient bien des informations /Domain-Specific/ et qu'avec un minimum d'inférence, un domaine peut être reconstruit. La part d'implicite reste tout de même importante dû à l'abstraction que permet les GPL. Il est vrai que le choix de s'intéresser aux annotations réduit la problématique, mais permet d'avoir une première approche sur le sujet. Par la suite, on peut imaginer des analyses de construction plus complexe des AST à l'aide de /pattern matching/. Si Busimo génère un méta-modèle uniquement via le concept d'annotation, ceci est une première étape.
 
 #+BEGIN_LATEX
 \newpage
