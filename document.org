@@ -163,7 +163,15 @@ Pour faire le choix d'une solution, externe ou interne, il faut peser le pour et
 #+ATTR_LATEX: :width 15cm
 [[./pictures/How-to-choose-between-external-and-internal-DSL.png]]
 
-** Méthodes et implémentations
+** Bonnes et mauvaises pratiques
+
+Le processus de création d'un /Domain-Specific Language/ requière des connaissances en développement de langage ainsi qu'une connaissance du domaine \cite{Mernik-et-al-2005}. C'est un point très important car le domaine est au centre du problème.
+
+Pour apporter de la méthodologie dans ce processus, \cite{Karsai-et-al-2009} proposent une ligne de conduite. Ils insistent sur le fait de se rapprocher des experts, de ne pas hésiter à poser des questions. Il est conseillé de rester proche du domaine, de ne pas généraliser si cela ne semble utile à aucun cas clair d'utilisation. Il faut utiliser une notation descriptive, concis mais pas trop, et rendre possible les commentaires qui sont là pour corriger tout manque de clarté.
+
+Si ces conseils semblent généralistes, ce n'est pas le cas des problèmes relevés par \cite{Kelly-and-Pohjonen-2009} grâce à une analyse de plusieurs DSL. Si le manque de compréhension métier des problématiques est cité, les mauvaises pratiques les plus fréquentes sont : rendre la solution initiale inaltérable ; laisser le langage stagner ; ou encore utiliser le code source comme modèle. Moins fréquent, mais toujours à éviter, sont : mettre l'accent sur un sous-domaine ; prédéterminer le paradigme ; ignorer le cas réel d'utilisation ; ou encore considérer que tout le monde comprend la solution.
+
+** Implémentations et outils
 
 Le sujet de cette section est les méthodes et les implémentations. Nous parlerons des capacités de certains GPL à accueillir des DSL et d'outils aidant la conception de DSL.
 
@@ -211,7 +219,7 @@ LMS (/Lightweight Modular Staging/) est un système de génération de code à l
 #+NAME: Scala-LMS-example
 #+CAPTION: Exemple d'utilisation de LMS (source : https://scala-lms.github.io)
 #+BEGIN_SRC scala
-  class Vector[T:Numeric:Manifest](val data: Rep[Array[T]]) {
+  clas s Vector[T:Numeric:Manifest](val data: Rep[Array[T]]) {
     def foreach(f: Rep[T] => Rep[Unit]): Rep[Unit] = {
       for (i <- 0 until data.length) f(data(i))
     }
@@ -274,86 +282,18 @@ Si Spoofax et Xtext se focalise sur le DSL textuel, MPS propose un système de p
 #+ATTR_LATEX: :width 8cm
 [[./pictures/MPS-view-definition.png]]
 
-n** Succès et échecs
+** Constats
 
-Nous abordons ici les comportements conseillés ou non dans l'utilisation de DSL, tout en mettant le doigt sur les problématiques de la conception. Nous finirons pas présenter les critères de qualification d'un DSL.
+Les langages dédiés réconcilient les domaines avec le code source. Les langages de programmation ont longtemps été des outils que seuls les programmeurs pouvaient manipuler. En donnant une vraie place aux notions métiers, les experts ont la possibilité de produire et de communiquer via les sources comme média, prenant ainsi le contrôle de la logique métier. Ces pratiques ont démontré leurs impacts bénéfiques sur la productivité et les coûts. Cependant, faire le choix d'utiliser ou non d'un DSL, tout comme les choix de conception de ce DSL, n'est pas évident. Une analyse préalable accompagnée de bonnes pratiques doit être effectuée.
 
-*** Bonnes et mauvaises pratiques
+Les /Language Workbenches/ ont simplifié la création de DSL externe en rendant accessible le /Language-Oriented Programming/. Si certains environnments reste sur une vision classique, d'autres y préfère la vision projectionnelle qui permet de proposer à l'utilisateur des vues plus personnalisables. Si le concept de l'AST pour source est discutable, il est indéniable que les projections permettent de mieux s'adapté aux différents cas d'utilisation. Cependant, cette méthode n'est pas une solution à tout, car en plus d'être encore jeune, elle reste peu compatible avec les pratiques /mainstream/ de développement logiciel d'aujourd'hui.
 
-Le processus de création d'un /Domain-Specific Language/ requière des connaissances en développement de langage ainsi qu'une connaissance du domaine \cite{Mernik-et-al-2005}. C'est un point très important car le domaine est au centre du problème.
+Les critiques pouvant être faites au DSL externe justifient la prolifération des DSL interne, que ce soit dans des langages de programmation permissifs syntaxiquement ou non. Malheureusement, utiliser $n$ syntaxes crée des barrières symboliques, créant un faussé entre plusieurs représentations d'un même domaine.
 
-Pour apporter de la méthodologie dans ce processus, \cite{Karsai-et-al-2009} proposent une ligne de conduite. Ils insistent sur le fait de se rapprocher des experts, de ne pas hésiter à poser des questions. Il est conseillé de rester proche du domaine, de ne pas généraliser si cela ne semble utile à aucun cas clair d'utilisation. Il faut utiliser une notation descriptive, concis mais pas trop, et rendre possible les commentaires qui sont là pour corriger tout manque de clarté.
-
-Si ces conseils semblent généralistes, ce n'est pas le cas des problèmes relevés par \cite{Kelly-and-Pohjonen-2009} grâce à une analyse de plusieurs DSL. Si le manque de compréhension métier des problématiques est cité, les mauvaises pratiques les plus fréquentes sont : rendre la solution initiale inaltérable ; laisser le langage stagner ; ou encore utiliser le code source comme modèle. Moins fréquent, mais toujours à éviter, sont : mettre l'accent sur un sous-domaine ; prédéterminer le paradigme ; ignorer le cas réel d'utilisation ; ou encore considérer que tout le monde comprend la solution.
-
-*** Propriétés d'un DSL
-
-Il est compliqué de juger un DSL sans critère précis. \cite{Karsai-et-al-2009} ont réunis les différents facteurs de succès rencontrés dans la littérature sur les DSL. On y trouve : l'apprenabilité (L), la convivialité (U), l'expressivité (E), la réutilisabilité (R), le coût de développement (C) et la fiabilité (I) (voir tableau [[Success-factors]]).
-
-#+NAME: Success-factors
-#+CAPTION: Facteurs de succès proposé par \cite{Hermans-et-al-2009}
-| *(L) Learnability*     | Developers have to learn an extra language,     |
-|                        | which takes time and effort. Furthermore,       |
-|                        | as the domain changes the DSL has to evolve     |
-|                        | and developers need to stay up-to-date.         |
-| *(U) Usability*        | Tools and methods supporting the DSL should     |
-|                        | be easy and convenient to use.                  |
-| *(E) Expressiveness*   | Using a DSL, domain specific features can       |
-|                        | be implemented compactly, however, the language |
-|                        | is specific to that domain and limits the       |
-|                        | possible scenarios that can be expressed.       |
-| *(R) Reusability*      | With a DSL, reuse is possible at the model      |
-|                        | level, making it easier to reuse partial or     |
-|                        | even entire solutions, rather than pieces of    |
-|                        | source code.                                    |
-| *(C) Development Cost* | The DSL helps developers to model domain        |
-|                        | concepts that otherwise are time-consuming to   |
-|                        | implement. The corresponding source code is     |
-|                        | generated automatically. The corresponding      |
-|                        | sources code is generated automatically.        |
-|                        | This lowers developement costs and shortens     |
-|                        | time-to-market.                                 |
-| *(I) Reliability*      | In addition to reducing development cost,       |
-|                        | automation of large parts of the development    |
-|                        | process leads to fewers errors.                 |
-
-\cite{Albuquerque-et-al-2014} proposent la réutilisation des critères cognitifs de \cite{Blackwell-and-Green-2003}. Ils les séparent en deux catégories : l'expressivité et la brièveté. L'expressivité (/expressiveness/) est la capacité du DSL à représenter les éléments du domaine (voir tableau [[Expressiveness-criteria]]). La brièveté (/conciseness/) est l'économie de termes dans la syntaxe (voir tableau [[Conciseness-criteria]]). Ces caractéristiques étant opposés, les concepteurs doivent faire en sorte d'avoir un DSL équilibré. Malheureusement, il est difficile d'identifier ses forces et ses faiblesses dès la phase de conception \cite{Albuquerque-et-al-2014}.
-
-#+NAME: Expressiveness-criteria
-#+CAPTION: Critères concernant l'expressivité proposés par \cite{Albuquerque-et-al-2014}
-| Expressiveness         |                                                     |
-|------------------------+-----------------------------------------------------|
-| *Hidden Dependencies*  | Relevant relations between entities are not visible |
-| *Role-Expressiveness*  | The purpose of an entity is readily inferred        |
-| *Abstraction*          | Type and availability of abstraction mechanisms     |
-| *Closeness of Mapping* | Closeness of representation to domain               |
-
-#+NAME: Conciseness-criteria
-#+CAPTION: Critères concernant la brièveté proposés par \cite{Albuquerque-et-al-2014}
-| Conciseness              |                                    |
-|--------------------------+------------------------------------|
-| *Viscosity*              | Resistance to change               |
-| *Visibility*             | Ability to view entities easily    |
-| *Diffuseness*            | Verbosity of language              |
-| *Hard Mental Operations* | High demand on cognitive resources |
-
-** Constats et perspectives
-
-Les critères de qualité du DSL restent difficiles à mesurer \cite{Albuquerque-et-al-2014} et sont encore trop jeunes pour être utilisés industriellement pour les évaluations. Les /Language Workbenches/ simplifient la création et l'usage de langage exécutable métier \cite{Erdweg-et-al-2015}. Spoofax, Xtext et MPS sont des solutions techniques qui ont hérité des concepts du /Language-Oriented Programming/ exprimé par \cite{Ward-1994}. Grâce au système de projection (ex. MPS), la forme abstraite est manipulée via les diverses vues disponibles. L'information est présentée sous différentes formes, permettant si besoin de cacher le contenu inutile selon la tâche en cours. L'artéfact éditable permet d'uniformiser la forme, ce qui répond à une problématique forte. Cette vision était déjà à l'époque défini comme la « nouvelle génération de feuille de calcul » \cite{Fowler-2005} : un environnement ou l'utilisateur lambda peut rapidement devenir apte à user de fonctionnalités avancées.
-
-Jongler avec $n$ syntaxes (externes, et potentiellement plusieurs formes internes pour un même DSL) crée des barrières symboliques. Les /Language Workbenches/ ne sont pas toujours une solution acceptable car il peut toujours être difficile de savoir quelle forme adopter. \cite{Acher-et-al-2014} définissent le terme de /Metamorphic DSL/ avec l'expérience FAMILIAR. Le fait est que les syntaxes concrètes forcent le choix d'une forme qui n'est pas adapté à tous les cas d'utilisations. Le /Metamorphic DSL/ conceptualise la capacité d'un DSL à passer d'une syntaxe concrète à une autre selon le cas d'utilisation (tâche à effectuer, outil utilisé), permettant ainsi de ne pas avoir à choisir une mais plutôt plusieurs formes (voir figure [[Metamorphic-DSL-usecase]]).
-
-#+NAME: Metamorphic-DSL-usecase
-#+CAPTION: Cas d'utilisation du /Metamorphic DSL/ \cite{Acher-et-al-2014}.
-#+ATTR_LATEX: :width 15cm
-[[./pictures/Metamorphic-DSL-usecase.png]]
-
-Ces deux solutions ont une vision différente. Si le /Language Workbench/ propose une forme plus approprié pour un domaine donné, le /Metamorphic DSL/ veut donner le choix de la forme que peut prendre un DSL selon le cas d'utilisation.
-
-* Modélisation inverse grâce aux annotations
+* Modélisation inverse de code GPL grâce aux annotations
 ** Motivations
 
-Nous avons cité précédemment les problèmes d'interopérabilité entre les différents DSL d'un même domaine. Si un domaine est la plupart du temps associé à un unique DSL externe, les DSL internes sont souvent nombreux. Le problème relié au DSL métamorphique sur lequel nous nous penchons est la traduction de sémantique de GPL à GPL au niveau domaine. On peut faire l'analogie avec les barrières entre les langues naturelles : les choses peuvent être dites de manière différentes, cependant nous pouvons parler de la même chose.
+Nous avons cité précédemment constaté les problèmes d'interopérabilité entre les différents DSL d'un même domaine. Si un domaine est la plupart du temps associé à un unique DSL externe, les DSL internes sont souvent nombreux. Le problème relié au DSL métamorphique sur lequel nous nous penchons est la traduction de sémantique de GPL à GPL au niveau domaine. On peut faire l'analogie avec les barrières entre les langues naturelles : les choses peuvent être dites de manière différentes, cependant nous pouvons parler de la même chose.
 
 Retrouver le domaine dans un programme GPL est plus problématique que pour le DSL. Pour illustrer, nous pouvons prendre le cas des transformations de forme. Deux approches s'offre à nous. La première est la solution /ad hoc/ (voir figure [[Ad-hoc-transformation]]), la seconde stratégie est de passer par une representation intermédiaire (voir figure [[Generic-transformation]]). La seconde est intéressante de par sa nature générique. Dans ce cas, une syntaxe abstraite centrale doit être définie, c'est-à-dire que l'intersection des domaines des différents modèles doit être spécifié. Il faut être capable déterminer une syntaxe abstraite sans perdre d'information présente dans les syntaxes concrètes (dans notre exemple, =XML=, =JSON=, =CSV= et =YAML= partagent des notions du domaines de la sérialisation de données).
 :
@@ -497,7 +437,7 @@ Par la suite, l'ANT est analysé pour définir un méta-modèle. Les règles app
 #+BEGIN_SRC pseudocode
   def analyze_node(node, parent=nil)
     node.each_annotation do |annotation|
-      if class_not_exist annotation.name
+      unless class_exist annotation.name
         type = create_class annotation.name
         metamodel.add type
         parent.contains type unless parent.nil?
