@@ -359,26 +359,26 @@ Retrouver le domaine dans un programme GPL est plus problématique que pour le D
 :
 #+NAME: Ad-hoc-transformation
 #+CAPTION: Transformation /ad hoc/ de Ruby vers JavaScript avec [[http://opalrb.org/][Opal]]
-#+ATTR_LATEX: :width 10cm
+#+ATTR_LATEX: :width 8cm
 [[./pictures/Ad-hoc-transformation.png]]
 
 #+NAME: Generic-transformation
 #+CAPTION: Transformation générique grâce à une syntaxe abstraite
-#+ATTR_LATEX: :width 10cm
+#+ATTR_LATEX: :width 8cm
 [[./pictures/Generic-transformation.png]]
 
 Notre but est de déterminer un méta-modèles, soit le domaine, à partir de modèles défini sous la forme d'un langage de programmation général. Le cas des GPL est plus complexe que l'exemple des formats de sérialisation de données qui sont des DSL. Les langages de programmation donnent la possibilité de définir un modèle pour un domaine (d'où leur nature généraliste). Il faut donc comprendre ici que le métier ne respecte pas le méta-modèle du GPL mais celui défini par les modèles rédigé dans ce GPL. La figure [[GPL-domain-and-models]] montre les relations entre modèles et méta-modèles dans le cas des langages de programmation et des domaines.
 
 #+NAME: GPL-domain-and-models
 #+CAPTION: Rapport entre les modèles dans le GPL et les domaines
-#+ATTR_LATEX: :width 13cm
+#+ATTR_LATEX: :width 9cm
 [[./pictures/GPL-domain-and-models.png]]
 
-La forme d'un code source (=M(gpl)=) est formalisé par son méta-modèle (=MM(gpl)=). Ce =M(gpl)= est une des manières de définir le méta-modèle du domaine ciblé (=MM(domain)=). Exécuter =M(gpl)= revient donc à modéliser =MM(domain)= ainsi qu'à instancier un modèle (=M(domain)=) conforme à ce =MM(domain)=. Ceci est d'autant plus clair dans les langages orientés-objet, le principe de classe étant la définition d'un type (niveau méta) auquel lui est associé des attributs et du comportements. Un exemple avec le cas de le /framework/ de persistance =Hibernate= se trouve en figure [[Java-Hibernate-and-models]].
+La forme d'un code source (=M(gpl)=) est formalisé par son méta-modèle (=MM(GPL)=). Ce =M(GPL)= est une des manières de définir le méta-modèle du domaine ciblé (=MM(Domain)=). Exécuter =M(GPL)= revient donc à modéliser =MM(Domain)= ainsi qu'à instancier un modèle (=M(Domain)=) conforme à ce =MM(Domain)=. Ceci est d'autant plus clair dans les langages orientés-objet, le principe de classe étant la définition d'un type (niveau méta) auquel lui est associé des attributs et du comportements. Un exemple avec le cas de le /framework/ de persistance =Hibernate= se trouve en figure [[Java-Hibernate-and-models]].
 
 #+NAME: Java-Hibernate-DB-and-models
 #+CAPTION: Java, Hibernate, base de données et les modèles
-#+ATTR_LATEX: :width 12cm
+#+ATTR_LATEX: :width 13cm
 [[./pictures/Java-Hibernate-DB-and-models.png]]
 
 Cependant, nous ne devrions pas avoir à exécuter un modèles pour en récupérer le domaine qu'il représente. De plus cette supposition est très lié au paradigme objet. Les modèles en entrée devrait aussi être interprétable au niveau métier. Le problème se pose avec la bibliothèque =jOOQ=. Comme on peut le voir sur la figure [[Internal-DSL-example]], le DSL interne n'est accessible seulement grâce à une exécution. De plus la conception de la bibliothèque doit permettre la récupération du domaine, ce qui n'est pas nécessairement le cas pour toutes les implémentation. Finalement, il faut aussi prendre en compte que les implémentations ne respectent pas toutes un même méta-modèle.
@@ -425,10 +425,10 @@ Busimo a pour but d'inferer un méta-modèle via les annotations situées dans l
 
 #+NAME: How-Busimo-works
 #+CAPTION: Fonctionnement global de Busimo
-#+ATTR_LATEX: :width 12cm
+#+ATTR_LATEX: :width 10cm
 [[./pictures/How-Busimo-works.png]]
 
-La forme abstraite utilisée dans Busimo (que l'on appellera /Annotable Nodes Tree/ ou ANT) est intéressante par son caractère générique qui la rend indépendante du langage en entrée. En effet, le code en figure [[JUnit-annotations-example]] donne l'ANT en figure [[JUnit-ANT-exanple]], mais une version =Java= du même programme doit pouvoir retourner le même résultat [fn:Xtend-and-Java]. Un second exemple d'ANT est proposé par la figure [[State-machine-ANT-example]] qui est généré avec le code [[State-machine-code-example]].
+La forme abstraite utilisée dans Busimo (que l'on appellera /Annotable Nodes Tree/ ou ANT) est intéressante par son caractère générique qui la rend indépendante du langage en entrée. En effet, le code en figure [[JUnit-annotations-example]] donne l'ANT en figure [[JUnit-ANT-example]], mais une version =Java= du même programme doit pouvoir retourner le même résultat [fn:Xtend-and-Java]. Un second exemple d'ANT est proposé par la figure [[State-machine-ANT-example]] qui est généré avec le code [[State-machine-code-example]].
 
 #+NAME: JUnit-ANT-example
 #+CAPTION: ANT d'un modèle utilisant JUnit
@@ -537,12 +537,12 @@ Par la suite, l'ANT est analysé pour définir un méta-modèle. Les règles app
 ** Analyse de modèles Java
 
 Cette première version ne sait qu'analyser du code source =Xtend=. Ce choix a été fait pour des raisons de facilité. En effet, le langage =Xtend= a été défini grâce au framework =Xtext=, cela permettant de récupérer les AST correspondants aisément.
-Cependant, il est nécessaire d'aller plus loin pour aussi permettre l'analyse de code source =Java=. Si =Xtend= sait « se /parser/ » grâce à ses propres outils, le cas de =Java= est plus compliqué. =Spoon= \cite{Pawlak-et-al-2006} est un outil dont nous pouvons nous servir pour, entre autres, analyser statiquement du code source =Java= grâce à une redéfinition compléte de l'AST. Dans ce cas, Busimo doit être capable de transformer ce deuxième type d'arbre en un AST de noeuds annotés. (voir figure [[Multi-model-analyser]]).
+Cependant, il est nécessaire d'aller plus loin pour aussi permettre l'analyse de code source =Java=. Si =Xtend= sait « se /parser/ » grâce à ses propres outils, le cas de =Java= est plus compliqué. =Spoon= \cite{Pawlak-et-al-2006} est un outil dont nous pouvons nous servir pour, entre autres, analyser statiquement du code source =Java= grâce à une redéfinition compléte de l'AST. Dans ce cas, Busimo doit être capable de transformer ce deuxième type d'arbre en un AST de noeuds annotés. (voir figure [[Multi-model-analyzer]]).
 
-#+NAME: Multi-model-analyser
+#+NAME: Multi-model-analyzer
 #+CAPTION: Analyser plusieur type de source
 #+ATTR_LATEX: :width 11cm
-[[./pictures/Multi-model-analyser.png]]
+[[./pictures/Multi-model-analyzer.png]]
 
 ** Règles de filtrage
 
@@ -552,7 +552,7 @@ Un système de listes noires est donc nécessaire si l'on ne souhaite pas avoir 
 
 #+NAME: Annotations-blacklist
 #+CAPTION: Système de listes noires
-#+ATTR_LATEX: :width 12cm
+#+ATTR_LATEX: :width 10cm
 [[./pictures/Annotations-blacklist.png]]
 
 ** Miner
