@@ -9,7 +9,6 @@
 #+LATEX_HEADER: \abstract{Ce document regroupe un état de l'art sur les langages dédiés (aussi appelés DSL pour \textit{Domain-Specific Languages}) ainsi qu'un rapport des travaux de recherche autour du thème du DSL métamorphique. Si l'on souhaite généraliser les transformations modèle à modèle, il faut fournir une forme pivot. Dans le DSL, la sémantique est le domaine ; cependant, ce n'est pas le cas du GPL (pour \textit{General Purpose Language}) qui a la capacité de définir le métier. C'est dans le but de capturer cette forme pivot qu'un prototype permettant l'inference de domaine dans le code source a été développé. Le travail en cours sur l'outil Busimo est un premier pas vers l'automatisation de la modélisation inverse.}
 
 * TODOs
-** TODO Finaliser *GPL et DSL : du point de vue des modèles*
 ** TODO Finaliser *L'outil Busimo*
 ** TODO Fusionner *Critiques* et *Travaux à venir*
 ** TODO Changer l'exemple avec Hibernate avec =jOOQ=
@@ -340,7 +339,7 @@ Le cas du GPL est particulier du fait qu'il permettent la définition de concept
 #+ATTR_LATEX: :width 14cm
 [[./pictures/Java-Hibernate-DB-and-models.png]]
 
-Aujourd'hui, le code source exécutable (GPL) n'est pas interprétable au niveau métier. Le problème se pose avec les outils comme =jOOQ=. Comme on peut le voir sur la figure [[Internal-DSL-example]], le DSL interne n'est compréhensible au niveau domaine par la machine sans développement spécifique.
+Aujourd'hui, le code source exécutable (GPL) n'est pas interprété au niveau métier. Le problème se pose avec les outils comme =jOOQ=. Comme on peut le voir sur la figure [[Internal-DSL-example]], le DSL interne n'est pas exploité au niveau domaine sans développement spécifique. Pourtant, des informations /Domain-Specific/ y sont belle et bien présentent. Nous souhaiterons trouver des techniques génériques pour récupérer ces informations.
 
 ** Le choix des annotations
 
