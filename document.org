@@ -8,6 +8,10 @@
 #+LATEX_HEADER: \input{header}
 #+LATEX_HEADER: \abstract{Ce document regroupe un état de l'art sur les langages dédiés (aussi appelés DSL pour \textit{Domain-Specific Languages}) ainsi qu'un rapport des travaux de recherche autour du thème du DSL métamorphique. Si l'on souhaite généraliser les transformations modèle à modèle, il faut fournir une forme pivot. Dans le DSL, la sémantique est le domaine ; cependant, ce n'est pas le cas du GPL (pour \textit{General Purpose Language}) qui a la capacité de définir le métier. C'est dans le but de capturer cette forme pivot qu'un prototype permettant l'inference de domaine dans le code source a été développé. Le travail en cours sur l'outil Busimo est un premier pas vers l'automatisation de la modélisation inverse.}
 
+* TODOs
+** TODO Changer l'exemple avec Hibernate avec =jOOQ=
+** TODO Fusionner *Critiques* et *Travaux à venir*
+
 * Introduction
 
 Les premiers programmes numériques étaient développés directement en langage machine. En plus de n'être compatible qu'avec un type particulier de machine, ce travail était ingrat et source d'erreur. L'apparition de l'assembleur a permis de rendre le code produit plus générique et /human-readable/ grâce à une abstraction du code machine cible. L'arrivée des langages de programmation ont permis l'utilisation de concepts plus haut niveau tel que les types, les variables, les constantes, les listes, les structures, les fonctions, /etc./ qui permettent des constructions beaucoup plus proches de la vision que l'homme a d'un programme.
@@ -268,17 +272,17 @@ Si Spoofax et Xtext se focalise sur le DSL textuel, MPS propose un système de p
 [[./pictures/Parsing-and-projectional-styles.png]]
 
 #+NAME: Manipulating-representations-with-a-Language-Workbench
-#+CAPTION: Manipulation des représentations avec le /Language Workbench/ \cite{Fowler-2005}.
+#+CAPTION: Principe de projection utilisé dans les /Language Workbenches/ projectionnels\cite{Fowler-2005}.
 #+ATTR_LATEX: :width 13cm
 [[./pictures/Manipulating-representations-with-a-Language-Workbench.png]]
 
 #+NAME: MPS-concept-definition
-#+CAPTION: Définition d'un concept dans MPS
+#+CAPTION: Définition d'un concept Entity dans MPS
 #+ATTR_LATEX: :width 8cm
 [[./pictures/MPS-concept-definition.png]]
 
 #+NAME: MPS-view-definition
-#+CAPTION: Définition d'une vue textuelle dans MPS
+#+CAPTION: Définition d'une projection textuelle au concept Entity dans MPS
 #+ATTR_LATEX: :width 8cm
 [[./pictures/MPS-view-definition.png]]
 
@@ -290,40 +294,51 @@ Les /Language Workbenches/ ont simplifié la création de DSL externe en rendant
 
 Les critiques pouvant être faites au DSL externe justifient la prolifération des DSL interne, que ce soit dans des langages de programmation permissifs syntaxiquement ou non. Malheureusement, utiliser $n$ syntaxes crée des barrières symboliques, créant un faussé entre plusieurs représentations d'un même domaine.
 
-* Modélisation inverse de code GPL grâce aux annotations
+* Modélisation inverse de code GPL
 ** Motivations
 
-Nous avons cité précédemment constaté les problèmes d'interopérabilité entre les différents DSL d'un même domaine. Si un domaine est la plupart du temps associé à un unique DSL externe, les DSL internes sont souvent nombreux. Le problème relié au DSL métamorphique sur lequel nous nous penchons est la traduction de sémantique de GPL à GPL au niveau domaine. On peut faire l'analogie avec les barrières entre les langues naturelles : les choses peuvent être dites de manière différentes, cependant nous pouvons parler de la même chose.
+Nous avons cité précédemment constaté les problèmes d'interopérabilité entre les différents DSL d'un même domaine. Si un domaine est la plupart du temps associé à un unique DSL externe, les DSL internes sont souvent nombreux. Si un DSL externe est la plupart du temps bien équipé en outil /Domain Specific/, il est souvent compliqué d'avoir un service identique avec le DSL interne du fait qu'il se fait sa propre représentation du domaine.
 
-Retrouver le domaine dans un programme GPL est plus problématique que pour le DSL. Pour illustrer, nous pouvons prendre le cas des transformations de forme. Deux approches s'offre à nous. La première est la solution /ad hoc/ (voir figure [[Ad-hoc-transformation]]), la seconde stratégie est de passer par une representation intermédiaire (voir figure [[Generic-transformation]]). La seconde est intéressante de par sa nature générique. Dans ce cas, une syntaxe abstraite centrale doit être définie, c'est-à-dire que l'intersection des domaines des différents modèles doit être spécifié. Il faut être capable déterminer une syntaxe abstraite sans perdre d'information présente dans les syntaxes concrètes (dans notre exemple, =XML=, =JSON=, =CSV= et =YAML= partagent des notions du domaines de la sérialisation de données).
-:
-#+NAME: Ad-hoc-transformation
-#+CAPTION: Transformation /ad hoc/ de Ruby vers JavaScript avec [[http://opalrb.org/][Opal]]
-#+ATTR_LATEX: :width 8cm
-[[./pictures/Ad-hoc-transformation.png]]
+L'idée ici est de permettre l'extraction de contenu /Domain Specific/ du code source ; ceci permettant l'accès à des services spécifiques malgré l'utilisation de DSL internes (voir figure [[DSL-and-GPL-to-domain]]).
 
-#+NAME: Generic-transformation
-#+CAPTION: Transformation générique grâce à une syntaxe abstraite
-#+ATTR_LATEX: :width 8cm
-[[./pictures/Generic-transformation.png]]
+#+NAME: DSL-and-GPL-to-domain
+#+CAPTION: Interprétation d'un DSL et extraction /Domain-Specific/ de GPL
+#+ATTR_LATEX: :width 16cm
+[[./pictures/DSL-and-GPL-to-domain.png]]
 
-Notre but est de déterminer un méta-modèles, soit le domaine, à partir de modèles défini sous la forme d'un langage de programmation général. Le cas des GPL est plus complexe que l'exemple des formats de sérialisation de données qui sont des DSL. Les langages de programmation donnent la possibilité de définir un modèle pour un domaine (d'où leur nature généraliste). Il faut donc comprendre ici que le métier ne respecte pas le méta-modèle du GPL mais celui défini par les modèles rédigé dans ce GPL. La figure [[GPL-domain-and-models]] montre les relations entre modèles et méta-modèles dans le cas des langages de programmation et des domaines.
+Notre objectif est de déterminer un méta-modèles, soit le domaine, et un modèle à partir d'un autre modèles sous la forme d'un langage de programmation général. Cette approche est à l'opposer de l'approche MDE, nous la nommerons donc : modélisation inverse.
+
+** GPL et DSL : du point de vue des modèles
+
+Nous avons déjà abordé le sujet lors de l'étude bibiliographique. Cependant, il est important de définir la différence fondamentale entre DSL externe et DSL interne par rapport aux modèles. Nous utiliserons par la suite DSL pour DSL externe et GPL pour du code source avec potentiellement l'utilisation d'un DSL interne. Il est d'ailleur raisonnable de dire que tout code GPL utile cache un domaine.
+
+Retrouver le domaine dans un programme GPL n'est pas simple, car contrairement au DSL, le domaine y est beaucoup plus implicite. En effet, si la grammaire rend les choses explicite côté DSL (voir figure [[DSL-to-domain-with-a-grammar]]), avec un GPL, le développeur doit user des possibilité offertes par le langage pour obtenir un rendu le plus /Domain-Specific/ possible. Si la génération de code transforme un domaine en code exécutable équivalent, il n'y a pas d'outil générique pour récupérer le domaine métier à partir des sources (voir figure [[GPL-to-domain-with-what]]).
+
+#+NAME: DSL-to-domain-with-a-grammar
+#+CAPTION: Du DSL au domain et /vice versa/ avec une grammaire
+#+ATTR_LATEX: :width 10cm
+[[./pictures/DSL-to-domain-with-a-grammar.png]]
+
+#+NAME: DSL-to-domain-with-a-grammar
+#+CAPTION: Du GPL au domain /et vice verca/
+#+ATTR_LATEX: :width 10cm
+[[./pictures/GPL-to-domain-with-what.png]]
+
+Le cas du GPL est particulier du fait qu'il permettent la définition de concepts métier (voir figure [[GPL-domain-and-models]]) ; on peut même aller jusqu'à dire que le domaine des GPL est création de représentation exécutable de domaine. La forme d'un code source (=M(GPL)=) est formalisé par son méta-modèle (=MM(GPL)=). Ce =M(GPL)= est une des manières de définir le méta-modèle du domaine ciblé (=MM(Domain)=). Exécuter =M(GPL)= revient donc à modéliser =MM(Domain)= ainsi qu'à instancier un modèle (=M(Domain)=) conforme à ce =MM(Domain)=. Un exemple avec le cas de le /framework/ de persistance =Hibernate= se trouve en figure [[Java-Hibernate-and-models]].
 
 #+NAME: GPL-domain-and-models
-#+CAPTION: Rapport entre les modèles dans le GPL et les domaines
-#+ATTR_LATEX: :width 9cm
+#+CAPTION: Relation entre le GPL et les domaines par rapport aux modèles
+#+ATTR_LATEX: :width 8cm
 [[./pictures/GPL-domain-and-models.png]]
-
-La forme d'un code source (=M(GPL)=) est formalisé par son méta-modèle (=MM(GPL)=). Ce =M(GPL)= est une des manières de définir le méta-modèle du domaine ciblé (=MM(Domain)=). Exécuter =M(GPL)= revient donc à modéliser =MM(Domain)= ainsi qu'à instancier un modèle (=M(Domain)=) conforme à ce =MM(Domain)=. Ceci est d'autant plus clair dans les langages orientés-objet, le principe de classe étant la définition d'un type (niveau méta) auquel lui est associé des attributs et du comportements. Un exemple avec le cas de le /framework/ de persistance =Hibernate= se trouve en figure [[Java-Hibernate-and-models]].
 
 #+NAME: Java-Hibernate-DB-and-models
 #+CAPTION: Java, Hibernate, base de données et les modèles
-#+ATTR_LATEX: :width 13cm
+#+ATTR_LATEX: :width 14cm
 [[./pictures/Java-Hibernate-DB-and-models.png]]
 
-Cependant, nous ne devrions pas avoir à exécuter un modèles pour en récupérer le domaine qu'il représente.  Les modèles en entrée devrait aussi être interprétable au niveau métier. Le problème se pose avec la bibliothèque =jOOQ=. Comme on peut le voir sur la figure [[Internal-DSL-example]], le DSL interne n'est accessible seulement grâce à une exécution. De plus la conception de la bibliothèque doit permettre la récupération du domaine, ce qui n'est pas nécessairement le cas pour toutes les implémentation. Finalement, il faut aussi prendre en compte que les implémentations ne respectent pas toutes un même méta-modèle.
+Aujourd'hui, le code source exécutable (GPL) n'est pas interprétable au niveau métier. Le problème se pose avec les outils comme =jOOQ=. Comme on peut le voir sur la figure [[Internal-DSL-example]], le DSL interne n'est compréhensible au niveau domaine par la machine sans développement spécifique.
 
-** S'intéresser à l'AST : le cas des annotations
+** Le choix des annotations
 
 Les annotations dans le code source sont des méta-données pouvant être ajoutés sur différents noeuds de l'AST (packages, classes, méthodes, /etc/.). Du comportement peut leur être associé (voir l'exemple avec la persistence en Java grâce à l'aide des annotations \cite{Reed-2007}). Pour le métier aussi, les annotations sont une potentielle une source d'information.
 
@@ -357,7 +372,7 @@ class StringTest
 }
 #+END_SRC
 
-** L'outil Busimo : des annotations au domaine
+** L'outil Busimo
 
 Cette section présente le fonctionnement de l'outil Busimo [fn:Busimo-project-URL].
 
