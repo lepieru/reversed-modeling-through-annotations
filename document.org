@@ -154,7 +154,7 @@ L'idée d'un DSL interne est d'utiliser les capacités d'un GPL pour exprimer un
 #+BEGIN_SRC java
 create.selectFrom(CAT)
       .where(CAT.BORN_IN.eq(2015))
-      .orderBy(CAT.NAME)
+      .orderBy(CAT.NAME);
 #+END_SRC
 
 \cite{Gibbons-and-Wu-2014} distinguent le DSL interne peu profond (/shallow DSEL/) et profond (/deep DSEL/). Le /shallow DSEL/ est le fait de se servir de la syntaxe du langage hôte comme base de formalisation de notion du domaine. Si nous avons "=chat + chien=", cela doit aussi avoir du sens dans le langage hôte. À l'inverse le /deep DSEL/ ne se contente pas simplement d'exécuter la chaîne en entrée, il en crée un AST. Le comportement de cette structure peut être défini par la suite. Ce deuxième type de DSL nous permet plus de liberté dans la construction de la sémantique des entrées.
@@ -343,37 +343,35 @@ Aujourd'hui, le code source exécutable (GPL) n'est pas interprété au niveau m
 
 ** Le choix des annotations
 
-Les annotations dans le code source sont des méta-données pouvant être ajoutés sur différents noeuds de l'AST (packages, classes, méthodes, /etc/.). Du comportement peut leur être associé (voir l'exemple avec la persistence en Java grâce à l'aide des annotations \cite{Reed-2007}). Pour le métier aussi, les annotations sont une potentielle une source d'information.
-
-Extraire les annotations peut être une manière de reconstruire le domaine. De plus, les annotations sont aisément identifiable dans le code ce qui n'est pas le cas pour toutes les techniques appliquées à la définition de DSL interne (voir le cas de jOOQ [[Internal-DSL-example]]). Si les méta-modèle sont identifiable dans le code source, le cas des annotation semble être une bonne première approche au problème.
-
-Si l'on considère le domaine du test unitaire, le code source =Xtend= en figure [[JUnit-annotations-example]] contient de l'information au niveau des annotations. Si des informations sont présentent partout dans les modèles (nom de classe, nom de méthode, /etc/.), les annotations sont des informations explicites beaucoup moins technique (soit plus proche du domaine).
+Comme nous le disions précédemment, le code source contient des informations métier. Le code en figure [[JUnit-annotations-example]] comporte des informations du domaine du /testing/ et de l'interrogation de base de donnée relationnelle. Un test est construit avec une méthode annotée par =@Test= et une requête de base de donnée se crée à l'aide d'une /API fluent/. Si il semble difficile d'inférer un domaine dans un chaînage de méthode, les annotions sont simple à extraire et plus souvent /Domain-Specific/.
 
 #+NAME: JUnit-annotations-example
-#+CAPTION: Exemple avec des annotations JUnit en Xtend
-#+BEGIN_SRC xtend
-package test
-
-import static org.junit.Assert.*
-import org.junit.Test
-import org.junit.Ignore
-
-class StringTest
+#+CAPTION: Utilisation de la bibliothèque de test unitaire =JUnit= en =Java=
+#+BEGIN_SRC java
+public class QueryTest
 {
   @Test
-  def void testToString() {
-    assertEquals("", "".toString)
-    assertEquals("test", "test".toString)
+  public void testCatTable() {
+    create.selectFrom(CAT)
+          .where(CAT.BORN_IN.eq(2015))
+          .orderBy(CAT.NAME);
   }
 
   @Test
   @Ignore
-  def void testLength() {
-    assertEquals("".length, 0)
-    assertEquals("test".length, 4)
+  public void testDogTable() {
+    create.selectFrom(DOG)
+          .where(DOG.BORN_IN.eq(2015))
+          .orderBy(DOG.NAME);
   }
 }
 #+END_SRC
+
+Les annotations dans le code source sont des méta-données pouvant être ajoutés sur différents noeuds de l'AST (packages, classes, méthodes, /etc/.). Du comportement peut leur être associé (voir l'exemple avec la persistence en Java grâce à l'aide des annotations \cite{Reed-2007}). Pour le métier aussi, les annotations sont une potentielle une source d'information.
+
+Extraire les annotations peut être une manière de reconstruire le domaine. De plus, les annotations sont aisément identifiable dans le code ce qui n'est pas le cas pour toutes les techniques appliquées à la définition de DSL interne (voir le cas de jOOQ [[Internal-DSL-example]]). Si les méta-modèle sont identifiable dans le code source, le cas des annotation semble être une bonne première approche au problème.
+
+Si l'on considère le domaine du test unitaire, le code source =Java= en figure [[JUnit-annotations-example]] contient de l'information au niveau des annotations. Si des informations sont présentent partout dans les modèles (nom de classe, nom de méthode, /etc/.), les annotations sont des informations explicites beaucoup moins technique (soit plus proche du domaine).
 
 ** L'outil Busimo
 
@@ -398,8 +396,8 @@ La forme abstraite utilisée dans Busimo (que l'on appellera /Annotable Nodes Tr
 #+BEGIN_SRC xtend
 @StateMachine
 class Light implements IStateMachine {
-  @Accessors var IState state
-  @Accessors var int count
+  var IState state
+  var int count
 
   new() {
     count = 0
@@ -452,13 +450,13 @@ Par la suite, l'ANT est analysé pour définir un méta-modèle. Les règles app
 
 #+NAME: Pseudocode-ANT-to-metamodel
 #+CAPTION: ANT d'un modèle utilisant JUnit
-#+BEGIN_SRC pseudocode
+#+BEGIN_SRC ruby
 def analyze_node(node, parent=nil)
   node.each_annotation do |annotation|
     unless class_exist annotation.name
       type = create_class annotation.name
       metamodel.add type
-      parent.contains type unless parent.nil?
+      parent.has_many type unless parent.nil?
     end
   end
   node.children.each do |child|
@@ -526,7 +524,7 @@ Github étant la plus grande forge de projet de développement aujourd'hui, il s
 
 Les langages dédiés réconcilient les domaines avec le code source. Les langages de programmation ont longtemps été des outils que seuls les programmeurs pouvaient manipuler. En donnant une vraie place aux notions métiers, les experts ont la possibilité de produire et de communiquer via les sources comme média, prenant ainsi le contrôle de la logique métier.
 
-Ces pratiques ont démontré leurs impacts bénéfiques sur la productivité et les coûts. Cependant, faire le choix d'utiliser ou non d'un DSL n'est pas évident, tout comme les choix de conception de ce DSL. Une analyse préalable accompagnée de bonnes pratiques doit être effectuée. Si les environnements de /Language Workbench/ ont rendu accessible le /Language-Oriented Programming/, le choix de la forme la plus adéquate reste préoccupant car potentiellement discutable. C'est dans l'optique de répondre à ce problème que le concept de /Metamorphic DSL/ à vu le jour.
+Ces pratiques ont démontré leurs impacts bénéfiques sur la productivité et les coûts. Cependant, faire le choix d'utiliser ou non d'un DSL n'est pas évident, tout comme les choix de conception de ce DSL. Une analyse préalable accompagnée de bonnes pratiques doit être effectuée. Si les environnements de /Language Workbench/ ont rendu accessible le /Language-Oriented Programming/, l'utilisation DSL internes restent très répendu.
 
 La capacité de passer de forme en forme serait-elle une nouvelle étape dans l'évolution des /Domain-Specific Languages/ ? C'est la question que pose le /Metamorphic DSL/. Le défi est, en plus de proposer un système de transpositions de forme, de savoir quelle forme est la plus appropriée pour la tâche en cours. Pour se faire, une automatisation des processus est nécessaire ; c'est-à-dire une méthode générique de transposition de forme de DSL (approche développeur) et une qualification rigoureuse des propriétés des formes (approche utilisateur).
 
