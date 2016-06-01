@@ -1,4 +1,4 @@
-#+TITLE: Modélisation inverse via les annotations
+#+TITLE: Modélisation inversé via les annotations
 #+AUTHOR: Pierre Le Gall
 
 #+OPTIONS: toc:nil
@@ -24,7 +24,7 @@ Il est indéniable que les DSL simplifient l'usage de l'informatique d'aujourd'h
 
 Si les DSL sont partout, ils possèdent souvent diverses formes pour un même métier. Une forme peut être externe ou interne. Si il existe souvent qu'une seule forme externe, il existe souvent plusieurs formes internes créant une faussé entre des outils d'un même domaine.
 
-Suite à une étudé bibliographique sur les langages dédiés, le travail sur un prototype d'inference du domaine dans du code GPL sera présenté. Cet outil est un début vers l'automatisation de la modélisation inverse, c'est-à-dire la définition de modèles via des sources logicielles. Ce premier essai s'intéresse aux annotations que l'on peut retrouver dans des langages tel que =Java=, =C#= ou encore =Python=.
+Suite à une étudé bibliographique sur les langages dédiés, le travail sur un prototype d'inference du domaine dans du code GPL sera présenté. Cet outil est un début vers l'automatisation de la modélisation inversé, c'est-à-dire la définition de modèles via des sources logicielles. Ce premier essai s'intéresse aux annotations que l'on peut retrouver dans des langages tel que =Java=, =C#= ou encore =Python=.
 
 * Contexte
 ** Notions de modèle
@@ -296,7 +296,7 @@ Les /Language Workbenches/ ont simplifié la création de DSL externe en rendant
 
 Les critiques pouvant être faites au DSL externe justifient la prolifération des DSL interne, que ce soit dans des langages de programmation permissifs syntaxiquement ou non. Malheureusement, utiliser $n$ syntaxes crée des barrières symboliques, créant un faussé entre plusieurs représentations d'un même domaine.
 
-* Modélisation inverse de code GPL
+* Modélisation inversé de code GPL
 ** Motivations
 
 Nous avons cité précédemment constaté les problèmes d'interopérabilité entre les différents DSL d'un même domaine. Si un domaine est la plupart du temps associé à un unique DSL externe, les DSL internes sont souvent nombreux. Si un DSL externe est la plupart du temps bien équipé en outil /Domain Specific/, il est souvent compliqué d'avoir un service identique avec le DSL interne du fait qu'il reconstruise sa propre représentation du domaine.
@@ -313,7 +313,7 @@ L'idée ici est de permettre l'extraction de contenu /Domain Specific/ du code s
 #+ATTR_LATEX: :width 11cm
 [[./pictures/GPL-to-domain.png]]
 
-Notre objectif est de déterminer un méta-modèles, soit le domaine, et un modèle à partir d'un autre modèles sous la forme d'un langage de programmation général. Cette approche est à l'opposer de l'approche MDE, nous la nommerons donc : modélisation inverse.
+Notre objectif est de déterminer un méta-modèles, soit le domaine, et un modèle à partir d'un autre modèles sous la forme d'un langage de programmation général. Cette approche est à l'opposer de l'approche MDE, nous la nommerons donc : modélisation inversé.
 
 ** Problématique
 
@@ -517,11 +517,11 @@ Les langages dédiés réconcilient les domaines avec le code source. Les langag
 
 Ces pratiques ont démontré leurs impacts bénéfiques sur la productivité et les coûts. Cependant, faire le choix d'utiliser ou non d'un DSL n'est pas évident, tout comme les choix de conception de ce DSL. Une analyse préalable accompagnée de bonnes pratiques doit être effectuée. Si les environnements de /Language Workbench/ ont rendu accessible le /Language-Oriented Programming/, l'utilisation DSL internes restent très répendu.
 
-La capacité de passer de forme en forme serait-elle une nouvelle étape dans l'évolution des /Domain-Specific Languages/ ? C'est la question que pose le /Metamorphic DSL/. Le défi est, en plus de proposer un système de transpositions de forme, de savoir quelle forme est la plus appropriée pour la tâche en cours. Pour se faire, une automatisation des processus est nécessaire ; c'est-à-dire une méthode générique de transposition de forme de DSL (approche développeur) et une qualification rigoureuse des propriétés des formes (approche utilisateur).
+Les DSL externes ainsi que les outils de création de DSL (les /Language Workbenches/) sont des solutions très intéressantes aujourd'hui. Néanmoins, les DSL internes restent encore très utilisés dû fait de leurs intérêts certains. Un même domaine étant souvent représenté dans plusieurs GPL via plusieurs DSL internes, l'accès aux services du domaine demande de nouveaux développements spécifiques. Notre réalisation de modélisation inversé cherche à proposer des méthodes de récupération des modèles métiers utilisé implicitement dans le code source.
 
-C'est dans l'optique de trouver des éléments de réponse du côté de l'approche développeur que nous avons décidé de creuser du côté du contenu des codes source. Car si un domaine représenté un DSL peut être plus simplement captés grâce à leur outils, les domaines issu des DSL internes sont souvent bien plus implicites. Le cas des DSL internes rend les choses plus implicites. De plus dès qu'un langage de programmation nécessite sa propre implémentation, cela rajoute un nouveau type de modèle à l'équation.
+Nous avons rencontré divers problèmes lors avec le prototype Busimo. Le fait est que si un domaine représenté via DSL externe peut être captés via les outils de ce DSL, les domaines issus des DSL internes sont souvent bien plus implicites.
 
-Busimo nous aura montré que le code source contient bien des informations /Domain-Specific/ et qu'avec un minimum d'inférence, un domaine peut être reconstruit. La part d'implicite reste tout de même importante dû à l'abstraction que permet les GPL. Il est vrai que le choix de s'intéresser aux annotations réduit la problématique, mais permet d'avoir une première approche sur le sujet. Par la suite, on peut imaginer des analyses de construction plus complexe des AST à l'aide de /pattern matching/. Si Busimo génère un méta-modèle uniquement via le concept d'annotation, ceci est une première étape.
+Busimo nous aura montré que certaines informations /Domain-Specific/ sont disponibles dans le code source et qu'il est possible de reconstruire un domaine. La part d'implicite reste tout de même importante dû à l'abstraction que permet les GPL. Il est vrai que le choix de s'intéresser uniquement aux annotations réduit la problématique, mais permet d'avoir une première approche sur le sujet. Malgré tout, Busimo permet déjà de visualiser de manière graphique le domaine inférer via les annotations aidant au développement d'application. Il est nécessaire de continuer le travail sur l'outil pour le permettre entre autre de lire du =Java= ou encore de filtrer les annotations indésirables.
 
 #+BEGIN_LATEX
 \newpage
