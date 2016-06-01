@@ -464,44 +464,6 @@ Malheureusement, les annotations ne nous donnent souvent pas assez d'information
 
 Nous aurons remarqué qu'il est difficile d'inférer un modèle de manière juste via un code source. Ces problèmes sont listés ci-dessous. Il peuvent être réglés en donnant plus informations à Busimo.
 
-*** Priorité des annotations
-
-Les annotations ne sont pas toutes au même niveau selon les modèles. Il faut comprendre par là que
-
-*Égalité* :  le fait de mettre deux annotations au même niveau (comportement par défaut).
-
-#+CAPTION: Résultat attendu : HttpServer developed by John Doe under construction
-#+BEGIN_SRC xtend
-@Author(name="John Doe")
-@UnderConstruction
-class HttpServer {
-  def run() {}
-}
-#+END_SRC
-
-*Mise en avant* : une priorité est à affecter lorsque deux annotations ne sont pas au même niveau côté modèle. En effet, certaines annotations n'ont de sens uniquement dans le contexte d'une autre annotation. Dans ce cas, l'annotation de niveau inférieur devient une propriété. Dans exemple en figure [[example]], =@Ignore= est une propriété du test =firstTest=, qui est lui même annoté =@Test=.
-
-#+NAME: [[example]]
-#+CAPTION: Résultat attendu : firstTest ignored
-#+BEGIN_SRC xtend
-class MyTest {
-  @Test
-  @Ignore
-  def firstTest() {}
-}
-#+END_SRC
-
-*Dissimulation* : le fait de laisser une annotation "écraser" une autre.
-
-#+CAPTION: Résultat attendu : Playground candeled
-#+BEGIN_SRC xtend
-@Todo
-@Canceled
-class Playground {
-  def open() {}
-}
-#+END_SRC
-
 *** Containment
 
 Si un noeud est le seul à référencer un type d'élément, il est envisageable de définir cet référence comme un "containment". Pour le momoent, Busimo met automatiquement les entités dans une collection créé spécialement pour contenir tous les élément de ce type (voir figure).
