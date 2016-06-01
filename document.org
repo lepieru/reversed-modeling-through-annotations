@@ -322,7 +322,7 @@ Retrouver le domaine dans un programme GPL n'est pas simple, car contrairement a
 #+ATTR_LATEX: :width 10cm
 [[./pictures/DSL-to-domain-with-a-grammar.png]]
 
-#+NAME: DSL-to-domain-with-a-grammar
+#+NAME: GPL-to-domain-with-what
 #+CAPTION: Du GPL au domain /et vice verca/
 #+ATTR_LATEX: :width 10cm
 [[./pictures/GPL-to-domain-with-what.png]]
@@ -367,11 +367,9 @@ public class QueryTest
 }
 #+END_SRC
 
-Les annotations dans le code source sont des méta-données pouvant être ajoutés sur différents noeuds de l'AST (packages, classes, méthodes, /etc/.). Du comportement peut leur être associé (voir l'exemple avec la persistence en Java grâce à l'aide des annotations \cite{Reed-2007}). Pour le métier aussi, les annotations sont une potentielle une source d'information.
+Les annotations dans le code source sont des méta-données pouvant être ajoutés sur différents noeuds de l'AST (packages, classes, méthodes, /etc/.). Du comportement peut leur être associé (voir l'exemple avec la persistence en Java grâce à l'aide des annotations \cite{Reed-2007}). Pour le métier aussi, les annotations sont une potentielle une source d'information. Si on les compare au reste du code, les annotations nous fourni des informations explicites et peu technique.
 
 Extraire les annotations peut être une manière de reconstruire le domaine. De plus, les annotations sont aisément identifiable dans le code ce qui n'est pas le cas pour toutes les techniques appliquées à la définition de DSL interne (voir le cas de jOOQ [[Internal-DSL-example]]). Si les méta-modèle sont identifiable dans le code source, le cas des annotation semble être une bonne première approche au problème.
-
-Si l'on considère le domaine du test unitaire, le code source =Java= en figure [[JUnit-annotations-example]] contient de l'information au niveau des annotations. Si des informations sont présentent partout dans les modèles (nom de classe, nom de méthode, /etc/.), les annotations sont des informations explicites beaucoup moins technique (soit plus proche du domaine).
 
 ** L'outil Busimo
 
