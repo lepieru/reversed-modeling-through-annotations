@@ -464,9 +464,9 @@ Malheureusement, les annotations ne nous donnent souvent pas assez d'information
 
 Nous aurons remarqué qu'il est difficile d'inférer un modèle de manière juste via un code source. Ces problèmes sont listés ci-dessous. Il peuvent être réglés en donnant plus informations à Busimo.
 
-*** Containment
+*** Composition
 
-Si un noeud est le seul à référencer un type d'élément, il est envisageable de définir cet référence comme un "containment". Pour le momoent, Busimo met automatiquement les entités dans une collection créé spécialement pour contenir tous les élément de ce type (voir figure).
+Si un noeud est le seul à référencer un type d'élément, il est envisageable de définir cet référence comme une agrégation de composition. Pour le moment, l'or de l'instanciation de modèle issus du méta-modèle généré, Busimo met automatiquement les entités dans une collection créé spécialement pour contenir tous les éléments de ce type (voir figure [[State-machine-metamodel-with-lists]]).
 
 #+NAME: State-machine-metamodel-with-lists
 #+CAPTION: Méta-modèle d'une machine à états en sortie
@@ -475,7 +475,7 @@ Si un noeud est le seul à référencer un type d'élément, il est envisageable
 
 *** Cardinalité (0..1 ou 1)
 
-Si un noeud ne référence qu'une seule fois un type d'élément, il est envisageable de *supposer* une cardinalité à =0..1/1=. Malheureusement, ceci n'est pas forcément vrai et aucune solution sûre n'a encore été proposée.
+Si un noeud ne référence qu'une seule fois un type d'élément, il est envisageable de *supposer* une cardinalité à =0..1/1=. Malheureusement, ceci n'est pas forcément et aucune inférence semble possible puisque le code source ne contient pas l'information.
 
 ** Analyse de modèles Java
 
