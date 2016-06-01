@@ -480,7 +480,7 @@ Si un noeud ne référence qu'une seule fois un type d'élément, il est envisag
 ** Analyse de modèles Java
 
 Cette première version ne sait qu'analyser du code source =Xtend=. Ce choix a été fait pour des raisons de facilité. En effet, le langage =Xtend= a été défini grâce au framework =Xtext=, cela permettant de récupérer les AST correspondants aisément.
-Cependant, il est nécessaire d'aller plus loin pour aussi permettre l'analyse de code source =Java=. Si =Xtend= sait « se /parser/ » grâce à ses propres outils, le cas de =Java= est plus compliqué. =Spoon= \cite{Pawlak-et-al-2006} est un outil dont nous pouvons nous servir pour, entre autres, analyser statiquement du code source =Java= grâce à une redéfinition compléte de l'AST. Dans ce cas, Busimo doit être capable de transformer ce deuxième type d'arbre en un AST de noeuds annotés. (voir figure [[Multi-model-analyzer]]).
+Cependant, il est nécessaire d'aller plus loin pour aussi permettre l'analyse de code source =Java=. Si =Xtend= sait « se /parser/ » et rendre sa forme abstraite grâce à ses propres outils, le cas de =Java= est plus compliqué. =Spoon= \cite{Pawlak-et-al-2006} est un outil dont nous pouvons nous servir pour, entre autres, analyser statiquement du code source =Java= grâce à une redéfinition compléte de l'AST. Dans ce cas, Busimo doit être capable de transformer ce deuxième type d'arbre en un AST de noeuds annotés (voir figure [[Multi-model-analyzer]]).
 
 #+NAME: Multi-model-analyzer
 #+CAPTION: Analyser plusieur type de source
@@ -500,7 +500,7 @@ Un système de listes noires est donc nécessaire si l'on ne souhaite pas avoir 
 
 ** Le méta-modèle en entrée
 
-Busimo infére des modèles du domaine des annotations d'un code source. Si le méta-modèle est connu, les modèles peuvent être généré en utilisant ce méta-modèle. Cependant le probléme se pose dans le liaison entre les annotations et les entité du méta-modèle en entrée comme le montre la figure [[Annotations-and-entities-mapping]].
+Busimo infére des modèles du domaine des annotations d'un code source. Si le méta-modèle est connu à l'avance, les modèles devraient pouvoir être générés en utilisant ce méta-modèle. Le probléme ici est différent : se pose la question de la liaison entre les annotations et les entités du méta-modèle en entrée comme le montre la figure [[Annotations-and-entities-mapping]]. L'inférence ici est bien différente que ce Busimo sait faire pour le moment. Cette piste doit être réfléchi pour éventuellement palier les problème posé par le manque d'informations.
 
 #+NAME: Annotations-and-entities-mapping
 #+CAPTION: Mapping entre les annotations de l'ANT et les entités du méta-modèle
@@ -509,7 +509,7 @@ Busimo infére des modèles du domaine des annotations d'un code source. Si le m
 
 ** Miner
 
-Github étant la plus grande forge de projet de développement aujourd'hui, il serait intéressant de ns'y servir en code source =Java= et =Xtend=. Une analyse de ces sources nous permettrait de valider la intérêt des modèles générés par Busimo par rapport à l'utilisation des annotations en conditions réelles. Cela permettrait de valider ou non l'approce de Busimo.
+Github étant la plus grande forge de projet de développement aujourd'hui, il serait intéressant de s'y servir en code source =Java= et =Xtend=. Une analyse de ces sources nous permettrait de valider l'intérêt des modèles générés par Busimo par rapport à l'utilisation des annotations en conditions réelles.
 
 * Conclusion
 
