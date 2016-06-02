@@ -88,6 +88,7 @@
   \end{flushleft}
   \@abstract
 
+  \setcounter{tocdepth}{2}
   \tableofcontents
   \thispagestyle{empty}
   \newpage

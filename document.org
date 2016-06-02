@@ -6,7 +6,7 @@
 #+LATEX_CLASS: custom
 #+LATEX_CLASS_OPTIONS: [11pt]
 #+LATEX_HEADER: \input{header}
-#+LATEX_HEADER: \abstract{Ce document regroupe un état de l'art sur les langages dédiés (aussi appelés DSL pour \textit{Domain-Specific Languages}) ainsi qu'un rapport des travaux de recherche autour des notions spécifiques aux domaines dans les langages généraliste (ou GPL pour \textit{General Purpose Language}). Si les langages de programmation sont exécutables en terme d'instruction, ils restent difficilement interprétable au niveau métier sans développement spécifique. Pourtant, le DSL interne est aujourd'hui très répendu, permettant au code de se rapprocher syntaxiquement d'un domaine en particulier. De ce constat, nous avons entrepris le prototype Busimo qui essaye d'extraire les informations domaine de code source GPL annotés.}
+#+LATEX_HEADER: \abstract{Ce document regroupe un état de l'art sur les langages dédiés (aussi appelés DSL pour \textit{Domain-Specific Languages}) ainsi qu'un rapport des travaux de recherche autour des notions spécifiques aux domaines dans les langages généraliste (ou GPL pour \textit{General Purpose Language}). Si les langages de programmation sont exécutables en terme d'instruction, ils restent difficilement interprétable au niveau métier sans développement spécifique. Pourtant, le DSL interne est aujourd'hui très répendu, permettant au code de se rapprocher syntaxiquement d'un domaine en particulier. De ce constat, nous avons entrepris le développement d'un prototype qui a pour but d'extraire des informations domaine de code source GPL annotés.}
 
 * Introduction
 
@@ -23,7 +23,7 @@ Suite à une étudé bibliographique sur les langages dédiés, le travail sur u
 * Contexte
 ** Notions de modèle
 
-Un *modèle* (relatif à un domaine) est la conceptualisation d'un sujet par rapport à une problématique précise (voir deux exemples de modèles en figure [[Equivalent-models-example]]). Grâce à lui, on peut définir de manière plus ou moins abstraite un problème et/ou sa solution. Dans le cadre de la méthodologie MDE (/Model-Driven Engineering/ ou Ingénierie Dirigée par les Modèles), tout est modèle, des schémas aux codes source. Selon la forme, un modèle équivalent au niveau domaine peuvent contenir plus ou moins d'informations.
+Un *modèle* (relatif à un domaine) est la conceptualisation d'un sujet par rapport à une problématique précise (voir les deux exemples de modèles en figure [[Equivalent-models-example]]). Grâce à lui, on peut définir de manière plus ou moins abstraite un problème et/ou sa solution. Dans le cadre de la méthodologie MDE (/Model-Driven Engineering/ ou Ingénierie Dirigée par les Modèles), tout est modèle, des schémas aux codes source. Selon la forme, un modèle équivalent au niveau domaine peuvent contenir plus ou moins d'informations.
 
 #+NAME: Equivalent-models-example
 #+CAPTION: Schema et code source conceptuellement équivalents
@@ -280,14 +280,7 @@ Les critiques pouvant être faites au DSL externe justifient la prolifération d
 * Modélisation inversée de code GPL via les annotions
 ** Motivations
 
-Nous avons cité précédemment constaté les problèmes d'interopérabilité entre les différents DSL d'un même domaine. Si un domaine est la plupart du temps associé à un unique DSL externe, les DSL internes sont souvent nombreux. Si un DSL externe est la plupart du temps bien équipé en outil /Domain Specific/, il est souvent compliqué d'avoir un service identique avec le DSL interne du fait qu'il reconstruise sa propre représentation du domaine.
-
-La figure [[Code-and-models]] part du code source pour arriver jusqu'aux services. Passer par des modèles comformes à des méta-modèle métier permettrait cela.
-
-#+NAME: Code-and-models
-#+CAPTION: Du code source aux services
-#+ATTR_LATEX: :width 16cm
-[[./pictures/Code-and-models.png]]
+Nous avons cité précédemment constaté les problèmes d'interopérabilité entre les différents DSL interne d'un même domaine. Si un domaine est la plupart du temps associé à un unique DSL externe, les DSL internes sont souvent nombreux. Le DSL externe est la plupart du temps bien équipé en outil /Domain Specific/. À l'inverse, il est souvent compliqué d'avoir un service identique avec le DSL interne du fait qu'il reconstruise sa propre représentation du domaine. Il existe donc une barrière entre les différents outils du domaine et les DSL internes représentant ce domaine. Cela impose du développement spécifique pour chacune de ces implémentations. Cependant, la plupard du temps, les outils ne sont tout simplement pas supportés, privant l'utilateur l'usage des services associés selon le GPL utilisé.
 
 Les DSL internes utilisent plusieurs techniques permises par le GPL hôte. Parmis ces techniques on peut retrouver :
 - la redéfinition d'opérateur
@@ -295,22 +288,29 @@ Les DSL internes utilisent plusieurs techniques permises par le GPL hôte. Parmi
 - les annotations
 - /etc./
 
-L'idée ici est de permettre l'extraction de contenu /Domain Specific/ du code source ; ceci permettant l'accès à des services spécifiques sans développement spécifique malgré l'utilisation de DSL internes (voir figure [[GPL-to-domain]]).
+La figure [[Code-and-models]] part du code source pour arriver jusqu'aux services. On y retrouve du chaînage de méthode émulant du =SQL= ainsi que des annotations donnant des precisions sur l'usage des méthods =testCatTable= et =testDogTable=. Un lien est fait entre les informations spécifiques à un domaine et les modèles déduis.
+
+#+NAME: Code-and-models
+#+CAPTION: Du code source aux services
+#+ATTR_LATEX: :width 16cm
+[[./pictures/Code-and-models.png]]
+
+Notre volonté ici est d'extraire le contenu /Domain Specific/ du code source comme le mondre la figure [[GPL-to-domain]]. L'accès aux services associés à un domaine devient possible sans développement spécifique, malgré l'utilisation de DSL interne.
 
 #+NAME: GPL-to-domain
 #+CAPTION: Interprétation d'un DSL et extraction /Domain-Specific/ de GPL
 #+ATTR_LATEX: :width 11cm
 [[./pictures/GPL-to-domain.png]]
 
-Notre objectif est des modèles représentatif du domaine à partir d'un autre modèles sous la forme d'un langage de programmation général. Cette approche est à l'opposer de l'approche MDE, nous la nommerons : modélisation inversée.
+Aujourd'hui, le code source exécutable (GPL) n'est pas interprété au niveau métier. Le problème se pose avec les outils tel que =jOOQ=. Comme on peut le voir sur la figure [[Internal-DSL-example]], le DSL interne n'est pas exploité au niveau domaine sans développement spécifique. Pourtant, des informations /Domain-Specific/ y sont bel et bien présentes. Nous souhaiterons trouver des techniques génériques pour récupérer ces informations, en déduisant des modèles du domaine pour permettre entre autre l'accès à des services spécifiques avec comme source le code exécutable. Cette approche est à l'opposer de l'approche MDE, nous la nommerons : modélisation inversée.
 
 ** Problématique
 
 Nous avons déjà abordé le sujet lors de l'étude bibiliographique. Cependant, il est important de définir la différence fondamentale entre DSL externe et DSL interne par rapport aux modèles. Nous utiliserons par la suite DSL pour DSL externe et GPL pour du code source avec potentiellement l'utilisation d'un DSL interne. Il est d'ailleur raisonnable de dire que tout code GPL utile cache un domaine.
 
-Retrouver le domaine dans un programme GPL n'est pas simple, car contrairement au DSL, le domaine y est beaucoup plus implicite. En effet, si la grammaire rend les choses explicite côté DSL, avec un GPL, le développeur doit user des possibilité offertes par le langage pour obtenir un rendu le plus /Domain-Specific/ possible. Si la génération de code transforme un domaine en code exécutable équivalent, il n'y a pas d'outil générique pour récupérer le domaine métier à partir des sources (voir figure [[DSL-and-GPL-to-domain]]).
+Retrouver le domaine dans un programme GPL n'est pas simple, car contrairement au DSL, le domaine y est beaucoup plus implicite. En effet, ayant connaissance de la grammaire, le lien entre le DSL et le domaine est explicite de manière bilatérale. Pour un GPL, le développeur doit user des possibilités offertes par le langage pour obtenir un rendu syntaxique le plus /Domain-Specific/ possible (comprendre ici créer un DSL interne au GPL). Si la génération de code transforme un domaine en code exécutable équivalent, il n'y a pas d'outil générique pour récupérer le domaine métier à partir des sources (voir figure [[DSL-and-GPL-to-domain]]).
 
-#+NAME: DSL-to-domain-with-a-grammar
+#+NAME: DSL-and-GPL-to-domain
 #+CAPTION: Transitions posibles entre le DSL, le GPL et les modèles /Domain-Specific/
 #+ATTR_LATEX: :width 15cm
 [[./pictures/DSL-and-GPL-to-domain.png]]
@@ -327,15 +327,13 @@ Le cas du GPL est particulier du fait qu'il permettent la définition de concept
 #+ATTR_LATEX: :width 16cm
 [[./pictures/Java-jOOQ-DB-and-models.png]]
 
-Aujourd'hui, le code source exécutable (GPL) n'est pas interprété au niveau métier. Le problème se pose avec les outils tel que =jOOQ=. Comme on peut le voir sur la figure [[Internal-DSL-example]], le DSL interne n'est pas exploité au niveau domaine sans développement spécifique. Pourtant, des informations /Domain-Specific/ y sont bel et bien présentes. Nous souhaiterons trouver des techniques génériques pour récupérer ces informations, en inférer des modèles du domaine pour permettre l'accès à des services spécifiques avec comme source le code exécutable.
-
 ** Le choix des annotations
 
 Comme nous le disions précédemment, le code source contient des informations métier. Le code en figure [[Code-and-models]] comporte des informations du domaine du /testing/ et de l'interrogation de base de donnée relationnelle. Un test est construit avec une méthode annotée par =@Test= et une requête de base de donnée se crée à l'aide d'une /API fluent/. Si il semble difficile d'inférer un domaine dans un chaînage de méthode, les annotions sont simple à extraire et plus souvent /Domain-Specific/.
 
-Les annotations dans le code source sont des méta-données pouvant être ajoutés sur différents noeuds de l'AST (packages, classes, méthodes, /etc/.). Du comportement peut leur être associé (voir l'exemple avec la persistence en Java grâce à l'aide des annotations \cite{Reed-2007}). Pour le métier aussi, les annotations sont une potentielle une source d'information. Si on les compare au reste du code, les annotations nous fourni des informations explicites et peu technique.
+Les annotations dans le code source sont des méta-données pouvant être ajoutés sur différents noeuds de l'AST (packages, classes, méthodes, /etc/.). Du comportement peut leur être associé (voir l'exemple avec la persistence en Java grâce à l'aide des annotations \cite{Reed-2007}). Pour le métier aussi, les annotations sont une potentielle une source d'information. Si on les compare au reste du code, les annotations nous fournisse des informations explicites et peu techniques.
 
-Extraire les annotations peut être une manière de reconstruire le domaine. De plus, les annotations sont aisément identifiable dans le code ce qui n'est pas le cas pour toutes les techniques appliquées à la définition de DSL interne (voir le cas de jOOQ [[Internal-DSL-example]]). Si les méta-modèle sont identifiable dans le code source, le cas des annotation semble être une bonne première approche au problème.
+Extraire les annotations peut être une manière de reconstruire le domaine. De plus, les annotations sont aisément identifiables dans le code ce qui n'est pas le cas pour toutes les techniques appliquées à la définition de DSL interne (voir le cas de jOOQ [[Internal-DSL-example]]). Si les méta-modèle sont identifiables dans le code source, le cas des annotations semble être une bonne première approche au problème.
 
 ** L'outil Busimo
 
@@ -346,12 +344,7 @@ Busimo [fn:Busimo-project-URL] a pour but d'inferer des modèles via les annotat
 #+ATTR_LATEX: :width 13cm
 [[./pictures/How-Busimo-works.png]]
 
-La forme abstraite utilisée dans Busimo (que l'on appellera /Annotable Nodes Tree/ ou ANT) est intéressante pour son caractère générique qui la rend indépendante du langage en entrée. En effet, le code en figure [[JUnit-annotations-example]] donne l'ANT en figure [[JUnit-ANT-example]], mais une version =Java= du même programme doit pouvoir retourner le même résultat [fn:Xtend-and-Java]. Un second exemple d'ANT est proposé par la figure [[State-machine-ANT-example]] qui est généré avec le code [[State-machine-code-example]].
-
-# #+NAME: JUnit-ANT-example
-# #+CAPTION: ANT d'un modèle utilisant JUnit
-# #+ATTR_LATEX: :width 12cm
-# [[./pictures/JUnit-ANT-example.png]]
+La forme abstraite utilisée dans Busimo (que l'on appellera /Annotable Nodes Tree/ ou ANT) est intéressante pour son caractère générique qui la rend indépendante du langage en entrée. Comme nous ne voulons pas être dépendant d'un langage, il est important de travailler sur une forme abstraite dénuée de toutes notions spécifiques à un GPL en particulier. Un exemple d'ANT est proposé par la figure [[State-machine-ANT-example]] qui est généré avec le code [[State-machine-code-example]].
 
 #+NAME: State-machine-ANT-example
 #+CAPTION: ANT d'un modèle d'une machine à états
@@ -404,12 +397,12 @@ class Light implements IStateMachine {
 #+END_SRC
 
 Par la suite, l'ANT est analysé pour définir un méta-modèle. Les règles appliquées, explicitées dans le pseudocode en figure [[Pseudocode-ANT-to-metamodel]], sont les suivantes :
-- toutes les annotations de noeuds sont prises en compte (un noeuds peut être une classe, un attribut, une méthode)
+- toutes les annotations de noeud sont prises en compte (les noeuds auquels nous nous intéressons sont les classes, les attributs et les méthodes)
 - une annotation crée une entité si elle n'existe pas déjà
 - une nouvelle entité est contenu par les entités issues du noeud parent (la classe englobante)
 
 #+NAME: Pseudocode-ANT-to-metamodel
-#+CAPTION: Pseudocode permettant naïf transformant l'ANT en méta-modèle
+#+CAPTION: Pseudocode transformant naïf l'ANT en méta-modèle
 #+BEGIN_SRC ruby
 def analyze_node(node, parent=nil)
   node.each_annotation do |annotation|
@@ -427,35 +420,41 @@ end
 analyze_node(ant_root)
 #+END_SRC
 
-=Xtend=, comme =Java=, n'étant pas réflexif, le framework =EMF= (pour /Eclipse Modeling Framework/) est utilisé pour définir dynamiquement de nouvelles entités (des classes) nécessaire à la création du méta-modèle. Les modèles en sortie sont au format =XML= et sont exploitable par l'environnment Eclipse.
+Suite à l'analyse de l'ANT de la machine à état, Busimo infére le méta-modèle en figure [[State-machine-metamodel]]. Il est intéressant de pouvoir proposer une vision méta des modèles sous forme de code source. Cela permet de valider la conception du DSL créé à l'aide des annotations.
 
-Suite à l'analyse de l'ANT de la machine à état, Busimo infére le méta-modèle en figure [[State-machine-metamodel-with-lists]]. Il est intéressant de pouvoir proposer une vision méta des modèles sous forme de code source. Cela permet de valider la conception du DSL créé à l'aide des annotations.
-
-#+NAME: State-machine-metamodel-without-lists
+#+NAME: State-machine-metamodel
 #+CAPTION: Méta-modèle d'une machine à états en sortie, avec inférence de contenance
 #+ATTR_LATEX: :width 16cm
-[[./pictures/State-machine-metamodel-without-lists.png]]
+[[./pictures/State-machine-metamodel.png]]
 
 Malheureusement, les annotations ne nous donnent souvent pas assez d'informations en restant dans l'implicite. C'est ce que l'on peut voir avec le cas du méta-modèle en figure [[JUnit-metamodel]] généré avec la classe de test en figure [[JUnit-annotations-example]]. L'annotation =@Ignore= est dépendente de l'annotation =@Test= car elle défini l'état d'un test.
+
+=Xtend=, comme =Java=, n'étant pas réflexif, le framework =EMF= (pour /Eclipse Modeling Framework/) est utilisé pour définir dynamiquement de nouvelles entités nécessaires à la définition du méta-modèle. Les modèles en sortie sont au format =XML=. Ils sont directement exploitable par l'environnment de développement intégré Eclipse grâce au /plugin/ =EMF=.
+
+** Expériences
+
+Les résultats que nous donne l'outil Busimo nous montre que des modèles peuvent être déduit du code source, notamment grâce aux annotations. On peut retrouver comme information le nom de l'annoation, le noeud sur lequel elle est placé. La place du noeud annoté est très intéressante pour Busimo. Ces imbriquations permettent de déduire des références entre les entités des méta-modèles générés.
+
+Cela dit, il y a beaucoup d'impressisions dans les sources GPL. Certains éléments sont très problématiques. Par exemple, on peut trouver des annotations insérés aux même niveau dans le code source. Busimo ne peut créer de lien entre ces deux annotations. On peut en voir un exemple sur le méta-modèle généré en analysant du code de test en figure [[JUnit-metamodel]], où =@Test= et =@Ignore= se trouve sur un même noeud. =@Ignore= est en quelques sortes un attribut de =@Test=. Cela nous montre bien que certaines pratiques d'utilisation des annotions n'est pas conforme à nos stratégies de déduction. Ici, l'annotation qui aurait été préféré aurait été =@Test(ignored=true)=.
 
 #+NAME: JUnit-metamodel
 #+CAPTION: Méta-modèle de JUnit en sortie
 #+ATTR_LATEX: :width 10cm
 [[./pictures/JUnit-metamodel.png]]
 
-* Expérience
+Nous ne pouvons pas blâmer certaines bibliothèque de proposer des annotations ne permettant pas à Busimo de générer des modèles intéressant : les annotations ne sont pas initialement utilisé dans ce but. Cependant, annoter un code source en connaissance de cause peut permettre à Busimo de générer des modèles très cohérents. On peut très bien imaginer Busimo comme un assistant de validation d'instance d'entités domaine lors de la phase de développement ou de relecture de code.
 
 + info exploitables dans le code source: les annotations!
   - notion de domaine (le nom de l'annotation)
   - imbriquation ok
 
-+ trop d'impression dans les annotations
-  - éléments problématiques :
++ trop d'impressision dans les annotations
+  - éléments problématiques :oo
     - annotation aux même niveau dans le code, mais pas dans les concepts
   - mais normal, ce n'est pas le but initial :
-    - prendre en compte Busimo dans la conception des annotations ?
+  - prendre en compte Busimo dans la conception des annotations ?
 
-* Travaux sur le court terme
+* Travaux en cours
 ** Plus d'inférence
 
 Nous aurons remarqué qu'il est difficile d'inférer un modèle de manière juste via un code source. Ces problèmes sont listés ci-dessous. Il peuvent être réglés en donnant plus informations à Busimo, c'est-à-dire en explicitant ou en fournissant plus de modèles en entrée pour diminuer la marge d'erreur.
@@ -480,21 +479,27 @@ Un système de listes noires est donc nécessaire si l'on ne souhaite pas avoir 
 #+ATTR_LATEX: :width 10cm
 [[./pictures/Annotations-blacklist.png]]
 
+** Utiliser les paramétres des annotations
+
+Les annotations peuvent avoir des paramétres. Ils ne sont pas pris en compte par Busimo. Malgré tout, cela donne une information qui, selon notre interprétation, sont des attributs des entités généré. Ces nouvelle donnée devrait être prise en compte.
+
 ** Système d'option et de journal
 
-Busimo ne permet pas d'interaction avec l'utilisateur. L'interface homme-machine doit être développée. Cela est nécessaire notament pour implémenter les règles de filtrage ainsi que pour notifier l'utilisateur des choix d'inférence. L
+Busimo ne permet pas d'interaction avec l'utilisateur. L'interface homme-machine doit être développée. Cela est nécessaire notament pour implémenter les règles de filtrage ainsi que pour notifier l'utilisateur des choix effectué dans lors des déductions de Busimo. Tout ceci est à intégrer dans l'environnement de développement intégré Eclipse sous forme de /plugin/.
 
-* Travaux sur le long terme
+* Vision future
 ** Analyse de modèles Java
 
-Cette première version ne sait qu'analyser du code source =Xtend=. Ce choix a été fait pour des raisons de facilité. En effet, le langage =Xtend= a été défini grâce au framework =Xtext=, cela permettant de récupérer les AST correspondants aisément.
-Cependant, il est nécessaire d'aller plus loin pour aussi permettre l'analyse de code source =Java=. Si =Xtend= sait « se /parser/ » et rendre sa forme abstraite grâce à ses propres outils, le cas de =Java= est plus compliqué. =Spoon= \cite{Pawlak-et-al-2006} est un outil dont nous pouvons nous servir pour, entre autres, analyser statiquement du code source =Java= grâce à une redéfinition compléte de l'AST. Dans ce cas, Busimo doit être capable de transformer ce deuxième type d'arbre en un AST de noeuds annotés (voir figure [[Multi-model-analyzer]]).
+Cette première version ne sait qu'analyser du code source =Xtend=. Ce choix a été fait pour des raisons de facilité. En effet, le langage =Xtend= a été défini grâce au framework =Xtext=, cela permettant de récupérer les AST correspondants aisément. Cependant, il est nécessaire d'aller plus loin pour aussi permettre l'analyse de code source =Java=.  Si =Xtend= sait « se /parser/ » pour rendre sa forme abstraite grâce aux outils issus d'=Xtend=. Le cas de =Java= est plus compliqué techniquement car il est difficile de manipuler la forme abstraite généré par =javac= [fn:Javac]. =Spoon= \cite{Pawlak-et-al-2006} est un outil dont nous pouvons nous servir pour, entre autres, analyser statiquement du code source =Java= grâce à une redéfinition compléte de l'AST. Dans ce cas, Busimo doit être capable de transformer ce deuxième type d'arbre en un AST de noeuds annotés (voir figure [[Multi-model-analyzer]]).
 
 #+NAME: Multi-model-analyzer
 #+CAPTION: Analyser plusieur type de source
 #+ATTR_LATEX: :width 11cm
 [[./pictures/Multi-model-analyzer.png]]
-** Le méta-modèle en entrée
+
+Il est aussi imaginable que nous généralisions ceci à d'autre GPL. On peut penser à =C#= ou encore =Python= qui possèdent un système d'annotation. Dans l'idée, Busimo semble ne pouvoir agir uniquement sur ce type de langage. Cependant, une annotation est un concept assez abstrait qui est émulable via des commentaires. Ce qui nous permet de dire que notre approche est compatible avec tout type de GPL.
+
+** Le méta-modèle en entrée : [TODO: renomer et revoir]
 
 Busimo infére des modèles du domaine des annotations d'un code source. Si le méta-modèle est connu à l'avance, les modèles devraient pouvoir être générés en utilisant ce méta-modèle. Le probléme ici est différent : se pose la question de la liaison entre les annotations et les entités du méta-modèle en entrée comme le montre la figure [[Annotations-and-entities-mapping]]. L'inférence ici est bien différente que ce Busimo sait faire pour le moment. Cette piste doit être réfléchi pour éventuellement palier les problème posé par le manque d'informations.
 
@@ -503,9 +508,11 @@ Busimo infére des modèles du domaine des annotations d'un code source. Si le m
 #+ATTR_LATEX: :width 15cm
 [[./pictures/Annotations-and-entities-mapping.png]]
 
-** Miner
+** Évalution à large échelle
 
-Github étant la plus grande forge de projet de développement aujourd'hui, il serait intéressant de s'y servir en code source =Java= et =Xtend=. Une analyse de ces sources nous permettrait de valider l'intérêt des modèles générés par Busimo par rapport à l'utilisation des annotations en conditions réelles.
+La qualité des déductions de Busimo sont évaluées manuellement avec du code source pré-sélectionné. De ce fait, nous ne pouvons dire que nous sommes très objectif sur l'intérêt de cette outil. Nous souhaitons cependant valider la pertinence de notre approche.
+
+Pour ce faire, il est d'une part nécessaire de définir des critères de qualité. Une analyse plus formelle du résultat autoriserait l'automatisation de évalution. Quant au problème des entrées, une base de code doit être récupéré de manière non arbitraire. Github étant la plus grande forge de projet de développement aujourd'hui, il serait intéressant de s'y servir.
 
 * Conclusion
 
@@ -520,7 +527,6 @@ Nous avons rencontré divers problèmes avec le prototype Busimo. Le fait est qu
 Busimo nous aura montré que certaines informations /Domain-Specific/ sont disponibles dans le code source et qu'il est possible de reconstruire un domaine. La part d'implicite reste tout de même importante dû à l'abstraction que permet les GPL. Il est vrai que le choix de s'intéresser uniquement aux annotations réduit la problématique, mais permet d'avoir une première approche sur le sujet. Malgré tout, Busimo permet déjà de visualiser de manière graphique le domaine inférer via les annotations aidant au développement d'application. Il est nécessaire de continuer le travail sur l'outil pour en autre le rendre compatible =Java= ou encore de filtrer les annotations indésirables.
 
 #+BEGIN_LATEX
-\newpage
 \bibliographystyle{plain}
 \bibliography{references}
 #+END_LATEX
@@ -537,3 +543,4 @@ Busimo nous aura montré que certaines informations /Domain-Specific/ sont dispo
 [fn:Code-as-domain] Il y a effectivement « toujours » un domaine associé à une annotations, cependant l'exemple montre des annotations liées à un côté purement technique du code source
 [fn:Busimo-project-URL] Dépôt Git : https://github.com/lepieru/busimo
 [fn:Xtend-and-Java] =Xtend= a été développé dans l'idée de créer un langage 100% compatible avec les concepts =Java=
+[fn:Javac] =Javac= est le compilateur inclus dans le /Java Development Kit/
